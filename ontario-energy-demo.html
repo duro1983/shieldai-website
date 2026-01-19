@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontario Energy Assistant - Live Demo | ShieldAI</title>
+    <meta name="description" content="Try the Ontario Energy Assistant - AI-powered platform helping Ontario residents discover and apply for energy rebate programs.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2C3E87;
+            text-decoration: none;
+        }
+        
+        .logo svg {
+            width: 40px;
+            height: 40px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #2C3E87;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #2C3E87;
+            border: 2px solid #2C3E87;
+        }
+        
+        .btn-secondary:hover {
+            background: #2C3E87;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        /* Demo Section */
+        .demo-section {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .chat-title h3 {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        .chat-title p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .chat-messages {
+            height: 450px;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.bot {
+            background: #f1f3f4;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user {
+            background: #28a745;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.typing {
+            background: #f1f3f4;
+            align-self: flex-start;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: #28a745;
+        }
+
+        .chat-input button {
+            width: 45px;
+            height: 45px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+
+        .chat-input button:hover {
+            background: #218838;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 20px 15px;
+        }
+
+        .quick-action {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 18px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quick-action:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Sidebar */
+        .demo-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .info-card h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .info-card ul {
+            list-style: none;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        .info-card li::before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-box .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .stat-box .label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .cta-section .btn {
+            background: white;
+            color: #28a745;
+            margin: 0 10px;
+        }
+
+        .cta-section .btn:hover {
+            background: #f8f9fa;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 40px 0 20px;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            color: #999;
+        }
+
+        .footer-bottom a {
+            color: #999;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 900px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-sidebar {
+                order: -1;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <svg width="40" height="40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 20 L160 50 L160 110 Q160 150 100 180 Q40 150 40 110 L40 50 Z" 
+                              fill="#2C3E87" stroke="#4A90E2" stroke-width="3"/>
+                        <circle cx="100" cy="80" r="8" fill="#4A90E2"/>
+                        <circle cx="75" cy="100" r="6" fill="#4A90E2"/>
+                        <circle cx="125" cy="100" r="6" fill="#4A90E2"/>
+                        <circle cx="100" cy="120" r="6" fill="#4A90E2"/>
+                        <line x1="100" y1="80" x2="75" y2="100" stroke="#4A90E2" stroke-width="2"/>
+                        <line x1="100" y1="80" x2="125" y2="100" stroke="#4A90E2" stroke-width="2"/>
+                        <line x1="75" y1="100" x2="100" y2="120" stroke="#4A90E2" stroke-width="2"/>
+                        <line x1="125" y1="100" x2="100" y2="120" stroke="#4A90E2" stroke-width="2"/>
+                        <text x="100" y="150" font-family="Arial" font-size="24" font-weight="bold" 
+                              fill="white" text-anchor="middle">AI</text>
+                    </svg>
+                    <span>ShieldAI</span>
+                </a>
+                <ul>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#pricing">Pricing</a></li>
+                    <li><a href="index.html#use-cases">Use Cases</a></li>
+                </ul>
+                <div class="cta-buttons">
+                    <a href="mailto:info@shield-ai.ca?subject=Ontario%20Energy%20Assistant%20Inquiry" class="btn btn-secondary">Contact Us</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>⚡ Ontario Energy Assistant</h1>
+            <p>AI-powered platform helping Ontario residents discover, qualify for, and apply to energy rebate programs. Available 24/7 in 100+ languages.</p>
+            <div class="hero-badges">
+                <div class="badge">🤖 AI-Powered</div>
+                <div class="badge">🌐 100+ Languages</div>
+                <div class="badge">✅ AODA Compliant</div>
+                <div class="badge">🔒 FIPPA Compliant</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo-section">
+        <div class="container">
+            <div class="demo-container">
+                <!-- Chat Interface -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-avatar">⚡</div>
+                        <div class="chat-title">
+                            <h3>Ontario Energy Assistant</h3>
+                            <p>Online • Typically replies instantly</p>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">
+                            👋 Hello! I'm the Ontario Energy Assistant. I can help you:
+                            <br><br>
+                            • Find energy rebate programs you qualify for<br>
+                            • Check your eligibility in real-time<br>
+                            • Guide you through the application process<br>
+                            <br>
+                            What would you like help with today?
+                        </div>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="quick-action" onclick="sendQuickMessage('What rebates are available for heat pumps?')">Heat pump rebates</button>
+                        <button class="quick-action" onclick="sendQuickMessage('Am I eligible for energy rebates?')">Check eligibility</button>
+                        <button class="quick-action" onclick="sendQuickMessage('How do I apply for rebates?')">How to apply</button>
+                        <button class="quick-action" onclick="sendQuickMessage('What programs are available?')">All programs</button>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="userInput" placeholder="Type your question..." onkeypress="handleKeyPress(event)">
+                        <button onclick="sendMessage()">➤</button>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="demo-sidebar">
+                    <div class="info-card">
+                        <h3>📊 Platform Impact</h3>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="value">60%</div>
+                                <div class="label">Call Reduction</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="value">$1.8M</div>
+                                <div class="label">Annual Savings</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="value">3-5x</div>
+                                <div class="label">More Applications</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="value">85%</div>
+                                <div class="label">Satisfaction</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>✨ Key Features</h3>
+                        <ul>
+                            <li>24/7 availability</li>
+                            <li>100+ language support</li>
+                            <li>Real-time eligibility checks</li>
+                            <li>Application assistance</li>
+                            <li>Document upload help</li>
+                            <li>Analytics dashboard</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>🏛️ For Government</h3>
+                        <ul>
+                            <li>Reduce call center costs</li>
+                            <li>Increase program uptake</li>
+                            <li>Policy insights from data</li>
+                            <li>AODA & FIPPA compliant</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Human-Centered Section -->
+    <section style="padding: 60px 0; background: #e8f5e9;">
+        <div class="container" style="max-width: 900px; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 20px;">🤝</div>
+            <h2 style="font-size: 32px; color: #2e7d32; margin-bottom: 20px;">Empowering Staff, Not Replacing Them</h2>
+            <p style="font-size: 18px; color: #333; line-height: 1.8; margin-bottom: 30px;">
+                The Ontario Energy Assistant is designed to <strong>reduce wait times and service backlogs</strong> by handling repetitive inquiries, especially during peak periods. 
+                <strong>Human staff remain essential</strong> for complex, sensitive, and escalated cases.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; text-align: left;">
+                <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.08);">
+                    <div style="font-size: 28px; margin-bottom: 10px;">🤖</div>
+                    <h4 style="color: #2e7d32; margin-bottom: 8px;">AI Handles</h4>
+                    <ul style="color: #666; font-size: 14px; padding-left: 18px;">
+                        <li>FAQs and program information</li>
+                        <li>Basic eligibility screening</li>
+                        <li>After-hours inquiries</li>
+                        <li>Multilingual support</li>
+                    </ul>
+                </div>
+                <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.08);">
+                    <div style="font-size: 28px; margin-bottom: 10px;">👩‍💼</div>
+                    <h4 style="color: #2e7d32; margin-bottom: 8px;">Staff Focus On</h4>
+                    <ul style="color: #666; font-size: 14px; padding-left: 18px;">
+                        <li>Complex eligibility cases</li>
+                        <li>Sensitive situations</li>
+                        <li>Escalated complaints</li>
+                        <li>Policy decisions</li>
+                    </ul>
+                </div>
+                <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.08);">
+                    <div style="font-size: 28px; margin-bottom: 10px;">✨</div>
+                    <h4 style="color: #2e7d32; margin-bottom: 8px;">The Result</h4>
+                    <ul style="color: #666; font-size: 14px; padding-left: 18px;">
+                        <li>Shorter wait times for citizens</li>
+                        <li>Less burnout for staff</li>
+                        <li>Better service quality</li>
+                        <li>More time for meaningful work</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Ask Questions</h3>
+                    <p>Citizens ask about energy programs in plain language. The AI understands context and provides accurate, up-to-date information.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Check Eligibility</h3>
+                    <p>Real-time eligibility screening based on home type, income, location, and other factors. No more guessing if you qualify.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Apply Easily</h3>
+                    <p>Guided application process with form pre-filling, document upload assistance, and submission tracking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Track & Analyze</h3>
+                    <p>Government dashboard provides insights on citizen needs, program performance, and policy optimization opportunities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Interested in This Solution?</h2>
+            <p>We're working with the Ontario Ministry of Energy to bring this platform to all Ontarians.</p>
+            <a href="mailto:info@shield-ai.ca?subject=Ontario%20Energy%20Assistant%20-%20Partnership%20Inquiry" class="btn">Partner With Us</a>
+            <a href="products.html" class="btn">View All Products</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 ShieldAI. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const responses = {
+            'heat pump': `Great question! Ontario offers several rebates for heat pumps:\n\n🔹 **Canada Greener Homes Grant**: Up to $5,000 for air-source heat pumps, up to $5,000 for ground-source\n\n🔹 **Enbridge Home Efficiency Rebate**: Up to $5,000 additional rebate\n\n🔹 **Canada Greener Homes Loan**: 0% interest loan up to $40,000\n\n**Total potential savings: Up to $15,000+**\n\nWould you like me to check your eligibility?`,
+            
+            'eligible': `I can help check your eligibility! To determine which programs you qualify for, I'll need to know:\n\n1. Do you own your home?\n2. Is it your primary residence?\n3. What type of home? (detached, semi, townhouse, condo)\n4. What's your approximate household income?\n5. What's your postal code?\n\nYou can answer these one at a time, or tell me about your situation and I'll guide you through it.`,
+            
+            'apply': `Here's how to apply for energy rebates:\n\n**Step 1:** Get a pre-retrofit EnerGuide evaluation (~$600, rebate available)\n\n**Step 2:** Complete eligible upgrades with a registered contractor\n\n**Step 3:** Get a post-retrofit evaluation\n\n**Step 4:** Submit your application with receipts\n\n**Timeline:** Applications typically processed in 4-8 weeks\n\nI can help you find registered contractors and guide you through each step. Would you like to start?`,
+            
+            'programs': `Here are the main Ontario energy programs:\n\n⚡ **Canada Greener Homes Grant**\nUp to $5,600 for home retrofits\n\n🏠 **Enbridge Home Efficiency Rebate**\nUp to $5,000 for heating upgrades\n\n💰 **Canada Greener Homes Loan**\n0% interest up to $40,000\n\n🔌 **Save on Energy**\nFree smart thermostats & rebates\n\n☀️ **Net Metering**\nSell solar power back to grid\n\nWhich program would you like to learn more about?`,
+            
+            'default': `I understand you're asking about "${query}". Let me help you with that.\n\nAs the Ontario Energy Assistant, I can help you:\n• Find rebates you qualify for\n• Check eligibility requirements\n• Guide you through applications\n• Answer questions about energy programs\n\nCould you tell me more about what you're looking for? For example, are you interested in a specific upgrade like insulation, windows, or a heat pump?`
+        };
+
+        let query = '';
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            query = message;
+            addMessage(message, 'user');
+            input.value = '';
+            
+            showTyping();
+            
+            setTimeout(() => {
+                hideTyping();
+                const response = getResponse(message.toLowerCase());
+                addMessage(response, 'bot');
+            }, 1000 + Math.random() * 1000);
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('userInput').value = message;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addMessage(text, type) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTyping() {
+            const messagesDiv = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message typing';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        function getResponse(message) {
+            if (message.includes('heat pump') || message.includes('pump')) {
+                return responses['heat pump'];
+            } else if (message.includes('eligible') || message.includes('qualify')) {
+                return responses['eligible'];
+            } else if (message.includes('apply') || message.includes('application') || message.includes('how do i')) {
+                return responses['apply'];
+            } else if (message.includes('program') || message.includes('available') || message.includes('what')) {
+                return responses['programs'];
+            } else {
+                return responses['default'].replace('${query}', query);
+            }
+        }
+    </script>
+</body>
+</html>
