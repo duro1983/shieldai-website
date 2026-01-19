@@ -734,17 +734,13 @@
             
             'programs': `Here are the main Ontario energy programs:\n\n⚡ **Canada Greener Homes Grant**\nUp to $5,600 for home retrofits\n\n🏠 **Enbridge Home Efficiency Rebate**\nUp to $5,000 for heating upgrades\n\n💰 **Canada Greener Homes Loan**\n0% interest up to $40,000\n\n🔌 **Save on Energy**\nFree smart thermostats & rebates\n\n☀️ **Net Metering**\nSell solar power back to grid\n\nWhich program would you like to learn more about?`,
             
-            'default': `I understand you're asking about "${query}". Let me help you with that.\n\nAs the Ontario Energy Assistant, I can help you:\n• Find rebates you qualify for\n• Check eligibility requirements\n• Guide you through applications\n• Answer questions about energy programs\n\nCould you tell me more about what you're looking for? For example, are you interested in a specific upgrade like insulation, windows, or a heat pump?`
+            'default': `I understand you're asking about that. Let me help you.\n\nAs the Ontario Energy Assistant, I can help you:\n• Find rebates you qualify for\n• Check eligibility requirements\n• Guide you through applications\n• Answer questions about energy programs\n\nCould you tell me more about what you're looking for? For example, are you interested in a specific upgrade like insulation, windows, or a heat pump?`
         };
-
-        let query = '';
 
         function sendMessage() {
             const input = document.getElementById('userInput');
             const message = input.value.trim();
             if (!message) return;
-            
-            query = message;
             addMessage(message, 'user');
             input.value = '';
             
@@ -802,7 +798,7 @@
             } else if (message.includes('program') || message.includes('available') || message.includes('what')) {
                 return responses['programs'];
             } else {
-                return responses['default'].replace('${query}', query);
+                return responses['default'];
             }
         }
     </script>
