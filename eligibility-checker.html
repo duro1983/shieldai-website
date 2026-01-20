@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Your Eligibility - Ontario Energy Assistant | ShieldAI</title>
+    <meta name="description" content="Find out which Ontario energy rebate programs you qualify for. AI-powered eligibility screening in minutes.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2C3E87;
+            text-decoration: none;
+        }
+        
+        .logo svg {
+            width: 35px;
+            height: 35px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        nav a:hover, nav a.active {
+            color: #28a745;
+        }
+        
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #218838;
+        }
+        
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        /* Progress Steps */
+        .progress-bar {
+            background: white;
+            padding: 20px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 30px;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            width: 40px;
+            height: 2px;
+            background: #dee2e6;
+        }
+
+        .step.active:not(:last-child)::after {
+            background: #28a745;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .step.active .step-number {
+            background: #28a745;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .step.active .step-label {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .form-body {
+            padding: 40px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #28a745;
+        }
+
+        .form-group .hint {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option input:checked + label {
+            border-color: #28a745;
+            background: #e8f5e9;
+            color: #28a745;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkbox-option:hover {
+            border-color: #28a745;
+        }
+
+        .checkbox-option input {
+            width: 18px;
+            height: 18px;
+            accent-color: #28a745;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        /* Results Section */
+        .results-container {
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .results-header .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .results-header h2 {
+            font-size: 28px;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .total-savings {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .total-savings .amount {
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .total-savings .label {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .program-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .program-card:hover {
+            border-color: #28a745;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .program-card.eligible {
+            border-left: 4px solid #28a745;
+        }
+
+        .program-card.maybe {
+            border-left: 4px solid #ffc107;
+        }
+
+        .program-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .program-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .program-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .eligibility-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .eligibility-badge.eligible {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .eligibility-badge.maybe {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .program-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .program-requirements {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .program-requirements h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .program-requirements ul {
+            margin-left: 20px;
+            color: #666;
+        }
+
+        .cra-notice {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: start;
+        }
+
+        .cra-notice .icon {
+            font-size: 24px;
+        }
+
+        .cra-notice h4 {
+            color: #1565c0;
+            margin-bottom: 5px;
+        }
+
+        .cra-notice p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .next-steps {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .next-steps h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .next-steps .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .footer-bottom a {
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+
+            .steps {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .step:not(:last-child)::after {
+                display: none;
+            }
+
+            .form-body {
+                padding: 25px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <svg width="35" height="35" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 20 L160 50 L160 110 Q160 150 100 180 Q40 150 40 110 L40 50 Z" fill="#2C3E87" stroke="#4A90E2" stroke-width="3"/>
+                        <text x="100" y="115" font-family="Arial" font-size="60" font-weight="bold" fill="white" text-anchor="middle">⚡</text>
+                    </svg>
+                    <span>Ontario Energy Assistant</span>
+                </a>
+                <ul>
+                    <li><a href="ontario-energy-demo.html">Chat</a></li>
+                    <li><a href="eligibility-checker.html" class="active">Check Eligibility</a></li>
+                    <li><a href="apply-assistant.html">Apply</a></li>
+                    <li><a href="status-tracker.html">Track Status</a></li>
+                </ul>
+                <a href="ontario-energy-demo.html" class="btn btn-primary">Back to Demo</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="container">
+            <div class="steps">
+                <div class="step active" id="step1-indicator">
+                    <div class="step-number">1</div>
+                    <span class="step-label">Your Home</span>
+                </div>
+                <div class="step" id="step2-indicator">
+                    <div class="step-number">2</div>
+                    <span class="step-label">Household</span>
+                </div>
+                <div class="step" id="step3-indicator">
+                    <div class="step-number">3</div>
+                    <span class="step-label">Upgrades</span>
+                </div>
+                <div class="step" id="step4-indicator">
+                    <div class="step-number">4</div>
+                    <span class="step-label">Results</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="form-container" id="formContainer">
+                <div class="form-header">
+                    <h1>Check Your Eligibility</h1>
+                    <p>Answer a few questions to see which programs you qualify for</p>
+                </div>
+                <div class="form-body">
+                    <!-- Step 1: Home Information -->
+                    <div class="form-section active" id="step1">
+                        <h3 style="margin-bottom: 25px; color: #333;">Tell us about your home</h3>
+                        
+                        <div class="form-group">
+                            <label>Do you own your home?</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="ownership" id="own-yes" value="yes">
+                                    <label for="own-yes">Yes, I own it</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="ownership" id="own-no" value="no">
+                                    <label for="own-no">No, I rent</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Is this your primary residence?</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="primary" id="primary-yes" value="yes">
+                                    <label for="primary-yes">Yes</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="primary" id="primary-no" value="no">
+                                    <label for="primary-no">No</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What type of home do you live in?</label>
+                            <select id="homeType">
+                                <option value="">Select home type...</option>
+                                <option value="detached">Detached House</option>
+                                <option value="semi">Semi-Detached</option>
+                                <option value="townhouse">Townhouse / Row House</option>
+                                <option value="condo">Condo / Apartment</option>
+                                <option value="mobile">Mobile Home</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What is your postal code?</label>
+                            <input type="text" id="postalCode" placeholder="e.g., M5V 1A1" maxlength="7">
+                            <p class="hint">We use this to find local programs and contractors</p>
+                        </div>
+
+                        <div class="form-actions">
+                            <div></div>
+                            <button class="btn btn-primary" onclick="nextStep(2)">Continue →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Household Information -->
+                    <div class="form-section" id="step2">
+                        <h3 style="margin-bottom: 25px; color: #333;">Household Information</h3>
+                        
+                        <div class="form-group">
+                            <label>How many people live in your household?</label>
+                            <select id="householdSize">
+                                <option value="">Select...</option>
+                                <option value="1">1 person</option>
+                                <option value="2">2 people</option>
+                                <option value="3">3 people</option>
+                                <option value="4">4 people</option>
+                                <option value="5">5+ people</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What is your approximate annual household income?</label>
+                            <select id="income">
+                                <option value="">Select income range...</option>
+                                <option value="under30">Under $30,000</option>
+                                <option value="30-50">$30,000 - $50,000</option>
+                                <option value="50-80">$50,000 - $80,000</option>
+                                <option value="80-120">$80,000 - $120,000</option>
+                                <option value="120-200">$120,000 - $200,000</option>
+                                <option value="over200">Over $200,000</option>
+                            </select>
+                            <p class="hint">This helps determine eligibility for income-based programs</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What is your current heating source?</label>
+                            <select id="heatingSource">
+                                <option value="">Select...</option>
+                                <option value="gas">Natural Gas</option>
+                                <option value="oil">Oil / Propane</option>
+                                <option value="electric">Electric Baseboard</option>
+                                <option value="heatpump">Heat Pump</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevStep(1)">← Back</button>
+                            <button class="btn btn-primary" onclick="nextStep(3)">Continue →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Planned Upgrades -->
+                    <div class="form-section" id="step3">
+                        <h3 style="margin-bottom: 25px; color: #333;">What upgrades are you considering?</h3>
+                        <p style="color: #666; margin-bottom: 20px;">Select all that apply</p>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="upgrades" value="heatpump">
+                                    <span>Heat Pump</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="upgrades" value="insulation">
+                                    <span>Insulation</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="upgrades" value="windows">
+                                    <span>Windows / Doors</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="upgrades" value="solar">
+                                    <span>Solar Panels</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="upgrades" value="waterheater">
+                                    <span>Water Heater</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="upgrades" value="thermostat">
+                                    <span>Smart Thermostat</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="upgrades" value="ev">
+                                    <span>EV Charger</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="upgrades" value="other">
+                                    <span>Other / Not Sure</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 30px;">
+                            <label>When are you planning to make these upgrades?</label>
+                            <select id="timeline">
+                                <option value="">Select timeline...</option>
+                                <option value="asap">As soon as possible</option>
+                                <option value="3months">Within 3 months</option>
+                                <option value="6months">Within 6 months</option>
+                                <option value="year">Within a year</option>
+                                <option value="exploring">Just exploring options</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
+                            <button class="btn btn-primary" onclick="showResults()">See My Results →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div class="results-container" id="resultsContainer">
+                <div class="results-header">
+                    <div class="icon">🎉</div>
+                    <h2>Great News! You May Qualify for Multiple Programs</h2>
+                    <p>Based on your answers, here are the programs you're likely eligible for:</p>
+                </div>
+
+                <div class="total-savings">
+                    <div class="label">Potential Total Savings</div>
+                    <div class="amount">Up to $21,100</div>
+                </div>
+
+                <div class="program-card eligible">
+                    <div class="program-header">
+                        <div>
+                            <span class="eligibility-badge eligible">✓ Likely Eligible</span>
+                            <div class="program-name">Canada Greener Homes Grant</div>
+                        </div>
+                        <div class="program-amount">Up to $5,600</div>
+                    </div>
+                    <p class="program-description">Federal grant for home energy retrofits including heat pumps, insulation, windows, and more.</p>
+                    <div class="program-requirements">
+                        <h4>Why you qualify:</h4>
+                        <ul>
+                            <li>✓ You own your home</li>
+                            <li>✓ It's your primary residence</li>
+                            <li>✓ Your home type is eligible</li>
+                            <li>✓ You're planning qualifying upgrades</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="program-card eligible">
+                    <div class="program-header">
+                        <div>
+                            <span class="eligibility-badge eligible">✓ Likely Eligible</span>
+                            <div class="program-name">Enbridge Home Efficiency Rebate</div>
+                        </div>
+                        <div class="program-amount">Up to $5,000</div>
+                    </div>
+                    <p class="program-description">Rebates for upgrading to high-efficiency heating equipment if you're an Enbridge Gas customer.</p>
+                    <div class="program-requirements">
+                        <h4>Why you qualify:</h4>
+                        <ul>
+                            <li>✓ You have natural gas heating</li>
+                            <li>✓ You're considering a heat pump upgrade</li>
+                            <li>✓ Your postal code is in the service area</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="program-card eligible">
+                    <div class="program-header">
+                        <div>
+                            <span class="eligibility-badge eligible">✓ Likely Eligible</span>
+                            <div class="program-name">Canada Greener Homes Loan</div>
+                        </div>
+                        <div class="program-amount">Up to $40,000</div>
+                    </div>
+                    <p class="program-description">Interest-free loan to help finance your home energy improvements. 10-year repayment term.</p>
+                    <div class="program-requirements">
+                        <h4>Why you qualify:</h4>
+                        <ul>
+                            <li>✓ You own your home</li>
+                            <li>✓ It's your primary residence</li>
+                            <li>✓ You're planning eligible retrofits</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="program-card maybe">
+                    <div class="program-header">
+                        <div>
+                            <span class="eligibility-badge maybe">? May Qualify</span>
+                            <div class="program-name">Oil to Heat Pump Affordability Program</div>
+                        </div>
+                        <div class="program-amount">Up to $10,000</div>
+                    </div>
+                    <p class="program-description">Additional grant for switching from oil heating to an electric heat pump.</p>
+                    <div class="program-requirements">
+                        <h4>Additional verification needed:</h4>
+                        <ul>
+                            <li>⚠️ Requires oil heating (you selected gas)</li>
+                            <li>✓ Income requirements may apply</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cra-notice">
+                    <div class="icon">🔐</div>
+                    <div>
+                        <h4>Income Verification Available</h4>
+                        <p>For income-based programs, we can securely verify your income through CRA integration (coming soon). This speeds up your application and ensures you get all the rebates you qualify for.</p>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h3>Ready to Apply?</h3>
+                    <p style="color: #666; margin-bottom: 20px;">Our AI assistant can guide you through the application process step by step.</p>
+                    <div class="buttons">
+                        <a href="apply-assistant.html" class="btn btn-primary" style="padding: 15px 40px; font-size: 16px;">Start Application →</a>
+                        <a href="ontario-energy-demo.html" class="btn btn-secondary" style="padding: 15px 40px; font-size: 16px;">Ask Questions First</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 ShieldAI. All rights reserved. | <a href="index.html">Back to ShieldAI</a> | <a href="ontario-energy-demo.html">Ontario Energy Assistant</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+
+        function nextStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('active');
+            document.getElementById(`step${currentStep}-indicator`).classList.add('completed');
+            document.getElementById(`step${step}-indicator`).classList.add('active');
+            
+            currentStep = step;
+            window.scrollTo(0, 0);
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            document.getElementById(`step${currentStep}-indicator`).classList.remove('active');
+            document.getElementById(`step${step}-indicator`).classList.remove('completed');
+            document.getElementById(`step${step}-indicator`).classList.add('active');
+            
+            currentStep = step;
+            window.scrollTo(0, 0);
+        }
+
+        function showResults() {
+            document.getElementById('formContainer').style.display = 'none';
+            document.getElementById('resultsContainer').classList.add('active');
+            
+            document.getElementById('step3-indicator').classList.remove('active');
+            document.getElementById('step3-indicator').classList.add('completed');
+            document.getElementById('step4-indicator').classList.add('active');
+            
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

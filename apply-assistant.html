@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Assistant - Ontario Energy Assistant | ShieldAI</title>
+    <meta name="description" content="AI-guided application process for Ontario energy rebate programs. We help you gather documents and submit your application.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2C3E87;
+            text-decoration: none;
+        }
+        
+        .logo svg {
+            width: 35px;
+            height: 35px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        nav a:hover, nav a.active {
+            color: #28a745;
+        }
+        
+        .btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #218838;
+        }
+        
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #28a745;
+            border: 2px solid #28a745;
+        }
+
+        .btn-outline:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            opacity: 0.9;
+            font-size: 18px;
+        }
+
+        /* Main Layout */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .app-steps {
+            list-style: none;
+        }
+
+        .app-step {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .app-step:last-child {
+            border-bottom: none;
+        }
+
+        .app-step:hover {
+            background: #f8f9fa;
+            margin: 0 -15px;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .step-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .app-step.completed .step-icon {
+            background: #28a745;
+            color: white;
+        }
+
+        .app-step.active .step-icon {
+            background: #007bff;
+            color: white;
+        }
+
+        .step-info h4 {
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .step-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .app-step.completed .step-info h4 {
+            color: #28a745;
+        }
+
+        .app-step.active .step-info h4 {
+            color: #007bff;
+        }
+
+        /* Main Panel */
+        .main-panel {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: #f8f9fa;
+            padding: 25px 30px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .panel-header h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .panel-header p {
+            color: #666;
+        }
+
+        .panel-body {
+            padding: 30px;
+        }
+
+        /* Program Selection */
+        .program-select {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .program-option {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .program-option:hover {
+            border-color: #28a745;
+        }
+
+        .program-option.selected {
+            border-color: #28a745;
+            background: #e8f5e9;
+        }
+
+        .program-option input {
+            display: none;
+        }
+
+        .program-info h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .program-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .program-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        /* Document Checklist */
+        .doc-checklist {
+            list-style: none;
+        }
+
+        .doc-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .doc-item.uploaded {
+            border-color: #28a745;
+            background: #e8f5e9;
+        }
+
+        .doc-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .doc-item.uploaded .doc-checkbox {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .doc-info {
+            flex: 1;
+        }
+
+        .doc-info h4 {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .doc-info p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .doc-action .btn {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: #28a745;
+            background: #f8f9fa;
+        }
+
+        .upload-area .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .upload-area p {
+            color: #666;
+        }
+
+        /* Form Preview */
+        .form-preview {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .form-preview h4 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .form-field:last-child {
+            border-bottom: none;
+        }
+
+        .field-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .field-value {
+            font-weight: 600;
+        }
+
+        .field-value.auto-filled {
+            color: #28a745;
+        }
+
+        /* AI Assistant */
+        .ai-assistant {
+            background: linear-gradient(135deg, #e3f2fd 0%, #e8f5e9 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .ai-message h4 {
+            color: #1565c0;
+            margin-bottom: 5px;
+        }
+
+        .ai-message p {
+            color: #333;
+            font-size: 14px;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-bottom: 30px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Actions */
+        .panel-actions {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            margin-top: 30px;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .footer-bottom a {
+            color: #999;
+        }
+
+        @media (max-width: 900px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <svg width="35" height="35" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 20 L160 50 L160 110 Q160 150 100 180 Q40 150 40 110 L40 50 Z" fill="#2C3E87" stroke="#4A90E2" stroke-width="3"/>
+                        <text x="100" y="115" font-family="Arial" font-size="60" font-weight="bold" fill="white" text-anchor="middle">⚡</text>
+                    </svg>
+                    <span>Ontario Energy Assistant</span>
+                </a>
+                <ul>
+                    <li><a href="ontario-energy-demo.html">Chat</a></li>
+                    <li><a href="eligibility-checker.html">Check Eligibility</a></li>
+                    <li><a href="apply-assistant.html" class="active">Apply</a></li>
+                    <li><a href="status-tracker.html">Track Status</a></li>
+                </ul>
+                <a href="ontario-energy-demo.html" class="btn btn-primary">Back to Demo</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="container">
+            <h1>📝 Application Assistant</h1>
+            <p>We'll guide you through every step of the application process</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <div class="app-layout">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <h3>Application Steps</h3>
+                    <ul class="app-steps">
+                        <li class="app-step completed" onclick="showStep(1)">
+                            <div class="step-icon">✓</div>
+                            <div class="step-info">
+                                <h4>Select Programs</h4>
+                                <p>Choose which rebates to apply for</p>
+                            </div>
+                        </li>
+                        <li class="app-step completed" onclick="showStep(2)">
+                            <div class="step-icon">✓</div>
+                            <div class="step-info">
+                                <h4>Book Evaluation</h4>
+                                <p>Schedule EnerGuide assessment</p>
+                            </div>
+                        </li>
+                        <li class="app-step active" onclick="showStep(3)">
+                            <div class="step-icon">3</div>
+                            <div class="step-info">
+                                <h4>Gather Documents</h4>
+                                <p>Upload required documents</p>
+                            </div>
+                        </li>
+                        <li class="app-step" onclick="showStep(4)">
+                            <div class="step-icon">4</div>
+                            <div class="step-info">
+                                <h4>Review & Submit</h4>
+                                <p>Verify and submit application</p>
+                            </div>
+                        </li>
+                        <li class="app-step" onclick="showStep(5)">
+                            <div class="step-icon">5</div>
+                            <div class="step-info">
+                                <h4>Track Progress</h4>
+                                <p>Monitor your application</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Main Panel -->
+                <div class="main-panel">
+                    <div class="panel-header">
+                        <h2>Step 3: Gather Your Documents</h2>
+                        <p>Upload the required documents to complete your application</p>
+                    </div>
+                    <div class="panel-body">
+                        <!-- AI Assistant -->
+                        <div class="ai-assistant">
+                            <div class="ai-avatar">🤖</div>
+                            <div class="ai-message">
+                                <h4>AI Assistant</h4>
+                                <p>Great progress! You've completed your EnerGuide evaluation. Now let's gather the documents needed for your application. I've pre-filled some information from your eligibility check to save you time.</p>
+                            </div>
+                        </div>
+
+                        <!-- Progress -->
+                        <div class="progress-section">
+                            <div class="progress-header">
+                                <span>Document Collection Progress</span>
+                                <span><strong>3 of 5</strong> documents uploaded</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Document Checklist -->
+                        <h3 style="margin-bottom: 20px;">Required Documents</h3>
+                        <ul class="doc-checklist">
+                            <li class="doc-item uploaded">
+                                <div class="doc-checkbox">✓</div>
+                                <div class="doc-info">
+                                    <h4>Pre-Retrofit EnerGuide Report</h4>
+                                    <p>Uploaded: EnerGuide_Report_2024.pdf (2.3 MB)</p>
+                                </div>
+                                <div class="doc-action">
+                                    <button class="btn btn-secondary">View</button>
+                                </div>
+                            </li>
+                            <li class="doc-item uploaded">
+                                <div class="doc-checkbox">✓</div>
+                                <div class="doc-info">
+                                    <h4>Proof of Home Ownership</h4>
+                                    <p>Uploaded: Property_Tax_Bill.pdf (1.1 MB)</p>
+                                </div>
+                                <div class="doc-action">
+                                    <button class="btn btn-secondary">View</button>
+                                </div>
+                            </li>
+                            <li class="doc-item uploaded">
+                                <div class="doc-checkbox">✓</div>
+                                <div class="doc-info">
+                                    <h4>Government-Issued ID</h4>
+                                    <p>Uploaded: Drivers_License.jpg (0.8 MB)</p>
+                                </div>
+                                <div class="doc-action">
+                                    <button class="btn btn-secondary">View</button>
+                                </div>
+                            </li>
+                            <li class="doc-item">
+                                <div class="doc-checkbox"></div>
+                                <div class="doc-info">
+                                    <h4>Contractor Quote / Invoice</h4>
+                                    <p>Quote or invoice from your registered contractor</p>
+                                </div>
+                                <div class="doc-action">
+                                    <button class="btn btn-primary" onclick="simulateUpload(this)">Upload</button>
+                                </div>
+                            </li>
+                            <li class="doc-item">
+                                <div class="doc-checkbox"></div>
+                                <div class="doc-info">
+                                    <h4>Utility Bill (Recent)</h4>
+                                    <p>Gas or electricity bill from the last 3 months</p>
+                                </div>
+                                <div class="doc-action">
+                                    <button class="btn btn-primary" onclick="simulateUpload(this)">Upload</button>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <!-- Upload Area -->
+                        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                            <div class="icon">📁</div>
+                            <p><strong>Drag and drop files here</strong></p>
+                            <p>or click to browse</p>
+                            <p style="font-size: 12px; margin-top: 10px;">Supported: PDF, JPG, PNG (Max 10MB)</p>
+                            <input type="file" id="fileInput" style="display: none;">
+                        </div>
+
+                        <!-- Auto-filled Form Preview -->
+                        <h3 style="margin: 30px 0 20px;">Auto-Filled Application Data</h3>
+                        <div class="form-preview">
+                            <h4>🤖 Pre-filled from your eligibility check</h4>
+                            <div class="form-field">
+                                <span class="field-label">Full Name</span>
+                                <span class="field-value auto-filled">John Smith ✓</span>
+                            </div>
+                            <div class="form-field">
+                                <span class="field-label">Address</span>
+                                <span class="field-value auto-filled">123 Maple Street, Toronto, ON M5V 1A1 ✓</span>
+                            </div>
+                            <div class="form-field">
+                                <span class="field-label">Home Type</span>
+                                <span class="field-value auto-filled">Detached House ✓</span>
+                            </div>
+                            <div class="form-field">
+                                <span class="field-label">Planned Upgrades</span>
+                                <span class="field-value auto-filled">Heat Pump, Insulation ✓</span>
+                            </div>
+                            <div class="form-field">
+                                <span class="field-label">EnerGuide Rating (Pre)</span>
+                                <span class="field-value auto-filled">42 GJ/year ✓</span>
+                            </div>
+                        </div>
+
+                        <div class="form-preview" style="background: #fff3cd; border: 1px solid #ffc107;">
+                            <h4>⚠️ Income Verification (Optional)</h4>
+                            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Some programs offer additional rebates based on household income. You can verify your income securely through CRA.</p>
+                            <button class="btn btn-outline" style="border-color: #ffc107; color: #856404;">
+                                🔐 Connect to CRA (Coming Soon)
+                            </button>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="panel-actions">
+                            <button class="btn btn-secondary">← Back to Evaluation</button>
+                            <button class="btn btn-primary" onclick="goToReview()">Continue to Review →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 ShieldAI. All rights reserved. | <a href="index.html">Back to ShieldAI</a> | <a href="ontario-energy-demo.html">Ontario Energy Assistant</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function simulateUpload(btn) {
+            const docItem = btn.closest('.doc-item');
+            docItem.classList.add('uploaded');
+            docItem.querySelector('.doc-checkbox').innerHTML = '✓';
+            docItem.querySelector('.doc-info p').textContent = 'Uploaded: Document.pdf (1.2 MB)';
+            btn.textContent = 'View';
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-secondary');
+            
+            // Update progress
+            const uploaded = document.querySelectorAll('.doc-item.uploaded').length;
+            const total = document.querySelectorAll('.doc-item').length;
+            document.querySelector('.progress-header span:last-child').innerHTML = `<strong>${uploaded} of ${total}</strong> documents uploaded`;
+            document.querySelector('.progress-fill').style.width = `${(uploaded/total)*100}%`;
+        }
+
+        function showStep(step) {
+            // In a real app, this would show different content
+            alert(`This demo shows Step 3. In the full application, clicking here would navigate to Step ${step}.`);
+        }
+
+        function goToReview() {
+            alert('In the full application, this would take you to the Review & Submit step where you can verify all information before submitting.');
+        }
+    </script>
+</body>
+</html>
