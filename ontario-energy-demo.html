@@ -576,6 +576,7 @@
                         <button class="quick-action" onclick="sendQuickMessage('Am I eligible for energy rebates?')">Check eligibility</button>
                         <button class="quick-action" onclick="sendQuickMessage('How do I apply for rebates?')">How to apply</button>
                         <button class="quick-action" onclick="sendQuickMessage('What programs are available?')">All programs</button>
+                        <button class="quick-action" onclick="sendQuickMessage('How do I find a contractor?')">Find contractor</button>
                     </div>
                     <div class="chat-input">
                         <input type="text" id="userInput" placeholder="Type your question..." onkeypress="handleKeyPress(event)">
@@ -629,6 +630,62 @@
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Find a Contractor Section -->
+    <section style="padding: 60px 0; background: #fff;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="font-size: 48px; margin-bottom: 15px;">🔧</div>
+                <h2 style="font-size: 32px; color: #2C3E87; margin-bottom: 15px;">Find a Certified Contractor</h2>
+                <p style="font-size: 18px; color: #666; max-width: 700px; margin: 0 auto;">
+                    Connect with verified, certified contractors to complete your energy upgrades and qualify for rebates.
+                </p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+                <!-- NRCan -->
+                <a href="https://oee.nrcan.gc.ca/corporate/statistics/neud/dpa/data_e/search/search.cfm?attr=0" target="_blank" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; transition: transform 0.3s, box-shadow 0.3s;">
+                        <div style="font-size: 36px; margin-bottom: 15px;">🍁</div>
+                        <h3 style="font-size: 20px; margin-bottom: 10px;">NRCan Energy Advisors</h3>
+                        <p style="font-size: 14px; opacity: 0.9; margin-bottom: 15px;">Find registered energy advisors for EnerGuide home evaluations required for Greener Homes Grant.</p>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-size: 13px;">Search Directory →</span>
+                    </div>
+                </a>
+                <!-- Enbridge -->
+                <a href="https://www.enbridgegas.com/residential/rebates-energy-conservation/find-a-contractor" target="_blank" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; transition: transform 0.3s, box-shadow 0.3s;">
+                        <div style="font-size: 36px; margin-bottom: 15px;">🔥</div>
+                        <h3 style="font-size: 20px; margin-bottom: 10px;">Enbridge Contractors</h3>
+                        <p style="font-size: 14px; opacity: 0.9; margin-bottom: 15px;">Find contractors participating in Enbridge Home Efficiency Rebate programs for heating upgrades.</p>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-size: 13px;">Find Contractor →</span>
+                    </div>
+                </a>
+                <!-- HRAI -->
+                <a href="https://www.hrai.ca/find-a-contractor" target="_blank" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; transition: transform 0.3s, box-shadow 0.3s;">
+                        <div style="font-size: 36px; margin-bottom: 15px;">❄️</div>
+                        <h3 style="font-size: 20px; margin-bottom: 10px;">HRAI HVAC Contractors</h3>
+                        <p style="font-size: 14px; opacity: 0.9; margin-bottom: 15px;">Find certified HVAC contractors for heat pumps, furnaces, and air conditioning installations.</p>
+                        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-size: 13px;">Search HRAI →</span>
+                    </div>
+                </a>
+                <!-- Save on Energy -->
+                <a href="https://saveonenergy.ca/For-Your-Home/Find-a-Contractor" target="_blank" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%); color: #333; padding: 30px; border-radius: 15px; text-align: center; transition: transform 0.3s, box-shadow 0.3s;">
+                        <div style="font-size: 36px; margin-bottom: 15px;">💡</div>
+                        <h3 style="font-size: 20px; margin-bottom: 10px;">Save on Energy</h3>
+                        <p style="font-size: 14px; opacity: 0.9; margin-bottom: 15px;">Find participating contractors for insulation, windows, and other energy efficiency upgrades.</p>
+                        <span style="background: rgba(0,0,0,0.1); padding: 8px 16px; border-radius: 20px; font-size: 13px;">Find Contractor →</span>
+                    </div>
+                </a>
+            </div>
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                <p style="color: #666; font-size: 14px; margin: 0;">
+                    💡 <strong>Tip:</strong> Always verify contractor certifications and get multiple quotes before proceeding with upgrades.
+                </p>
             </div>
         </div>
     </section>
@@ -735,6 +792,8 @@
             
             'programs': `Here are the main Ontario energy programs:\n\n⚡ **Canada Greener Homes Grant**\nUp to $5,600 for home retrofits\n\n🏠 **Enbridge Home Efficiency Rebate**\nUp to $5,000 for heating upgrades\n\n💰 **Canada Greener Homes Loan**\n0% interest up to $40,000\n\n🔌 **Save on Energy**\nFree smart thermostats & rebates\n\n☀️ **Net Metering**\nSell solar power back to grid\n\nWhich program would you like to learn more about?`,
             
+            'contractor': `Great! Finding a certified contractor is an important step. Here are your options:\n\n🍁 **NRCan Energy Advisors**\nFor EnerGuide evaluations (required for Greener Homes Grant)\n\n🔥 **Enbridge Contractors**\nFor heating upgrades eligible for Enbridge rebates\n\n❄️ **HRAI HVAC Contractors**\nFor heat pumps, furnaces, and AC installations\n\n💡 **Save on Energy Contractors**\nFor insulation, windows, and efficiency upgrades\n\n👇 Scroll down to the "Find a Certified Contractor" section for direct links to each directory.\n\n**Tip:** Always get 2-3 quotes and verify certifications before hiring!`,
+            
             'default': `I understand you're asking about that. Let me help you.\n\nAs the Ontario Energy Assistant, I can help you:\n• Find rebates you qualify for\n• Check eligibility requirements\n• Guide you through applications\n• Answer questions about energy programs\n\nCould you tell me more about what you're looking for? For example, are you interested in a specific upgrade like insulation, windows, or a heat pump?`
         };
 
@@ -792,6 +851,8 @@
         function getResponse(message) {
             if (message.includes('heat pump') || message.includes('pump')) {
                 return responses['heat pump'];
+            } else if (message.includes('contractor') || message.includes('installer') || message.includes('find a')) {
+                return responses['contractor'];
             } else if (message.includes('eligible') || message.includes('qualify')) {
                 return responses['eligible'];
             } else if (message.includes('apply') || message.includes('application') || message.includes('how do i')) {
