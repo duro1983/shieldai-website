@@ -1,827 +1,573 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Your Application - Ontario Energy Assistant | ShieldAI</title>
-    <meta name="description" content="Track the status of your Ontario energy rebate applications in real-time. Get updates and next steps.">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #2C3E87;
-            text-decoration: none;
-        }
-        
-        .logo svg {
-            width: 35px;
-            height: 35px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
-        
-        nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            font-size: 14px;
-        }
-        
-        nav a:hover, nav a.active {
-            color: #28a745;
-        }
-        
-        .btn {
-            padding: 10px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-block;
-            cursor: pointer;
-            border: none;
-            font-size: 14px;
-        }
-        
-        .btn-primary {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #218838;
-        }
-        
-        .btn-secondary {
-            background: #e9ecef;
-            color: #333;
-        }
-
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .hero p {
-            opacity: 0.9;
-            font-size: 18px;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 40px 0;
-        }
-
-        /* Dashboard Grid */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
-        }
-
-        /* Summary Cards */
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .summary-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-
-        .summary-card .icon {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .summary-card .value {
-            font-size: 32px;
-            font-weight: bold;
-            color: #28a745;
-        }
-
-        .summary-card .label {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .summary-card.pending .value {
-            color: #ffc107;
-        }
-
-        .summary-card.processing .value {
-            color: #007bff;
-        }
-
-        /* Application Cards */
-        .applications-section {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .section-header {
-            padding: 20px 25px;
-            border-bottom: 1px solid #e9ecef;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-header h2 {
-            font-size: 20px;
-        }
-
-        .application-card {
-            padding: 25px;
-            border-bottom: 1px solid #e9ecef;
-            transition: background 0.3s;
-        }
-
-        .application-card:last-child {
-            border-bottom: none;
-        }
-
-        .application-card:hover {
-            background: #f8f9fa;
-        }
-
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 15px;
-        }
-
-        .app-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .app-id {
-            font-size: 13px;
-            color: #666;
-        }
-
-        .status-badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .status-badge.approved {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-badge.processing {
-            background: #cce5ff;
-            color: #004085;
-        }
-
-        .status-badge.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-badge.action {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        /* Timeline */
-        .app-timeline {
-            margin: 20px 0;
-        }
-
-        .timeline-bar {
-            height: 6px;
-            background: #e9ecef;
-            border-radius: 3px;
-            position: relative;
-            margin-bottom: 10px;
-        }
-
-        .timeline-progress {
-            height: 100%;
-            border-radius: 3px;
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        .timeline-progress.approved {
-            background: #28a745;
-        }
-
-        .timeline-progress.processing {
-            background: #007bff;
-        }
-
-        .timeline-progress.pending {
-            background: #ffc107;
-        }
-
-        .timeline-steps {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #666;
-        }
-
-        .timeline-step.completed {
-            color: #28a745;
-            font-weight: 600;
-        }
-
-        .timeline-step.current {
-            color: #007bff;
-            font-weight: 600;
-        }
-
-        /* App Details */
-        .app-details {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e9ecef;
-        }
-
-        .detail-item {
-            font-size: 14px;
-        }
-
-        .detail-item .label {
-            color: #666;
-            margin-bottom: 3px;
-        }
-
-        .detail-item .value {
-            font-weight: 600;
-        }
-
-        .app-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .app-actions .btn {
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .sidebar-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .sidebar-card h3 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Next Steps */
-        .next-steps-list {
-            list-style: none;
-        }
-
-        .next-step-item {
-            display: flex;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .next-step-item:last-child {
-            border-bottom: none;
-        }
-
-        .step-priority {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-top: 6px;
-            flex-shrink: 0;
-        }
-
-        .step-priority.high {
-            background: #dc3545;
-        }
-
-        .step-priority.medium {
-            background: #ffc107;
-        }
-
-        .step-priority.low {
-            background: #28a745;
-        }
-
-        .step-content h4 {
-            font-size: 14px;
-            margin-bottom: 3px;
-        }
-
-        .step-content p {
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* Activity Feed */
-        .activity-feed {
-            list-style: none;
-        }
-
-        .activity-item {
-            display: flex;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .activity-icon.success {
-            background: #d4edda;
-        }
-
-        .activity-icon.info {
-            background: #cce5ff;
-        }
-
-        .activity-icon.warning {
-            background: #fff3cd;
-        }
-
-        .activity-content h4 {
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .activity-content p {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .activity-time {
-            font-size: 11px;
-            color: #999;
-            margin-top: 3px;
-        }
-
-        /* Notifications */
-        .notification-banner {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .notification-banner .icon {
-            font-size: 24px;
-        }
-
-        .notification-banner p {
-            flex: 1;
-            font-size: 14px;
-        }
-
-        .notification-banner .btn {
-            background: white;
-            color: #007bff;
-            padding: 8px 16px;
-            font-size: 13px;
-        }
-
-        /* Help Card */
-        .help-card {
-            background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
-            border: none;
-        }
-
-        .help-card .ai-avatar {
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-
-        .help-card p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        /* Footer */
-        footer {
-            background: #1a1a1a;
-            color: white;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            color: #999;
-            font-size: 14px;
-        }
-
-        .footer-bottom a {
-            color: #999;
-        }
-
-        @media (max-width: 1000px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .summary-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .app-details {
-                grid-template-columns: 1fr;
-            }
-
-            nav ul {
-                display: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Application status tracker — ShieldAI</title>
+<meta name="description" content="Track the status of your Ontario energy rebate applications, see the stage each one has reached and what is required next.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shield.css">
+<style>
+  /* Page-unique: tracker layout and the two sidebar feeds. Tokens only. */
+
+  .dashboard-grid { display: grid; gap: var(--s-6); align-items: start; }
+  @media (min-width: 1000px) {
+    .dashboard-grid { grid-template-columns: minmax(0, 1fr) 340px; }
+  }
+  .sidebar { display: grid; gap: var(--s-6); min-width: 0; }
+
+  /* Application card */
+  .application-card { padding: var(--s-6); border-bottom: 1px solid var(--border); }
+  .application-card:last-child { border-bottom: 0; }
+
+  .app-header {
+    display: flex; flex-wrap: wrap; justify-content: space-between;
+    align-items: flex-start; gap: var(--s-3);
+  }
+  .app-name { font-size: var(--t-lg); font-weight: 620; letter-spacing: -0.015em; }
+  .app-id {
+    margin-top: var(--s-1);
+    font-family: var(--font-mono); font-size: var(--t-xs);
+    color: var(--text-muted);
+  }
+
+  .app-timeline { margin-top: var(--s-5); }
+  .app-details {
+    margin-top: var(--s-5); padding-top: var(--s-5);
+    border-top: 1px solid var(--border);
+  }
+  .app-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-5); }
+
+  /* Sidebar feeds — icon hangs beside a single text block so lines still wrap */
+  .next-step-item, .activity-item {
+    display: flex; gap: var(--s-3);
+    padding: var(--s-4) 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .next-step-item:first-child, .activity-item:first-child { padding-top: 0; }
+  .next-step-item:last-child, .activity-item:last-child { padding-bottom: 0; border-bottom: 0; }
+
+  .activity-icon {
+    display: grid; place-items: center;
+    width: 32px; height: 32px; flex: none;
+    color: var(--b-600); background: var(--b-50);
+    border: 1px solid var(--b-100); border-radius: var(--r-full);
+  }
+  .activity-icon svg { width: 16px; height: 16px; }
+  .activity-icon--ok   { color: var(--ok-600); background: #f0fdf4; border-color: #bbf7d0; }
+  .activity-icon--warn { color: #92400e;       background: #fffbeb; border-color: #fde68a; }
+
+  .next-step-item h4, .activity-content h4 { font-size: var(--t-sm); font-weight: 620; }
+  .next-step-item p, .activity-content p {
+    margin-top: 2px; font-size: var(--t-sm); color: var(--text-muted); line-height: 1.5;
+  }
+  .activity-time { margin-top: var(--s-1); font-size: var(--t-xs); color: var(--text-muted); }
+  .next-step-item .status { margin-top: var(--s-2); }
+  .next-step-item > div, .activity-content { min-width: 0; }
+</style>
 </head>
+
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <svg width="35" height="35" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 20 L160 50 L160 110 Q160 150 100 180 Q40 150 40 110 L40 50 Z" fill="#2C3E87" stroke="#4A90E2" stroke-width="3"/>
-                        <text x="100" y="115" font-family="Arial" font-size="60" font-weight="bold" fill="white" text-anchor="middle">⚡</text>
-                    </svg>
-                    <span>Ontario Energy Assistant</span>
-                </a>
-                <ul>
-                    <li><a href="ontario-energy-demo.html">Chat</a></li>
-                    <li><a href="eligibility-checker.html">Check Eligibility</a></li>
-                    <li><a href="apply-assistant.html">Apply</a></li>
-                    <li><a href="status-tracker.html" class="active">Track Status</a></li>
-                </ul>
-                <a href="ontario-energy-demo.html" class="btn btn-primary">Back to Demo</a>
-            </nav>
-        </div>
-    </header>
+<a class="skip-link" href="#main">Skip to content</a>
 
-    <!-- Hero -->
-    <div class="hero">
-        <div class="container">
-            <h1>📊 Application Status Tracker</h1>
-            <p>Monitor your rebate applications and see what's next</p>
-        </div>
+<!-- ══ Header ══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="hm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#hm)"/>
+        <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+        <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+          <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+        </g>
+        <g fill="#8EC5FF">
+          <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+          <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+        </g>
+        <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+      </svg>
+      <span>ShieldAI</span>
+    </a>
+    <span class="app-header__context">Status tracker</span>
+
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="index.html#portfolio">Products</a>
+      <a href="index.html#infrastructure">Infrastructure</a>
+      <a href="index.html#compliance">Compliance</a>
+      <a href="index.html#engage">How we work</a>
+      <a href="products.html">All products</a>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn--secondary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20enquiry">Contact</a>
+      <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20briefing%20request&amp;body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20book%20a%20technical%20briefing.%0D%0A%0D%0AName%3A%0D%0AOrganisation%3A%0D%0ARole%3A%0D%0AArea%20of%20interest%3A%0D%0ABest%20time%3A%0D%0A">
+        Book a briefing
+      </a>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container">
-            <!-- Notification Banner -->
-            <div class="notification-banner">
-                <div class="icon">🔔</div>
-                <p><strong>Action Required:</strong> Your Enbridge rebate application needs additional documentation. Upload your utility bill to continue.</p>
-                <button class="btn" onclick="alert('This would take you to upload the required document.')">Upload Now</button>
-            </div>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+</header>
 
-            <!-- Summary Cards -->
-            <div class="summary-cards">
-                <div class="summary-card">
-                    <div class="icon">✅</div>
-                    <div class="value">$5,600</div>
-                    <div class="label">Approved Rebates</div>
-                </div>
-                <div class="summary-card processing">
-                    <div class="icon">⏳</div>
-                    <div class="value">$5,000</div>
-                    <div class="label">Processing</div>
-                </div>
-                <div class="summary-card pending">
-                    <div class="icon">📋</div>
-                    <div class="value">$40,000</div>
-                    <div class="label">Loan Pending</div>
-                </div>
-            </div>
+<script>
+(function () {
+  var btn = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('site-nav');
+  if (!btn || !nav) return;
 
-            <div class="dashboard-grid">
-                <!-- Main Panel -->
-                <div class="applications-section">
-                    <div class="section-header">
-                        <h2>Your Applications</h2>
-                        <button class="btn btn-secondary">+ New Application</button>
-                    </div>
+  function setOpen(open) {
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) { nav.setAttribute('data-open', ''); }
+    else { nav.removeAttribute('data-open'); }
+  }
 
-                    <!-- Application 1: Approved -->
-                    <div class="application-card">
-                        <div class="app-header">
-                            <div>
-                                <div class="app-name">Canada Greener Homes Grant</div>
-                                <div class="app-id">Application #CGH-2024-78542</div>
-                            </div>
-                            <span class="status-badge approved">✓ Approved</span>
-                        </div>
-                        <div class="app-timeline">
-                            <div class="timeline-bar">
-                                <div class="timeline-progress approved" style="width: 100%;"></div>
-                            </div>
-                            <div class="timeline-steps">
-                                <span class="timeline-step completed">Submitted</span>
-                                <span class="timeline-step completed">Under Review</span>
-                                <span class="timeline-step completed">Approved</span>
-                                <span class="timeline-step completed">Payment Sent</span>
-                            </div>
-                        </div>
-                        <div class="app-details">
-                            <div class="detail-item">
-                                <div class="label">Rebate Amount</div>
-                                <div class="value" style="color: #28a745;">$5,600</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label">Submitted</div>
-                                <div class="value">Oct 15, 2024</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label">Payment Date</div>
-                                <div class="value">Jan 10, 2025</div>
-                            </div>
-                        </div>
-                        <div class="app-actions">
-                            <button class="btn btn-secondary">View Details</button>
-                            <button class="btn btn-secondary">Download Receipt</button>
-                        </div>
-                    </div>
+  btn.addEventListener('click', function () {
+    setOpen(btn.getAttribute('aria-expanded') !== 'true');
+  });
 
-                    <!-- Application 2: Processing -->
-                    <div class="application-card">
-                        <div class="app-header">
-                            <div>
-                                <div class="app-name">Enbridge Home Efficiency Rebate</div>
-                                <div class="app-id">Application #ENB-2024-34521</div>
-                            </div>
-                            <span class="status-badge action">⚠️ Action Required</span>
-                        </div>
-                        <div class="app-timeline">
-                            <div class="timeline-bar">
-                                <div class="timeline-progress pending" style="width: 50%;"></div>
-                            </div>
-                            <div class="timeline-steps">
-                                <span class="timeline-step completed">Submitted</span>
-                                <span class="timeline-step current">Under Review</span>
-                                <span class="timeline-step">Approved</span>
-                                <span class="timeline-step">Payment</span>
-                            </div>
-                        </div>
-                        <div class="app-details">
-                            <div class="detail-item">
-                                <div class="label">Rebate Amount</div>
-                                <div class="value">Up to $5,000</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label">Submitted</div>
-                                <div class="value">Dec 20, 2024</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label">Est. Completion</div>
-                                <div class="value">Feb 15, 2025</div>
-                            </div>
-                        </div>
-                        <div class="app-actions">
-                            <button class="btn btn-primary">Upload Missing Document</button>
-                            <button class="btn btn-secondary">View Details</button>
-                        </div>
-                    </div>
+  // Close after choosing a destination, or on Escape
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false); btn.focus();
+    }
+  });
+  // Reset state if the viewport grows back to the desktop layout
+  window.matchMedia('(min-width: 941px)').addEventListener('change', function (m) {
+    if (m.matches) setOpen(false);
+  });
+})();
+</script>
 
-                    <!-- Application 3: Pending -->
-                    <div class="application-card">
-                        <div class="app-header">
-                            <div>
-                                <div class="app-name">Canada Greener Homes Loan</div>
-                                <div class="app-id">Application #CGL-2025-12345</div>
-                            </div>
-                            <span class="status-badge processing">🔄 Processing</span>
-                        </div>
-                        <div class="app-timeline">
-                            <div class="timeline-bar">
-                                <div class="timeline-progress processing" style="width: 25%;"></div>
-                            </div>
-                            <div class="timeline-steps">
-                                <span class="timeline-step completed">Submitted</span>
-                                <span class="timeline-step current">Credit Check</span>
-                                <span class="timeline-step">Approval</span>
-                                <span class="timeline-step">Disbursement</span>
-                            </div>
-                        </div>
-                        <div class="app-details">
-                            <div class="detail-item">
-                                <div class="label">Loan Amount</div>
-                                <div class="value">$40,000</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label">Submitted</div>
-                                <div class="value">Jan 5, 2025</div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="label">Est. Completion</div>
-                                <div class="value">Feb 28, 2025</div>
-                            </div>
-                        </div>
-                        <div class="app-actions">
-                            <button class="btn btn-secondary">View Details</button>
-                            <button class="btn btn-secondary">Contact Support</button>
-                        </div>
-                    </div>
-                </div>
+<main id="main" class="app-main">
+  <div class="wrap">
 
-                <!-- Sidebar -->
-                <div class="sidebar">
-                    <!-- Next Steps -->
-                    <div class="sidebar-card">
-                        <h3>📋 Next Steps</h3>
-                        <ul class="next-steps-list">
-                            <li class="next-step-item">
-                                <div class="step-priority high"></div>
-                                <div class="step-content">
-                                    <h4>Upload Utility Bill</h4>
-                                    <p>Required for Enbridge application</p>
-                                </div>
-                            </li>
-                            <li class="next-step-item">
-                                <div class="step-priority medium"></div>
-                                <div class="step-content">
-                                    <h4>Schedule Post-Retrofit Evaluation</h4>
-                                    <p>After heat pump installation</p>
-                                </div>
-                            </li>
-                            <li class="next-step-item">
-                                <div class="step-priority low"></div>
-                                <div class="step-content">
-                                    <h4>Review Loan Terms</h4>
-                                    <p>Once credit check completes</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Recent Activity -->
-                    <div class="sidebar-card">
-                        <h3>🕐 Recent Activity</h3>
-                        <ul class="activity-feed">
-                            <li class="activity-item">
-                                <div class="activity-icon success">✓</div>
-                                <div class="activity-content">
-                                    <h4>Payment Received</h4>
-                                    <p>$5,600 deposited to your account</p>
-                                    <div class="activity-time">2 days ago</div>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <div class="activity-icon warning">!</div>
-                                <div class="activity-content">
-                                    <h4>Document Requested</h4>
-                                    <p>Enbridge needs utility bill</p>
-                                    <div class="activity-time">5 days ago</div>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <div class="activity-icon info">📝</div>
-                                <div class="activity-content">
-                                    <h4>Application Submitted</h4>
-                                    <p>Greener Homes Loan submitted</p>
-                                    <div class="activity-time">2 weeks ago</div>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <div class="activity-icon success">✓</div>
-                                <div class="activity-content">
-                                    <h4>Application Approved</h4>
-                                    <p>Greener Homes Grant approved</p>
-                                    <div class="activity-time">3 weeks ago</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Help Card -->
-                    <div class="sidebar-card help-card">
-                        <div class="ai-avatar">🤖</div>
-                        <h3>Need Help?</h3>
-                        <p>Our AI assistant can answer questions about your applications, help with documents, or connect you with support.</p>
-                        <a href="ontario-energy-demo.html" class="btn btn-primary" style="width: 100%; text-align: center;">Chat with Assistant</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="page-head">
+      <h1>Application status tracker</h1>
+      <p>Every Ontario energy rebate application you have open, the stage it has reached, and what is required next.</p>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 ShieldAI. All rights reserved. | <a href="index.html">Back to ShieldAI</a> | <a href="ontario-energy-demo.html">Ontario Energy Assistant</a></p>
-            </div>
+    <!-- Action required -->
+    <div class="alert alert--warn" role="status">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+      <div>
+        <strong>Action required</strong>
+        Your Enbridge rebate application needs additional documentation. Upload your utility bill to continue.
+        <div class="btn-row mt-6">
+          <button class="btn btn--primary" type="button" onclick="alert('This would take you to upload the required document.')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            Upload now
+          </button>
         </div>
-    </footer>
+      </div>
+    </div>
+
+    <!-- Totals -->
+    <div class="panel mt-6">
+      <div class="panel__body">
+        <div class="stats">
+          <div class="stat">
+            <div class="stat__value">$5,600</div>
+            <div class="stat__label">Approved rebates</div>
+          </div>
+          <div class="stat">
+            <div class="stat__value">$5,000</div>
+            <div class="stat__label">Processing</div>
+          </div>
+          <div class="stat">
+            <div class="stat__value">$40,000</div>
+            <div class="stat__label">Loan pending</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid mt-6">
+
+      <!-- ── Applications ──────────────────────────────────────────── -->
+      <section class="panel applications-section" aria-labelledby="apps-heading">
+        <div class="panel__header">
+          <h2 id="apps-heading">Your applications</h2>
+          <button class="btn btn--secondary" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            New application
+          </button>
+        </div>
+
+        <!-- Approved -->
+        <article class="application-card">
+          <div class="app-header">
+            <div>
+              <h3 class="app-name">Canada Greener Homes Grant</h3>
+              <p class="app-id">Application #CGH-2024-78542</p>
+            </div>
+            <span class="status status--approved">Approved</span>
+          </div>
+
+          <ol class="timeline app-timeline">
+            <li class="timeline__item is-done">
+              <p class="timeline__title">Submitted</p>
+              <p class="timeline__meta">Oct 15, 2024</p>
+            </li>
+            <li class="timeline__item is-done">
+              <p class="timeline__title">Under review</p>
+              <p class="timeline__meta">Complete</p>
+            </li>
+            <li class="timeline__item is-done">
+              <p class="timeline__title">Approved</p>
+              <p class="timeline__meta">Rebate confirmed at $5,600</p>
+            </li>
+            <li class="timeline__item is-done">
+              <p class="timeline__title">Payment sent</p>
+              <p class="timeline__meta">Jan 10, 2025</p>
+              <p class="timeline__body"><span class="status status--paid">Paid</span></p>
+            </li>
+          </ol>
+
+          <dl class="dl dl--2 app-details">
+            <div class="detail-item">
+              <dt>Rebate amount</dt>
+              <dd>$5,600</dd>
+            </div>
+            <div class="detail-item">
+              <dt>Submitted</dt>
+              <dd>Oct 15, 2024</dd>
+            </div>
+            <div class="detail-item">
+              <dt>Payment date</dt>
+              <dd>Jan 10, 2025</dd>
+            </div>
+          </dl>
+
+          <div class="app-actions">
+            <button class="btn btn--secondary" type="button">View details</button>
+            <button class="btn btn--secondary" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M8 12l4 4 4-4"/><path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"/></svg>
+              Download receipt
+            </button>
+          </div>
+        </article>
+
+        <!-- Action required -->
+        <article class="application-card">
+          <div class="app-header">
+            <div>
+              <h3 class="app-name">Enbridge Home Efficiency Rebate</h3>
+              <p class="app-id">Application #ENB-2024-34521</p>
+            </div>
+            <span class="status status--info">Action required</span>
+          </div>
+
+          <ol class="timeline app-timeline">
+            <li class="timeline__item is-done">
+              <p class="timeline__title">Submitted</p>
+              <p class="timeline__meta">Dec 20, 2024</p>
+            </li>
+            <li class="timeline__item is-active active">
+              <p class="timeline__title">Under review</p>
+              <p class="timeline__meta">In progress</p>
+              <p class="timeline__body">Waiting on your utility bill before the review can continue.</p>
+            </li>
+            <li class="timeline__item">
+              <p class="timeline__title">Approved</p>
+              <p class="timeline__meta">Not started</p>
+            </li>
+            <li class="timeline__item">
+              <p class="timeline__title">Payment</p>
+              <p class="timeline__meta">Estimated Feb 15, 2025</p>
+            </li>
+          </ol>
+
+          <dl class="dl dl--2 app-details">
+            <div class="detail-item">
+              <dt>Rebate amount</dt>
+              <dd>Up to $5,000</dd>
+            </div>
+            <div class="detail-item">
+              <dt>Submitted</dt>
+              <dd>Dec 20, 2024</dd>
+            </div>
+            <div class="detail-item">
+              <dt>Est. completion</dt>
+              <dd>Feb 15, 2025</dd>
+            </div>
+          </dl>
+
+          <div class="app-actions">
+            <button class="btn btn--primary" type="button" onclick="alert('This would take you to upload the required document.')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+              Upload missing document
+            </button>
+            <button class="btn btn--secondary" type="button">View details</button>
+          </div>
+        </article>
+
+        <!-- Processing -->
+        <article class="application-card">
+          <div class="app-header">
+            <div>
+              <h3 class="app-name">Canada Greener Homes Loan</h3>
+              <p class="app-id">Application #CGL-2025-12345</p>
+            </div>
+            <span class="status status--review">In review</span>
+          </div>
+
+          <ol class="timeline app-timeline">
+            <li class="timeline__item is-done">
+              <p class="timeline__title">Submitted</p>
+              <p class="timeline__meta">Jan 5, 2025</p>
+            </li>
+            <li class="timeline__item is-active active">
+              <p class="timeline__title">Credit check</p>
+              <p class="timeline__meta">In progress</p>
+            </li>
+            <li class="timeline__item">
+              <p class="timeline__title">Approval</p>
+              <p class="timeline__meta">Not started</p>
+            </li>
+            <li class="timeline__item">
+              <p class="timeline__title">Disbursement</p>
+              <p class="timeline__meta">Estimated Feb 28, 2025</p>
+            </li>
+          </ol>
+
+          <dl class="dl dl--2 app-details">
+            <div class="detail-item">
+              <dt>Loan amount</dt>
+              <dd>$40,000</dd>
+            </div>
+            <div class="detail-item">
+              <dt>Submitted</dt>
+              <dd>Jan 5, 2025</dd>
+            </div>
+            <div class="detail-item">
+              <dt>Est. completion</dt>
+              <dd>Feb 28, 2025</dd>
+            </div>
+          </dl>
+
+          <div class="app-actions">
+            <button class="btn btn--secondary" type="button">View details</button>
+            <button class="btn btn--secondary" type="button">Contact support</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- ── Sidebar ───────────────────────────────────────────────── -->
+      <aside class="sidebar">
+
+        <section class="panel" aria-labelledby="next-heading">
+          <div class="panel__header">
+            <h2 id="next-heading">Next steps</h2>
+          </div>
+          <div class="panel__body">
+            <ul>
+              <li class="next-step-item">
+                <span class="activity-icon activity-icon--warn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+                </span>
+                <div>
+                  <h4>Upload utility bill</h4>
+                  <p>Required for the Enbridge application.</p>
+                  <span class="status status--rejected">High priority</span>
+                </div>
+              </li>
+              <li class="next-step-item">
+                <span class="activity-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+                </span>
+                <div>
+                  <h4>Schedule post-retrofit evaluation</h4>
+                  <p>After the heat pump installation.</p>
+                  <span class="status status--review">Medium priority</span>
+                </div>
+              </li>
+              <li class="next-step-item">
+                <span class="activity-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+                </span>
+                <div>
+                  <h4>Review loan terms</h4>
+                  <p>Once the credit check completes.</p>
+                  <span class="status status--submitted">Low priority</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="activity-heading">
+          <div class="panel__header">
+            <h2 id="activity-heading">Recent activity</h2>
+          </div>
+          <div class="panel__body">
+            <ul class="activity-feed">
+              <li class="activity-item">
+                <span class="activity-icon activity-icon--ok">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5 11 15l4.5-5"/></svg>
+                </span>
+                <div class="activity-content">
+                  <h4>Payment received</h4>
+                  <p>$5,600 deposited to your account.</p>
+                  <p class="activity-time">2 days ago</p>
+                </div>
+              </li>
+              <li class="activity-item">
+                <span class="activity-icon activity-icon--warn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+                </span>
+                <div class="activity-content">
+                  <h4>Document requested</h4>
+                  <p>Enbridge needs your utility bill.</p>
+                  <p class="activity-time">5 days ago</p>
+                </div>
+              </li>
+              <li class="activity-item">
+                <span class="activity-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4l10-10a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>
+                </span>
+                <div class="activity-content">
+                  <h4>Application submitted</h4>
+                  <p>Greener Homes Loan submitted.</p>
+                  <p class="activity-time">2 weeks ago</p>
+                </div>
+              </li>
+              <li class="activity-item">
+                <span class="activity-icon activity-icon--ok">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5 11 15l4.5-5"/></svg>
+                </span>
+                <div class="activity-content">
+                  <h4>Application approved</h4>
+                  <p>Greener Homes Grant approved.</p>
+                  <p class="activity-time">3 weeks ago</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="help-heading">
+          <div class="panel__header">
+            <h2 id="help-heading">Need help?</h2>
+          </div>
+          <div class="panel__body">
+            <span class="icon-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V5.5M9 13h.01M15 13h.01M9.5 16.5h5"/><circle cx="12" cy="4" r="1.5"/></svg>
+            </span>
+            <p style="color:var(--text-muted);font-size:var(--t-sm)">
+              The assistant answers questions about your applications, helps with documents,
+              or connects you with a person.
+            </p>
+            <div class="btn-row mt-6">
+              <a class="btn btn--primary" href="ontario-energy-demo.html">
+                Chat with the assistant
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </aside>
+    </div>
+
+  </div>
+</main>
+
+<!-- ══ Footer ══════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <span class="brand">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="fm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#fm)"/>
+            <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+            <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+              <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+            </g>
+            <g fill="#8EC5FF">
+              <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+              <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+            </g>
+            <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+          </svg>
+          <span>ShieldAI</span>
+        </span>
+        <p>Sovereign AI systems and the infrastructure beneath them, built in Canada for organisations that answer to a regulator.</p>
+      </div>
+
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="gateway.html">ShieldAI Gateway</a></li>
+          <li><a href="https://elpista.com" target="_blank" rel="noopener">Elpista</a></li>
+          <li><a href="https://terminova.io" target="_blank" rel="noopener">Terminova</a></li>
+          <li><a href="https://workcohorts.com" target="_blank" rel="noopener">WorkCohorts</a></li>
+          <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#infrastructure">Sovereign cloud architecture</a></li>
+          <li><a href="#infrastructure">Network &amp; security architecture</a></li>
+          <li><a href="#infrastructure">AI infrastructure &amp; GPU fabric</a></li>
+          <li><a href="#compliance">Compliance posture</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="eligibility-checker.html">Eligibility checker</a></li>
+          <li><a href="apply-assistant.html">Apply assistant</a></li>
+          <li><a href="status-tracker.html" aria-current="page">Status tracker</a></li>
+          <li><a href="admin-dashboard.html">Admin dashboard</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
+          <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 ShieldAI. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="#privacy">Privacy policy</a>
+        <a href="#terms">Terms of service</a>
+        <a href="#accessibility">Accessibility</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

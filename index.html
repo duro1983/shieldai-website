@@ -1,589 +1,634 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShieldAI - Your Privacy Shield for AI</title>
-    <meta name="description" content="PIPEDA-compliant AI gateway for Canadian enterprises. Use AI safely while maintaining full privacy compliance.">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #2C3E87;
-        }
-        
-        .logo svg {
-            width: 40px;
-            height: 40px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-        
-        nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        nav a:hover {
-            color: #2C3E87;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .btn {
-            padding: 12px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-        
-        .btn-primary {
-            background: #2C3E87;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #1f2c5c;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(44, 62, 135, 0.3);
-        }
-        
-        .btn-secondary {
-            background: white;
-            color: #2C3E87;
-            border: 2px solid #2C3E87;
-        }
-        
-        .btn-secondary:hover {
-            background: #2C3E87;
-            color: white;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #2C3E87 0%, #4A90E2 100%);
-            color: white;
-            padding: 100px 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 56px;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-        
-        .hero .tagline {
-            font-size: 28px;
-            margin-bottom: 15px;
-            opacity: 0.95;
-        }
-        
-        .hero p {
-            font-size: 20px;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .hero-badges {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 50px;
-            flex-wrap: wrap;
-        }
-        
-        .badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 18px;
-        }
-        
-        .badge svg {
-            width: 24px;
-            height: 24px;
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-        
-        .section-title {
-            text-align: center;
-            font-size: 42px;
-            margin-bottom: 60px;
-            color: #2C3E87;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .feature-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        .feature-card h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #2C3E87;
-        }
-        
-        .feature-card p {
-            color: #666;
-            line-height: 1.8;
-        }
-        
-        /* How It Works */
-        .how-it-works {
-            padding: 80px 0;
-        }
-        
-        .workflow {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 30px;
-            margin-top: 50px;
-            flex-wrap: wrap;
-        }
-        
-        .workflow-step {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
-        }
-        
-        .workflow-number {
-            width: 60px;
-            height: 60px;
-            background: #2C3E87;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin: 0 auto 20px;
-        }
-        
-        .workflow-arrow {
-            font-size: 36px;
-            color: #4A90E2;
-        }
-        
-        /* Pricing */
-        .pricing {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-        
-        .pricing-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-        
-        .pricing-card.featured {
-            border: 3px solid #2C3E87;
-            transform: scale(1.05);
-        }
-        
-        .pricing-card h3 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #2C3E87;
-        }
-        
-        .price {
-            font-size: 48px;
-            font-weight: bold;
-            color: #2C3E87;
-            margin: 20px 0;
-        }
-        
-        .price span {
-            font-size: 20px;
-            color: #666;
-        }
-        
-        .pricing-features {
-            list-style: none;
-            margin: 30px 0;
-            text-align: left;
-        }
-        
-        .pricing-features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .pricing-features li:before {
-            content: "✓ ";
-            color: #28a745;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        /* Use Cases */
-        .use-cases {
-            padding: 80px 0;
-        }
-        
-        .use-cases-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-        
-        .use-case-card {
-            background: linear-gradient(135deg, #2C3E87 0%, #4A90E2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-        }
-        
-        .use-case-card h3 {
-            font-size: 24px;
-            margin: 20px 0 15px;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, #2C3E87 0%, #4A90E2 100%);
-            color: white;
-            padding: 80px 0;
-            text-align: center;
-        }
-        
-        .cta-section h2 {
-            font-size: 42px;
-            margin-bottom: 20px;
-        }
-        
-        .cta-section p {
-            font-size: 20px;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-        
-        /* Footer */
-        footer {
-            background: #1a1a1a;
-            color: white;
-            padding: 60px 0 30px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-section h4 {
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-        
-        .footer-section ul {
-            list-style: none;
-        }
-        
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            display: block;
-            padding: 5px 0;
-            transition: color 0.3s;
-        }
-        
-        .footer-section a:hover {
-            color: #4A90E2;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid #333;
-            color: #999;
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero .tagline {
-                font-size: 20px;
-            }
-            
-            nav ul {
-                display: none;
-            }
-            
-            .workflow-arrow {
-                display: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShieldAI — Sovereign AI systems and infrastructure for regulated Canada</title>
+<meta name="description" content="ShieldAI builds AI products and the infrastructure beneath them for Canadian government, healthcare, finance and critical industry. Canadian data residency, tamper-evident audit trails, human-in-the-loop by design.">
+<link rel="canonical" href="https://shield-ai.ca/">
+<meta name="theme-color" content="#0a0f1c">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://shield-ai.ca/">
+<meta property="og:title" content="ShieldAI — Sovereign AI systems and infrastructure for regulated Canada">
+<meta property="og:description" content="AI products and the infrastructure beneath them, for organisations that have to prove every decision.">
+<meta property="og:image" content="https://shield-ai.ca/logo.svg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shield.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ShieldAI",
+  "url": "https://shield-ai.ca/",
+  "logo": "https://shield-ai.ca/logo.svg",
+  "description": "Canadian builder of AI products and supporting cloud, network-security and AI infrastructure for regulated and public-sector organisations.",
+  "areaServed": "CA",
+  "email": "info@shield-ai.ca",
+  "subOrganization": [
+    { "@type": "Organization", "name": "Terminova", "url": "https://terminova.io" },
+    { "@type": "Organization", "name": "Elpista",   "url": "https://elpista.com" },
+    { "@type": "Organization", "name": "WorkCohorts","url": "https://workcohorts.com" }
+  ]
+}
+</script>
 </head>
+
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <svg width="40" height="40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 20 L160 50 L160 110 Q160 150 100 180 Q40 150 40 110 L40 50 Z" 
-                              fill="#2C3E87" stroke="#4A90E2" stroke-width="3"/>
-                        <circle cx="100" cy="80" r="8" fill="#4A90E2"/>
-                        <circle cx="75" cy="100" r="6" fill="#4A90E2"/>
-                        <circle cx="125" cy="100" r="6" fill="#4A90E2"/>
-                        <circle cx="100" cy="120" r="6" fill="#4A90E2"/>
-                        <line x1="100" y1="80" x2="75" y2="100" stroke="#4A90E2" stroke-width="2"/>
-                        <line x1="100" y1="80" x2="125" y2="100" stroke="#4A90E2" stroke-width="2"/>
-                        <line x1="75" y1="100" x2="100" y2="120" stroke="#4A90E2" stroke-width="2"/>
-                        <line x1="125" y1="100" x2="100" y2="120" stroke="#4A90E2" stroke-width="2"/>
-                        <text x="100" y="150" font-family="Arial" font-size="24" font-weight="bold" 
-                              fill="white" text-anchor="middle">AI</text>
-                    </svg>
-                    <span>ShieldAI</span>
-                </div>
-                <ul>
-                    <li><a href="products.html">Products</a></li>
-                    <li><a href="#products">Our Solutions</a></li>
-                    <li><a href="#why-us">Why Us</a></li>
-                </ul>
-                <div class="cta-buttons">
-                    <a href="mailto:info@shield-ai.ca?subject=ShieldAI%20Demo%20Request&body=Hi,%0D%0A%0D%0AI'd%20like%20to%20schedule%20a%20demo%20of%20ShieldAI.%0D%0A%0D%0AName:%20%0D%0ACompany:%20%0D%0AEmail:%20%0D%0APhone:%20%0D%0ABest%20time:%20" class="btn btn-secondary">Book Demo</a>
-                    <a href="https://api.shield-ai.ca/admin" class="btn btn-primary" target="_blank">Start Free Trial</a>
-                </div>
-            </nav>
-        </div>
-    </header>
+<a class="skip-link" href="#main">Skip to content</a>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>🛡️ ShieldAI</h1>
-            <p class="tagline">Building Privacy-First AI Solutions for Canada</p>
-            <p>We help Canadian enterprises and government agencies deploy AI safely — with full compliance, Canadian data residency, and production-ready reliability.</p>
-            <div class="cta-buttons" style="justify-content: center;">
-                <a href="products.html" class="btn btn-primary" style="background: white; color: #2C3E87;">View Our Products</a>
-                <a href="mailto:info@shield-ai.ca?subject=ShieldAI%20Inquiry" class="btn btn-secondary" style="border-color: white; color: white;">Contact Us</a>
-            </div>
-            <div class="hero-badges">
-                <div class="badge">
-                    <svg fill="white" width="24" height="24" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-                    <span>PIPEDA Compliant</span>
-                </div>
-                <div class="badge">
-                    <svg fill="white" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                    <span>Canadian Data</span>
-                </div>
-                <div class="badge">
-                    <svg fill="white" width="24" height="24" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
-                    <span>99.9% Uptime</span>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ══ Header ══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="hm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#hm)"/>
+        <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+        <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+          <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+        </g>
+        <g fill="#8EC5FF">
+          <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+          <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+        </g>
+        <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+      </svg>
+      <span>ShieldAI</span>
+    </a>
 
-    <!-- Products Section -->
-    <section id="products" style="padding: 80px 0; background: white;">
-        <div class="container">
-            <h2 class="section-title">Our Products</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px;">
-                <!-- Product 1: ShieldAI Gateway -->
-                <div style="background: linear-gradient(135deg, #2C3E87 0%, #4A90E2 100%); border-radius: 20px; padding: 40px; color: white;">
-                    <div style="font-size: 48px; margin-bottom: 15px;">🛡️</div>
-                    <h3 style="font-size: 28px; margin-bottom: 10px;">ShieldAI Gateway</h3>
-                    <p style="opacity: 0.9; margin-bottom: 20px;">PIPEDA-compliant API gateway for enterprise AI. Automatic PII protection, Canadian data residency, complete audit trails.</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px;">
-                        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 13px;">Enterprise</span>
-                        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 13px;">Healthcare</span>
-                        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 13px;">Financial</span>
-                    </div>
-                    <a href="https://api.shield-ai.ca/admin" class="btn" style="background: white; color: #2C3E87; padding: 12px 25px;" target="_blank">Start Free Trial →</a>
-                </div>
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="#portfolio">Products</a>
+      <a href="#infrastructure">Infrastructure</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#engage">How we work</a>
+      <a href="products.html">All products</a>
+    </nav>
 
-                <!-- Product 2: Ontario Energy Assistant -->
-                <div style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius: 20px; padding: 40px; color: white;">
-                    <div style="font-size: 48px; margin-bottom: 15px;">⚡</div>
-                    <h3 style="font-size: 28px; margin-bottom: 10px;">Ontario Energy Assistant</h3>
-                    <p style="opacity: 0.9; margin-bottom: 20px;">AI-powered platform that reduces wait times by handling repetitive inquiries — while human staff focus on complex and sensitive cases.</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px;">
-                        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 13px;">Government</span>
-                        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 13px;">Energy</span>
-                        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 13px;">Citizen Services</span>
-                    </div>
-                    <a href="ontario-energy-demo.html" class="btn" style="background: white; color: #28a745; padding: 12px 25px;">Try Live Demo →</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="header-cta">
+      <a class="btn btn--secondary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20enquiry">Contact</a>
+      <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20briefing%20request&amp;body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20book%20a%20technical%20briefing.%0D%0A%0D%0AName%3A%0D%0AOrganisation%3A%0D%0ARole%3A%0D%0AArea%20of%20interest%3A%0D%0ABest%20time%3A%0D%0A">
+        Book a briefing
+      </a>
+    </div>
 
-    <!-- Why Choose Us Section -->
-    <section id="why-us" style="padding: 80px 0; background: #f8f9fa;">
-        <div class="container">
-            <h2 class="section-title">Why Choose ShieldAI?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🇨🇦</div>
-                    <h3>Canadian Company</h3>
-                    <p>Built in Canada, for Canada. All data stays in Canadian data centers. We understand Canadian compliance requirements.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Privacy & Compliance</h3>
-                    <p>PIPEDA, FIPPA, PHIPA, AODA compliant. We build privacy into every solution from the ground up.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🏛️</div>
-                    <h3>Government Ready</h3>
-                    <p>Experience working with government requirements. Secure, auditable, and built for public sector needs.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Production Ready</h3>
-                    <p>Enterprise-grade reliability with 99.9% uptime. Built to scale from pilot to full deployment.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+</header>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2>Ready to Get Started?</h2>
-            <p>Let's discuss how ShieldAI can help your organization deploy AI safely and effectively.</p>
-            <div class="cta-buttons" style="justify-content: center;">
-                <a href="products.html" class="btn btn-primary" style="background: white; color: #2C3E87;">View Our Products</a>
-                <a href="mailto:info@shield-ai.ca?subject=ShieldAI%20Inquiry" class="btn btn-secondary" style="border-color: white; color: white;">Contact Us</a>
-            </div>
-        </div>
-    </section>
+<script>
+(function () {
+  var btn = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('site-nav');
+  if (!btn || !nav) return;
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>ShieldAI</h4>
-                    <p>Your Privacy Shield for AI</p>
-                    <p style="margin-top: 20px;">Making AI safe and compliant for Canadian enterprises.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Products</h4>
-                    <ul>
-                        <li><a href="products.html">All Products</a></li>
-                        <li><a href="gateway.html">ShieldAI Gateway</a></li>
-                        <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#blog">Blog</a></li>
-                        <li><a href="#careers">Careers</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <ul>
-                        <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
-                        <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 ShieldAI. All rights reserved. | <a href="#privacy" style="color: #999;">Privacy Policy</a> | <a href="#terms" style="color: #999;">Terms of Service</a></p>
-            </div>
+  function setOpen(open) {
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) { nav.setAttribute('data-open', ''); }
+    else { nav.removeAttribute('data-open'); }
+  }
+
+  btn.addEventListener('click', function () {
+    setOpen(btn.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Close after choosing a destination, or on Escape
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false); btn.focus();
+    }
+  });
+  // Reset state if the viewport grows back to the desktop layout
+  window.matchMedia('(min-width: 941px)').addEventListener('change', function (m) {
+    if (m.matches) setOpen(false);
+  });
+})();
+</script>
+
+<main id="main">
+
+<!-- ══ Hero ════════════════════════════════════════════════════════════ -->
+<section class="hero on-dark">
+  <div class="wrap">
+    <span class="pill"><span class="pill__dot"></span> Canadian-owned · data resident in Canada</span>
+
+    <h1>AI you can put in front of a regulator.</h1>
+
+    <p class="hero__lede">
+      ShieldAI builds AI products for organisations that have to prove every decision —
+      and designs the cloud, network-security and GPU infrastructure those products run on.
+      Five platforms in production across translation, governance, intake, enterprise AI
+      access and citizen services.
+    </p>
+
+    <div class="btn-row">
+      <a class="btn btn--primary btn--lg" href="#portfolio">
+        See the portfolio
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn--secondary btn--lg" href="#infrastructure">Infrastructure practice</a>
+    </div>
+
+    <div class="trust">
+      <p class="trust__label">Engineered against</p>
+      <div class="trust__items">
+        <span class="trust__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+          PIPEDA · PHIPA · FIPPA
+        </span>
+        <span class="trust__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          ISO 27001 · SOC 2 · NIST CSF
+        </span>
+        <span class="trust__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v16"/></svg>
+          IEC 62443 for OT
+        </span>
+        <span class="trust__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/></svg>
+          Official Languages Act · AODA
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ The shared spine ════════════════════════════════════════════════ -->
+<section class="section section--sunken">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">What every ShieldAI system shares</span>
+      <h2>Four commitments, wired in at the architecture layer</h2>
+      <p>
+        These are not features we add per project. They are constraints the platforms are
+        built inside, which is why the same assurances hold across a translation system,
+        a GRC register and a GPU cluster.
+      </p>
+    </div>
+
+    <div class="grid grid--4">
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="7" rx="2"/><rect x="2" y="13" width="20" height="7" rx="2"/><path d="M6 7.5h.01M6 16.5h.01"/></svg>
+        </span>
+        <h3>Data stays in Canada</h3>
+        <p>Canadian regions end to end — storage, compute, inference and backups. Residency is a deployment constraint, not a contractual promise about someone else&rsquo;s cloud.</p>
+      </article>
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+        </span>
+        <h3>Tamper-evident by construction</h3>
+        <p>Hash-chained audit trails mean an altered record breaks the chain. You can demonstrate integrity to an auditor rather than assert it.</p>
+      </article>
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+        </span>
+        <h3>Human in the loop</h3>
+        <p>Models triage, rank and draft. People decide anything consequential, and every routing decision is logged with the reasoning that produced it.</p>
+      </article>
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v6M12 16v6M2 12h6M16 12h6"/><circle cx="12" cy="12" r="4"/></svg>
+        </span>
+        <h3>We own the substrate</h3>
+        <p>The same team designs the fabric, the segmentation and the control plane underneath. Nothing critical is delegated to an assumption.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Portfolio ═══════════════════════════════════════════════════════ -->
+<section class="section" id="portfolio">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">The portfolio</span>
+      <h2>Five platforms, one engineering standard</h2>
+      <p>
+        Each one solves a specific regulated workflow. They share the same residency,
+        audit and oversight guarantees, and they interoperate when it helps.
+      </p>
+    </div>
+
+    <div class="grid grid--2">
+
+      <!-- Gateway -->
+      <article class="product" style="--product-accent:#2c3e87">
+        <div class="product__head">
+          <span class="product__mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M9 12l2 2 4-4"/></svg>
+          </span>
+          <div>
+            <h3 class="product__name">ShieldAI Gateway</h3>
+            <span class="product__kicker">Enterprise AI access</span>
+          </div>
         </div>
-    </footer>
+        <p>
+          A compliance layer between your staff and the frontier models. PII is detected and
+          protected before a prompt ever leaves your boundary, requests stay on Canadian
+          infrastructure, and every call lands in an audit trail.
+        </p>
+        <div class="tags">
+          <span class="tag">Enterprise</span><span class="tag">Healthcare</span>
+          <span class="tag">Financial services</span>
+        </div>
+        <div class="product__foot">
+          <a class="link-arrow" href="gateway.html">
+            How it works
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--secondary" href="https://api.shield-ai.ca/admin" target="_blank" rel="noopener">Start free trial</a>
+        </div>
+      </article>
+
+      <!-- Elpista -->
+      <article class="product" style="--product-accent:#24336f">
+        <div class="product__head">
+          <span class="product__mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18M3 12h18M3 19h18"/><circle cx="7" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="10" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <div>
+            <h3 class="product__name">Elpista</h3>
+            <span class="product__kicker">Governance, risk &amp; compliance</span>
+          </div>
+        </div>
+        <p>
+          Nine GRC disciplines in one system — third-party risk, supply chain, cyber-maturity,
+          evidence, control testing, risk registers, policy lifecycle, reporting and
+          multi-framework mapping. Unusual depth in OT and industrial control environments.
+        </p>
+        <div class="tags">
+          <span class="tag">Public sector</span><span class="tag">Utilities</span>
+          <span class="tag">OT / ICS</span><span class="tag">IEC 62443</span>
+        </div>
+        <div class="product__foot">
+          <a class="link-arrow" href="https://elpista.com" target="_blank" rel="noopener">
+            Visit elpista.com
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+          <span class="tag">Licence-free vendor portal</span>
+        </div>
+      </article>
+
+      <!-- Terminova -->
+      <article class="product" style="--product-accent:#3d90f0">
+        <div class="product__head">
+          <span class="product__mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h9M8.5 5v3c0 3.3-2 6.3-5 7.6"/><path d="M6 10.5c1.2 2.6 3.4 4.5 6 5.4"/><path d="M13 20l4-9 4 9M14.6 17h4.8"/></svg>
+          </span>
+          <div>
+            <h3 class="product__name">Terminova</h3>
+            <span class="product__kicker">Translation management</span>
+          </div>
+        </div>
+        <p>
+          The full bilingual lifecycle — AI translation, centralised terminology, translation
+          memory, revision workflow, SLA tracking, vendor portals and financial reporting.
+          Git integration extracts strings and opens the pull request for you.
+        </p>
+        <div class="tags">
+          <span class="tag">Federal &amp; provincial</span><span class="tag">Crown corporations</span>
+          <span class="tag">Official Languages Act</span>
+        </div>
+        <div class="product__foot">
+          <a class="link-arrow" href="https://terminova.io" target="_blank" rel="noopener">
+            Visit terminova.io
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+          <span class="tag">Azure Canada East</span>
+        </div>
+      </article>
+
+      <!-- WorkCohorts -->
+      <article class="product" style="--product-accent:#5aa9ff">
+        <div class="product__head">
+          <span class="product__mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14l2 2 4-4"/></svg>
+          </span>
+          <div>
+            <h3 class="product__name">WorkCohorts</h3>
+            <span class="product__kicker">Document intake &amp; review</span>
+          </div>
+        </div>
+        <p>
+          An AI agent for teams buried in paperwork. It reviews applications against your
+          requirements, then auto-files the clean ones, flags what&rsquo;s missing and escalates
+          the high-risk cases — every decision logged and explainable.
+        </p>
+        <div class="tags">
+          <span class="tag">Mortgage brokerages</span><span class="tag">Municipalities</span>
+          <span class="tag">Law firms</span>
+        </div>
+        <div class="product__foot">
+          <a class="link-arrow" href="https://workcohorts.com" target="_blank" rel="noopener">
+            Visit workcohorts.com
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </a>
+          <span class="tag">Your data never trains a model</span>
+        </div>
+      </article>
+
+      <!-- Ontario Energy Assistant -->
+      <article class="product" style="--product-accent:#059669">
+        <div class="product__head">
+          <span class="product__mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>
+          </span>
+          <div>
+            <h3 class="product__name">Ontario Energy Assistant</h3>
+            <span class="product__kicker">Citizen services</span>
+          </div>
+        </div>
+        <p>
+          Handles the repetitive share of programme enquiries — eligibility, application
+          status, documentation — so wait times fall and human staff keep their attention
+          for the complex and sensitive cases.
+        </p>
+        <div class="tags">
+          <span class="tag">Government</span><span class="tag">Energy programmes</span>
+          <span class="tag">AODA</span>
+        </div>
+        <div class="product__foot">
+          <a class="link-arrow" href="ontario-energy-demo.html">
+            Try the live demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="link-arrow" href="eligibility-checker.html">Eligibility checker</a>
+        </div>
+      </article>
+
+      <!-- Bridge card -->
+      <article class="card card--hover" style="justify-content:center;background:var(--n-50);border-style:dashed">
+        <h3>Not sure which fits?</h3>
+        <p>Describe the workflow and the regulator you answer to. We&rsquo;ll tell you which platform applies — or say plainly if none of them do.</p>
+        <div class="btn-row mt-6">
+          <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=Which%20ShieldAI%20platform%20fits%3F">Ask an engineer</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ Infrastructure practice ═════════════════════════════════════════ -->
+<section class="section section--dark on-dark" id="infrastructure">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Infrastructure &amp; architecture practice</span>
+      <h2>We build the layer most AI vendors rent</h2>
+      <p>
+        Sovereign cloud, network and security architecture, and the tuned GPU fabrics that
+        make large-scale training and inference actually perform. Engaged standalone, or as
+        the foundation under one of our platforms.
+      </p>
+    </div>
+
+    <div class="grid grid--3">
+
+      <article class="card">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 0 0 .5-9 6.5 6.5 0 0 0-12.6 1.8A3.6 3.6 0 0 0 6 19Z"/><path d="M12 12v5M9.5 14.5 12 12l2.5 2.5"/></svg>
+        </span>
+        <h3>Sovereign cloud architecture</h3>
+        <p>Landing zones designed for residency and auditability from the first subscription — not retrofitted once a privacy review fails.</p>
+        <div class="specs">
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Azure and AWS Canadian regions, multi-region resilience</p>
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Identity, key management and policy-as-code guardrails</p>
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Evidence generated continuously, not assembled at audit time</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M10 6.5h4M6.5 10v4M17.5 10v4M10 17.5h4"/></svg>
+        </span>
+        <h3>Network &amp; security architecture</h3>
+        <p>Segmentation that survives contact with an incident, and designs that hold up when IT and OT have to share a boundary.</p>
+        <div class="specs">
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Zero-trust segmentation, micro-perimeters, east-west policy</p>
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> IT/OT convergence to <code>IEC 62443</code> zones and conduits</p>
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Controls mapped to <code>NIST 800-53</code> and <code>ISO 27001</code></p>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 2v3M14 2v3M10 19v3M14 19v3M2 10h3M2 14h3M19 10h3M19 14h3"/></svg>
+        </span>
+        <h3>AI infrastructure &amp; GPU fabric</h3>
+        <p>Where most clusters lose their throughput: the network. We design and tune the fabric so collectives run at line rate instead of stalling.</p>
+        <div class="specs">
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Lossless <code>RoCEv2</code> fabrics — <code>PFC</code> priority queues, headroom and watchdog</p>
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> <code>ECN</code> / <code>DCQCN</code> marking thresholds tuned against real congestion</p>
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Rail-optimised leaf/spine topology, <code>NCCL</code> collective profiling</p>
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Capacity, thermal and power planning for sustained training loads</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="mt-12">
+      <a class="btn btn--primary btn--lg" href="mailto:info@shield-ai.ca?subject=Infrastructure%20architecture%20enquiry&amp;body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20talk%20about%20an%20infrastructure%20engagement.%0D%0A%0D%0AOrganisation%3A%0D%0AEnvironment%20%28cloud%20%2F%20on-prem%20%2F%20hybrid%29%3A%0D%0AWhat%20we%27re%20trying%20to%20solve%3A%0D%0A">
+        Talk to the infrastructure team
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Compliance ══════════════════════════════════════════════════════ -->
+<section class="section section--sunken" id="compliance">
+  <div class="wrap">
+    <div class="sec-head sec-head--center">
+      <span class="eyebrow">Compliance posture</span>
+      <h2>The frameworks our work is built against</h2>
+      <p>
+        Canadian privacy law, international security standards and accessibility
+        obligations — treated as design inputs rather than a checklist applied at the end.
+      </p>
+    </div>
+
+    <div class="frameworks">
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> PIPEDA</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> PHIPA</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> FIPPA</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> ISO 27001</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> SOC 2</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> NIST CSF</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> NIST 800-53</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> IEC 62443</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> AODA / WCAG 2.1 AA</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Official Languages Act</span>
+      <span class="framework"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> French Language Services Act</span>
+    </div>
+
+    <p class="text-center measure mt-8" style="margin-inline:auto;color:var(--text-muted);font-size:var(--t-sm)">
+      Framework alignment describes how our systems are designed and assessed.
+      Certification status for a given platform is confirmed in writing during procurement.
+    </p>
+  </div>
+</section>
+
+<!-- ══ Engagement model ════════════════════════════════════════════════ -->
+<section class="section" id="engage">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <span class="eyebrow">How we work</span>
+        <h2>Short path from problem to something running</h2>
+        <p class="mt-6" style="color:var(--text-muted);font-size:var(--t-lg)">
+          Modular deployments configured in weeks rather than quarters — because the
+          compliance groundwork is already done and doesn&rsquo;t have to be rebuilt for
+          every engagement.
+        </p>
+        <div class="btn-row mt-8">
+          <a class="btn btn--primary btn--lg" href="mailto:info@shield-ai.ca?subject=ShieldAI%20briefing%20request">Book a technical briefing</a>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step__num">1</span>
+          <h3>Scope against the regulator</h3>
+          <p>We start from the obligation you actually have to satisfy — the statute, the framework, the auditor&rsquo;s question — and work backwards to the system.</p>
+        </div>
+        <div class="step">
+          <span class="step__num">2</span>
+          <h3>Pilot on real work</h3>
+          <p>A bounded deployment against live workload in your Canadian tenant. You see genuine throughput and genuine failure modes, not a sandbox demo.</p>
+        </div>
+        <div class="step">
+          <span class="step__num">3</span>
+          <h3>Scale with the evidence</h3>
+          <p>Expand once the audit trail, the accessibility review and the security architecture have all held. The evidence pack comes with it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ═════════════════════════════════════════════════════════════ -->
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="cta-band on-dark">
+      <h2>Bring us the constraint everyone said was blocking.</h2>
+      <p>
+        Residency, auditability, bilingual obligation, an OT boundary, a GPU cluster that
+        won&rsquo;t scale. Tell us what it is and we&rsquo;ll tell you straight whether we can help.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary btn--lg" href="mailto:info@shield-ai.ca?subject=ShieldAI%20briefing%20request">Book a briefing</a>
+        <a class="btn btn--secondary btn--lg" href="products.html">Browse all products</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ Footer ══════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <span class="brand">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="fm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#fm)"/>
+            <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+            <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+              <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+            </g>
+            <g fill="#8EC5FF">
+              <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+              <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+            </g>
+            <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+          </svg>
+          <span>ShieldAI</span>
+        </span>
+        <p>Sovereign AI systems and the infrastructure beneath them, built in Canada for organisations that answer to a regulator.</p>
+      </div>
+
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="gateway.html">ShieldAI Gateway</a></li>
+          <li><a href="https://elpista.com" target="_blank" rel="noopener">Elpista</a></li>
+          <li><a href="https://terminova.io" target="_blank" rel="noopener">Terminova</a></li>
+          <li><a href="https://workcohorts.com" target="_blank" rel="noopener">WorkCohorts</a></li>
+          <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#infrastructure">Sovereign cloud architecture</a></li>
+          <li><a href="#infrastructure">Network &amp; security architecture</a></li>
+          <li><a href="#infrastructure">AI infrastructure &amp; GPU fabric</a></li>
+          <li><a href="#compliance">Compliance posture</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="eligibility-checker.html">Eligibility checker</a></li>
+          <li><a href="apply-assistant.html">Apply assistant</a></li>
+          <li><a href="status-tracker.html">Status tracker</a></li>
+          <li><a href="admin-dashboard.html">Admin dashboard</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
+          <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 ShieldAI. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="#privacy">Privacy policy</a>
+        <a href="#terms">Terms of service</a>
+        <a href="#accessibility">Accessibility</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

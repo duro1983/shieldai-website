@@ -1,678 +1,482 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShieldAI Gateway - PIPEDA-Compliant AI for Enterprises | ShieldAI</title>
-    <meta name="description" content="PIPEDA-compliant AI gateway for Canadian enterprises. Automatic PII protection, Canadian data residency, complete audit trails.">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #2C3E87;
-            text-decoration: none;
-        }
-        
-        .logo svg {
-            width: 40px;
-            height: 40px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-        
-        nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        nav a:hover {
-            color: #2C3E87;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .btn {
-            padding: 12px 30px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-        
-        .btn-primary {
-            background: #2C3E87;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #1f2c5c;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(44, 62, 135, 0.3);
-        }
-        
-        .btn-secondary {
-            background: white;
-            color: #2C3E87;
-            border: 2px solid #2C3E87;
-        }
-        
-        .btn-secondary:hover {
-            background: #2C3E87;
-            color: white;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #2C3E87 0%, #4A90E2 100%);
-            color: white;
-            padding: 80px 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-        
-        .hero .tagline {
-            font-size: 24px;
-            margin-bottom: 15px;
-            opacity: 0.95;
-        }
-        
-        .hero p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .hero-badges {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-        
-        .badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-        }
-        
-        .badge svg {
-            width: 24px;
-            height: 24px;
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-        
-        .section-title {
-            text-align: center;
-            font-size: 42px;
-            margin-bottom: 60px;
-            color: #2C3E87;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .feature-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        .feature-card h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: #2C3E87;
-        }
-        
-        .feature-card p {
-            color: #666;
-            line-height: 1.8;
-        }
-        
-        /* How It Works */
-        .how-it-works {
-            padding: 80px 0;
-        }
-        
-        .workflow {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 30px;
-            margin-top: 50px;
-            flex-wrap: wrap;
-        }
-        
-        .workflow-step {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
-        }
-        
-        .workflow-number {
-            width: 60px;
-            height: 60px;
-            background: #2C3E87;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin: 0 auto 20px;
-        }
-        
-        .workflow-arrow {
-            font-size: 36px;
-            color: #4A90E2;
-        }
-        
-        /* Pricing */
-        .pricing {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-        
-        .pricing-card {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-        
-        .pricing-card.featured {
-            border: 3px solid #2C3E87;
-            transform: scale(1.05);
-        }
-        
-        .pricing-card h3 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #2C3E87;
-        }
-        
-        .price {
-            font-size: 48px;
-            font-weight: bold;
-            color: #2C3E87;
-            margin: 20px 0;
-        }
-        
-        .price span {
-            font-size: 20px;
-            color: #666;
-        }
-        
-        .pricing-features {
-            list-style: none;
-            margin: 30px 0;
-            text-align: left;
-        }
-        
-        .pricing-features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .pricing-features li:before {
-            content: "✓ ";
-            color: #28a745;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        /* Use Cases */
-        .use-cases {
-            padding: 80px 0;
-        }
-        
-        .use-cases-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-        
-        .use-case-card {
-            background: linear-gradient(135deg, #2C3E87 0%, #4A90E2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-        }
-        
-        .use-case-card h3 {
-            font-size: 24px;
-            margin: 20px 0 15px;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, #2C3E87 0%, #4A90E2 100%);
-            color: white;
-            padding: 80px 0;
-            text-align: center;
-        }
-        
-        .cta-section h2 {
-            font-size: 42px;
-            margin-bottom: 20px;
-        }
-        
-        .cta-section p {
-            font-size: 20px;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-        
-        /* Footer */
-        footer {
-            background: #1a1a1a;
-            color: white;
-            padding: 60px 0 30px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-section h4 {
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-        
-        .footer-section ul {
-            list-style: none;
-        }
-        
-        .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            display: block;
-            padding: 5px 0;
-            transition: color 0.3s;
-        }
-        
-        .footer-section a:hover {
-            color: #4A90E2;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid #333;
-            color: #999;
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero .tagline {
-                font-size: 20px;
-            }
-            
-            nav ul {
-                display: none;
-            }
-            
-            .workflow-arrow {
-                display: none;
-            }
-
-            .pricing-card.featured {
-                transform: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShieldAI Gateway — PIPEDA-compliant AI access for enterprises | ShieldAI</title>
+<meta name="description" content="A compliance layer between your staff and the frontier models. Automatic PII detection and masking, Canadian data residency, and a complete audit trail.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shield.css">
+<style>
+  /* Page-unique: pricing tiers. Everything else comes from shield.css. */
+  .tier { position: relative; }
+  .tier--featured { border-color: var(--b-600); box-shadow: var(--e-2); }
+  .tier__flag {
+    position: absolute; top: 0; right: var(--s-6);
+    transform: translateY(-50%);
+    padding: var(--s-1) var(--s-3);
+    font-size: var(--t-xs); font-weight: 620; letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--n-0); background: var(--b-600);
+    border-radius: var(--r-full);
+  }
+  .tier__price {
+    margin-top: var(--s-3);
+    font-size: var(--t-3xl); font-weight: 700; letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums; line-height: 1.1;
+    color: var(--b-600);
+  }
+  .tier__price span {
+    font-size: var(--t-base); font-weight: 500; letter-spacing: 0;
+    color: var(--text-muted);
+  }
+  .tier__list { display: grid; gap: var(--s-3); flex: 1; margin: var(--s-6) 0; }
+  .tier__list li {
+    position: relative; padding-left: 27px;
+    font-size: var(--t-sm); line-height: 1.55; color: var(--text-muted);
+  }
+  .tier__list svg {
+    position: absolute; left: 0; top: 4px;
+    width: 15px; height: 15px; color: var(--ok-600);
+  }
+</style>
 </head>
+
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <svg width="40" height="40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 20 L160 50 L160 110 Q160 150 100 180 Q40 150 40 110 L40 50 Z" 
-                              fill="#2C3E87" stroke="#4A90E2" stroke-width="3"/>
-                        <circle cx="100" cy="80" r="8" fill="#4A90E2"/>
-                        <circle cx="75" cy="100" r="6" fill="#4A90E2"/>
-                        <circle cx="125" cy="100" r="6" fill="#4A90E2"/>
-                        <circle cx="100" cy="120" r="6" fill="#4A90E2"/>
-                        <line x1="100" y1="80" x2="75" y2="100" stroke="#4A90E2" stroke-width="2"/>
-                        <line x1="100" y1="80" x2="125" y2="100" stroke="#4A90E2" stroke-width="2"/>
-                        <line x1="75" y1="100" x2="100" y2="120" stroke="#4A90E2" stroke-width="2"/>
-                        <line x1="125" y1="100" x2="100" y2="120" stroke="#4A90E2" stroke-width="2"/>
-                        <text x="100" y="150" font-family="Arial" font-size="24" font-weight="bold" 
-                              fill="white" text-anchor="middle">AI</text>
-                    </svg>
-                    <span>ShieldAI</span>
-                </a>
-                <ul>
-                    <li><a href="products.html">Products</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#use-cases">Use Cases</a></li>
-                </ul>
-                <div class="cta-buttons">
-                    <a href="mailto:info@shield-ai.ca?subject=ShieldAI%20Gateway%20Demo" class="btn btn-secondary">Book Demo</a>
-                    <a href="https://api.shield-ai.ca/admin" class="btn btn-primary" target="_blank">Start Free Trial</a>
-                </div>
-            </nav>
-        </div>
-    </header>
+<a class="skip-link" href="#main">Skip to content</a>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>🛡️ ShieldAI Gateway</h1>
-            <p class="tagline">Your Privacy Shield for AI</p>
-            <p>Enable your enterprise to safely use AI while maintaining full PIPEDA compliance. Canadian data residency, automatic PII protection, complete audit trail.</p>
-            <div class="cta-buttons" style="justify-content: center;">
-                <a href="https://api.shield-ai.ca/admin" class="btn btn-primary" style="background: white; color: #2C3E87;" target="_blank">Start Free Trial</a>
-                <a href="mailto:info@shield-ai.ca?subject=ShieldAI%20Gateway%20Demo" class="btn btn-secondary" style="border-color: white; color: white;">Book a Demo</a>
-            </div>
-            <div class="hero-badges">
-                <div class="badge">
-                    <svg fill="white" width="24" height="24" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-                    <span>PIPEDA Compliant</span>
-                </div>
-                <div class="badge">
-                    <svg fill="white" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                    <span>Canadian Data</span>
-                </div>
-                <div class="badge">
-                    <svg fill="white" width="24" height="24" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
-                    <span>99.9% Uptime</span>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ══ Header ══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="hm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#hm)"/>
+        <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+        <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+          <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+        </g>
+        <g fill="#8EC5FF">
+          <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+          <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+        </g>
+        <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+      </svg>
+      <span>ShieldAI</span>
+    </a>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <h2 class="section-title">Why ShieldAI Gateway?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Privacy First</h3>
-                    <p>Automatic PII detection and masking. Your sensitive data never reaches AI providers. Full PIPEDA compliance guaranteed.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🇨🇦</div>
-                    <h3>Canadian Data Residency</h3>
-                    <p>All data processed and stored in Canada. Meet data sovereignty requirements. Perfect for government and healthcare.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Complete Audit Trail</h3>
-                    <p>Full compliance reporting for regulators. Track every request, every PII detection, every action. Always audit-ready.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Enterprise Scale</h3>
-                    <p>Handle millions of requests per day. 99.9% uptime SLA. Low latency. Built for production workloads.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Easy Integration</h3>
-                    <p>Drop-in replacement for OpenAI API. No code changes needed. Start in minutes, not months.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Transparent Pricing</h3>
-                    <p>Simple, predictable pricing. No hidden fees. No surprises. Pay for what you use.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="index.html#portfolio">Products</a>
+      <a href="index.html#infrastructure">Infrastructure</a>
+      <a href="index.html#compliance">Compliance</a>
+      <a href="index.html#engage">How we work</a>
+      <a href="products.html">All products</a>
+    </nav>
 
-    <!-- How It Works -->
-    <section id="how-it-works" class="how-it-works">
-        <div class="container">
-            <h2 class="section-title">How It Works</h2>
-            <div class="workflow">
-                <div class="workflow-step">
-                    <div class="workflow-number">1</div>
-                    <h3>Your Application</h3>
-                    <p>Send AI requests to ShieldAI instead of OpenAI</p>
-                </div>
-                <div class="workflow-arrow">→</div>
-                <div class="workflow-step">
-                    <div class="workflow-number">2</div>
-                    <h3>ShieldAI Gateway</h3>
-                    <p>We detect & mask PII, log for compliance</p>
-                </div>
-                <div class="workflow-arrow">→</div>
-                <div class="workflow-step">
-                    <div class="workflow-number">3</div>
-                    <h3>AI Provider</h3>
-                    <p>Clean, compliant request processed</p>
-                </div>
-                <div class="workflow-arrow">→</div>
-                <div class="workflow-step">
-                    <div class="workflow-number">4</div>
-                    <h3>Response</h3>
-                    <p>You get results, we handle compliance</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="header-cta">
+      <a class="btn btn--secondary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20enquiry">Contact</a>
+      <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20briefing%20request&amp;body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20book%20a%20technical%20briefing.%0D%0A%0D%0AName%3A%0D%0AOrganisation%3A%0D%0ARole%3A%0D%0AArea%20of%20interest%3A%0D%0ABest%20time%3A%0D%0A">
+        Book a briefing
+      </a>
+    </div>
 
-    <!-- Pricing -->
-    <section id="pricing" class="pricing">
-        <div class="container">
-            <h2 class="section-title">Simple, Transparent Pricing</h2>
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Starter</h3>
-                    <div class="price">$2,000<span>/month</span></div>
-                    <ul class="pricing-features">
-                        <li>100,000 tokens included</li>
-                        <li>PIPEDA compliance</li>
-                        <li>Email support</li>
-                        <li>Basic reporting</li>
-                        <li>$0.08 per 1K overage</li>
-                    </ul>
-                    <a href="https://api.shield-ai.ca/admin" class="btn btn-primary" target="_blank">Start Trial</a>
-                </div>
-                <div class="pricing-card featured">
-                    <h3>Professional</h3>
-                    <div class="price">$10,000<span>/month</span></div>
-                    <ul class="pricing-features">
-                        <li>1,000,000 tokens included</li>
-                        <li>Priority support</li>
-                        <li>Advanced reporting</li>
-                        <li>Dedicated account manager</li>
-                        <li>$0.06 per 1K overage</li>
-                    </ul>
-                    <a href="https://api.shield-ai.ca/admin" class="btn btn-primary" target="_blank">Start Trial</a>
-                </div>
-                <div class="pricing-card">
-                    <h3>Enterprise</h3>
-                    <div class="price">$50,000<span>/month</span></div>
-                    <ul class="pricing-features">
-                        <li>10,000,000 tokens included</li>
-                        <li>24/7 support</li>
-                        <li>Custom SLA</li>
-                        <li>White-label option</li>
-                        <li>$0.04 per 1K overage</li>
-                    </ul>
-                    <a href="mailto:info@shield-ai.ca?subject=Enterprise%20Plan%20Inquiry" class="btn btn-primary">Contact Sales</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+</header>
 
-    <!-- Use Cases -->
-    <section id="use-cases" class="use-cases">
-        <div class="container">
-            <h2 class="section-title">Built for Canadian Enterprises</h2>
-            <div class="use-cases-grid">
-                <div class="use-case-card">
-                    <div style="font-size: 48px;">🏥</div>
-                    <h3>Healthcare</h3>
-                    <p>PHIPA-compliant AI for hospitals, clinics, and health systems</p>
-                </div>
-                <div class="use-case-card">
-                    <div style="font-size: 48px;">🏦</div>
-                    <h3>Financial Services</h3>
-                    <p>Secure AI for banks, credit unions, and fintech companies</p>
-                </div>
-                <div class="use-case-card">
-                    <div style="font-size: 48px;">⚖️</div>
-                    <h3>Legal</h3>
-                    <p>Confidential AI for law firms and legal departments</p>
-                </div>
-                <div class="use-case-card">
-                    <div style="font-size: 48px;">🏛️</div>
-                    <h3>Government</h3>
-                    <p>Sovereign AI for federal, provincial, and municipal services</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<script>
+(function () {
+  var btn = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('site-nav');
+  if (!btn || !nav) return;
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2>Ready to Use AI Safely?</h2>
-            <p>Start your free 30-day trial. No credit card required.</p>
-            <div class="cta-buttons" style="justify-content: center;">
-                <a href="https://api.shield-ai.ca/admin" class="btn btn-primary" style="background: white; color: #2C3E87;" target="_blank">Start Free Trial</a>
-                <a href="mailto:info@shield-ai.ca?subject=ShieldAI%20Gateway%20Inquiry" class="btn btn-secondary" style="border-color: white; color: white;">Contact Sales</a>
-            </div>
-        </div>
-    </section>
+  function setOpen(open) {
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) { nav.setAttribute('data-open', ''); }
+    else { nav.removeAttribute('data-open'); }
+  }
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>ShieldAI</h4>
-                    <p>Your Privacy Shield for AI</p>
-                    <p style="margin-top: 20px;">Building privacy-first AI solutions for Canadian enterprises and government.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Products</h4>
-                    <ul>
-                        <li><a href="products.html">All Products</a></li>
-                        <li><a href="gateway.html">ShieldAI Gateway</a></li>
-                        <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#blog">Blog</a></li>
-                        <li><a href="#careers">Careers</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <ul>
-                        <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
-                        <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 ShieldAI. All rights reserved. | <a href="#privacy" style="color: #999;">Privacy Policy</a> | <a href="#terms" style="color: #999;">Terms of Service</a></p>
-            </div>
-        </div>
-    </footer>
+  btn.addEventListener('click', function () {
+    setOpen(btn.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Close after choosing a destination, or on Escape
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false); btn.focus();
+    }
+  });
+  // Reset state if the viewport grows back to the desktop layout
+  window.matchMedia('(min-width: 941px)').addEventListener('change', function (m) {
+    if (m.matches) setOpen(false);
+  });
+})();
+</script>
+
+<main id="main">
+
+<!-- ══ Hero ════════════════════════════════════════════════════════════ -->
+<section class="hero on-dark">
+  <div class="wrap">
+    <span class="pill"><span class="pill__dot"></span> Enterprise AI access · data resident in Canada</span>
+
+    <h1>ShieldAI Gateway</h1>
+
+    <p class="hero__lede">
+      Your privacy shield for AI. Let your organisation use the frontier models without
+      giving up PIPEDA compliance — personal information is detected and masked before a
+      prompt leaves your boundary, requests stay on Canadian infrastructure, and every
+      call lands in an audit trail.
+    </p>
+
+    <div class="btn-row">
+      <a class="btn btn--primary btn--lg" href="https://api.shield-ai.ca/admin" target="_blank" rel="noopener">
+        Start free trial
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a class="btn btn--secondary btn--lg" href="mailto:info@shield-ai.ca?subject=ShieldAI%20Gateway%20demo">Book a demo</a>
+    </div>
+
+    <div class="trust">
+      <p class="trust__label">Built for</p>
+      <div class="trust__items">
+        <span class="trust__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M9 12l2 2 4-4"/></svg>
+          PIPEDA compliance
+        </span>
+        <span class="trust__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="7" rx="2"/><rect x="2" y="13" width="20" height="7" rx="2"/><path d="M6 7.5h.01M6 16.5h.01"/></svg>
+          Canadian data residency
+        </span>
+        <span class="trust__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+          Complete audit trail
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Features ════════════════════════════════════════════════════════ -->
+<section class="section section--sunken" id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Why Gateway</span>
+      <h2>A compliance layer, not another model</h2>
+      <p>
+        Gateway sits between your applications and the AI providers you already want to
+        use. The provider changes nothing about how it works — what changes is what
+        reaches it, and what you can prove afterwards.
+      </p>
+    </div>
+
+    <div class="grid grid--3">
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14.5v2.5"/></svg>
+        </span>
+        <h3>Privacy first</h3>
+        <p>Automatic PII detection and masking. Sensitive data never reaches the AI provider, which is what makes PIPEDA compliance workable rather than aspirational.</p>
+      </article>
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="7" rx="2"/><rect x="2" y="13" width="20" height="7" rx="2"/><path d="M6 7.5h.01M6 16.5h.01"/></svg>
+        </span>
+        <h3>Canadian data residency</h3>
+        <p>All data processed and stored in Canada, so data-sovereignty requirements are met by deployment rather than by clause. Suited to government and healthcare.</p>
+      </article>
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20h-20"/></svg>
+        </span>
+        <h3>Complete audit trail</h3>
+        <p>Compliance reporting a regulator can read. Every request, every PII detection and every action is tracked, so you stay audit-ready between audits.</p>
+      </article>
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>
+        </span>
+        <h3>Enterprise scale</h3>
+        <p>Handles millions of requests per day at low latency. Built for production workloads, not for a pilot that quietly stays a pilot.</p>
+      </article>
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+        </span>
+        <h3>Easy integration</h3>
+        <p>A drop-in replacement for the OpenAI API. No code changes needed — you start in minutes rather than months.</p>
+      </article>
+
+      <article class="card card--hover">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 12.4 21.6a2 2 0 0 1-2.8 0l-7.2-7.2a2 2 0 0 1-.6-1.4V4a2 2 0 0 1 2-2h9a2 2 0 0 1 1.4.6l6.4 6.4a2 2 0 0 1 0 2.8Z"/><path d="M7.5 7.5h.01"/></svg>
+        </span>
+        <h3>Transparent pricing</h3>
+        <p>Published tiers, published overage rates. No hidden fees and no surprises — you pay for what you use.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ How it works ════════════════════════════════════════════════════ -->
+<section class="section" id="how-it-works">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How it works</span>
+      <h2>Four steps, and only one of them is yours</h2>
+      <p>
+        You change the endpoint. Gateway handles the compliance work on the way out and
+        on the way back.
+      </p>
+    </div>
+
+    <div class="steps grid grid--4">
+      <div class="step">
+        <span class="step__num">1</span>
+        <h3>Your application</h3>
+        <p>Send AI requests to ShieldAI instead of directly to the provider.</p>
+      </div>
+      <div class="step">
+        <span class="step__num">2</span>
+        <h3>ShieldAI Gateway</h3>
+        <p>We detect and mask personal information, then log the request for compliance.</p>
+      </div>
+      <div class="step">
+        <span class="step__num">3</span>
+        <h3>AI provider</h3>
+        <p>A clean, compliant request is processed by the model you chose.</p>
+      </div>
+      <div class="step">
+        <span class="step__num">4</span>
+        <h3>Response</h3>
+        <p>You get the result. We keep the record that shows how it was handled.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Pricing ═════════════════════════════════════════════════════════ -->
+<section class="section section--sunken" id="pricing">
+  <div class="wrap">
+    <div class="sec-head sec-head--center">
+      <span class="eyebrow">Pricing</span>
+      <h2>Simple, transparent pricing</h2>
+      <p>Monthly tiers with an included token allowance and a published overage rate.</p>
+    </div>
+
+    <div class="grid grid--3">
+
+      <article class="card tier">
+        <h3>Starter</h3>
+        <p class="tier__price">$2,000<span>/month</span></p>
+        <ul class="tier__list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>100,000 tokens included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>PIPEDA compliance</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Email support</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Basic reporting</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>$0.08 per 1K overage</li>
+        </ul>
+        <a class="btn btn--secondary" href="https://api.shield-ai.ca/admin" target="_blank" rel="noopener">Start trial</a>
+      </article>
+
+      <article class="card tier tier--featured">
+        <span class="tier__flag">Most chosen</span>
+        <h3>Professional</h3>
+        <p class="tier__price">$10,000<span>/month</span></p>
+        <ul class="tier__list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>1,000,000 tokens included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Priority support</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Advanced reporting</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Dedicated account manager</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>$0.06 per 1K overage</li>
+        </ul>
+        <a class="btn btn--primary" href="https://api.shield-ai.ca/admin" target="_blank" rel="noopener">Start trial</a>
+      </article>
+
+      <article class="card tier">
+        <h3>Enterprise</h3>
+        <p class="tier__price">$50,000<span>/month</span></p>
+        <ul class="tier__list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>10,000,000 tokens included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>24/7 support</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Custom SLA</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>White-label option</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>$0.04 per 1K overage</li>
+        </ul>
+        <a class="btn btn--secondary" href="mailto:info@shield-ai.ca?subject=Enterprise%20Plan%20Inquiry">Contact sales</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ Use cases ═══════════════════════════════════════════════════════ -->
+<section class="section section--dark on-dark" id="use-cases">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Use cases</span>
+      <h2>Built for Canadian enterprises</h2>
+      <p>
+        The sectors where the wrong prompt is not an inconvenience but a reportable
+        privacy incident.
+      </p>
+    </div>
+
+    <div class="grid grid--4">
+
+      <article class="card">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="15" rx="2"/><path d="M8 6V3h8v3M12 11v6M9 14h6"/></svg>
+        </span>
+        <h3>Healthcare</h3>
+        <p>PHIPA-compliant AI for hospitals, clinics and health systems.</p>
+      </article>
+
+      <article class="card">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 4l9 6"/><path d="M5 10v8M10 10v8M14 10v8M19 10v8M3 21h18"/></svg>
+        </span>
+        <h3>Financial services</h3>
+        <p>Secure AI for banks, credit unions and fintech companies.</p>
+      </article>
+
+      <article class="card">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M7 21h10M5 7h14M8 7l-3 7h6ZM16 7l-3 7h6Z"/></svg>
+        </span>
+        <h3>Legal</h3>
+        <p>Confidential AI for law firms and legal departments.</p>
+      </article>
+
+      <article class="card">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9 12 3l9 6"/><path d="M6 9v9M10 9v9M14 9v9M18 9v9M3 21h18"/></svg>
+        </span>
+        <h3>Government</h3>
+        <p>Sovereign AI for federal, provincial and municipal services.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ═════════════════════════════════════════════════════════════ -->
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="cta-band on-dark">
+      <h2>Ready to use AI safely?</h2>
+      <p>Start your free 30-day trial. No credit card required.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary btn--lg" href="https://api.shield-ai.ca/admin" target="_blank" rel="noopener">Start free trial</a>
+        <a class="btn btn--secondary btn--lg" href="mailto:info@shield-ai.ca?subject=ShieldAI%20Gateway%20Inquiry">Contact sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ Footer ══════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <span class="brand">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="fm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#fm)"/>
+            <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+            <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+              <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+            </g>
+            <g fill="#8EC5FF">
+              <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+              <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+            </g>
+            <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+          </svg>
+          <span>ShieldAI</span>
+        </span>
+        <p>Sovereign AI systems and the infrastructure beneath them, built in Canada for organisations that answer to a regulator.</p>
+      </div>
+
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="gateway.html">ShieldAI Gateway</a></li>
+          <li><a href="https://elpista.com" target="_blank" rel="noopener">Elpista</a></li>
+          <li><a href="https://terminova.io" target="_blank" rel="noopener">Terminova</a></li>
+          <li><a href="https://workcohorts.com" target="_blank" rel="noopener">WorkCohorts</a></li>
+          <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#infrastructure">Sovereign cloud architecture</a></li>
+          <li><a href="#infrastructure">Network &amp; security architecture</a></li>
+          <li><a href="#infrastructure">AI infrastructure &amp; GPU fabric</a></li>
+          <li><a href="#compliance">Compliance posture</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="eligibility-checker.html">Eligibility checker</a></li>
+          <li><a href="apply-assistant.html">Apply assistant</a></li>
+          <li><a href="status-tracker.html">Status tracker</a></li>
+          <li><a href="admin-dashboard.html">Admin dashboard</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
+          <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 ShieldAI. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="#privacy">Privacy policy</a>
+        <a href="#terms">Terms of service</a>
+        <a href="#accessibility">Accessibility</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

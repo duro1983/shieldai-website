@@ -1,879 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Your Eligibility - Ontario Energy Assistant | ShieldAI</title>
-    <meta name="description" content="Find out which Ontario energy rebate programs you qualify for. AI-powered eligibility screening in minutes.">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #2C3E87;
-            text-decoration: none;
-        }
-        
-        .logo svg {
-            width: 35px;
-            height: 35px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-        }
-        
-        nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            font-size: 14px;
-        }
-        
-        nav a:hover, nav a.active {
-            color: #28a745;
-        }
-        
-        .btn {
-            padding: 10px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            display: inline-block;
-            cursor: pointer;
-            border: none;
-            font-size: 14px;
-        }
-        
-        .btn-primary {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #218838;
-        }
-        
-        .btn-secondary {
-            background: #e9ecef;
-            color: #333;
-        }
-        
-        .btn-secondary:hover {
-            background: #dee2e6;
-        }
-
-        /* Progress Steps */
-        .progress-bar {
-            background: white;
-            padding: 20px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .steps {
-            display: flex;
-            justify-content: center;
-            gap: 0;
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0 30px;
-            position: relative;
-        }
-
-        .step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: -20px;
-            width: 40px;
-            height: 2px;
-            background: #dee2e6;
-        }
-
-        .step.active:not(:last-child)::after {
-            background: #28a745;
-        }
-
-        .step-number {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #e9ecef;
-            color: #666;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .step.active .step-number {
-            background: #28a745;
-            color: white;
-        }
-
-        .step.completed .step-number {
-            background: #28a745;
-            color: white;
-        }
-
-        .step-label {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .step.active .step-label {
-            color: #28a745;
-            font-weight: 600;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 40px 0;
-        }
-
-        .form-container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .form-header {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .form-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .form-header p {
-            opacity: 0.9;
-            font-size: 16px;
-        }
-
-        .form-body {
-            padding: 40px;
-        }
-
-        .form-section {
-            display: none;
-        }
-
-        .form-section.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #28a745;
-        }
-
-        .form-group .hint {
-            font-size: 13px;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .radio-option {
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .radio-option input {
-            display: none;
-        }
-
-        .radio-option label {
-            display: block;
-            padding: 15px 20px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .radio-option input:checked + label {
-            border-color: #28a745;
-            background: #e8f5e9;
-            color: #28a745;
-        }
-
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-        }
-
-        .checkbox-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .checkbox-option:hover {
-            border-color: #28a745;
-        }
-
-        .checkbox-option input {
-            width: 18px;
-            height: 18px;
-            accent-color: #28a745;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e9ecef;
-        }
-
-        /* Results Section */
-        .results-container {
-            display: none;
-        }
-
-        .results-container.active {
-            display: block;
-        }
-
-        .results-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .results-header .icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-
-        .results-header h2 {
-            font-size: 28px;
-            color: #28a745;
-            margin-bottom: 10px;
-        }
-
-        .total-savings {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .total-savings .amount {
-            font-size: 48px;
-            font-weight: bold;
-        }
-
-        .total-savings .label {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        .program-card {
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-        }
-
-        .program-card:hover {
-            border-color: #28a745;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .program-card.eligible {
-            border-left: 4px solid #28a745;
-        }
-
-        .program-card.maybe {
-            border-left: 4px solid #ffc107;
-        }
-
-        .program-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 15px;
-        }
-
-        .program-name {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .program-amount {
-            font-size: 24px;
-            font-weight: bold;
-            color: #28a745;
-        }
-
-        .eligibility-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .eligibility-badge.eligible {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .eligibility-badge.maybe {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .program-description {
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .program-requirements {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-
-        .program-requirements h4 {
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .program-requirements ul {
-            margin-left: 20px;
-            color: #666;
-        }
-
-        .cra-notice {
-            background: #e3f2fd;
-            border: 1px solid #90caf9;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            display: flex;
-            gap: 15px;
-            align-items: start;
-        }
-
-        .cra-notice .icon {
-            font-size: 24px;
-        }
-
-        .cra-notice h4 {
-            color: #1565c0;
-            margin-bottom: 5px;
-        }
-
-        .cra-notice p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .next-steps {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .next-steps h3 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .next-steps .buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Footer */
-        footer {
-            background: #1a1a1a;
-            color: white;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            color: #999;
-            font-size: 14px;
-        }
-
-        .footer-bottom a {
-            color: #999;
-        }
-
-        @media (max-width: 768px) {
-            nav ul {
-                display: none;
-            }
-
-            .steps {
-                flex-wrap: wrap;
-                gap: 15px;
-            }
-
-            .step:not(:last-child)::after {
-                display: none;
-            }
-
-            .form-body {
-                padding: 25px;
-            }
-
-            .radio-group {
-                flex-direction: column;
-            }
-
-            .form-actions {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .form-actions .btn {
-                width: 100%;
-                text-align: center;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eligibility checker — Ontario Energy Assistant | ShieldAI</title>
+<meta name="description" content="Find out which Ontario energy rebate programmes you qualify for. AI-assisted eligibility screening in minutes.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shield.css">
+<style>
+  /* Page-unique only. Everything else comes from shield.css. */
+
+  .checker { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); }
+
+  /* Step visibility — these class names are toggled by the page script. */
+  .form-section { display: none; }
+  .form-section.active { display: block; }
+  .results-container { display: none; }
+  .results-container.active { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); }
+
+  /* The script toggles .active / .completed on the stepper items. */
+  .stepper__item.active { color: var(--b-700); }
+  .stepper__item.active .stepper__dot {
+    color: #fff; background: var(--b-600); border-color: var(--b-600);
+  }
+  .stepper__item.completed { color: var(--ok-600); }
+  .stepper__item.completed .stepper__dot {
+    color: #fff; background: var(--ok-600); border-color: var(--ok-600);
+  }
+
+  fieldset { min-width: 0; padding: 0; border: 0; }
+  legend { padding: 0; }
+
+  .choice-group--wide {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  }
+
+  /* Programme card head: name stacked over its state pill, amount beside it */
+  .prog__id { display: grid; justify-items: start; gap: var(--s-2); min-width: 0; }
+  .prog__amount {
+    font-size: var(--t-lg); font-weight: 700;
+    font-variant-numeric: tabular-nums; color: var(--b-600);
+  }
+
+  /* Reason lines — normal flow with a hanging icon, never flex. */
+  .reqs { margin-top: var(--s-5); padding: var(--s-4) var(--s-5); background: var(--surface-sunken); border-radius: var(--r-md); }
+  .reqs h4 { font-size: var(--t-sm); margin-bottom: var(--s-3); }
+  .req {
+    position: relative; padding-left: var(--s-6);
+    font-size: var(--t-sm); line-height: 1.55; color: var(--text-muted);
+    overflow-wrap: break-word;
+  }
+  .req + .req { margin-top: var(--s-2); }
+  .req > svg { position: absolute; left: 0; top: 4px; width: 15px; height: 15px; color: var(--ok-600); }
+  .req--warn > svg { color: var(--warn-500); }
+
+  .savings__label {
+    font-size: var(--t-xs); font-weight: 620; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+  .savings__amount {
+    margin-top: var(--s-2);
+    font-size: var(--t-3xl); font-weight: 700; letter-spacing: -0.03em;
+    line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--b-600);
+  }
+
+  .results-container .page-head { margin-bottom: 0; }
+  .btn-row--center { justify-content: center; }
+</style>
 </head>
+
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <svg width="35" height="35" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 20 L160 50 L160 110 Q160 150 100 180 Q40 150 40 110 L40 50 Z" fill="#2C3E87" stroke="#4A90E2" stroke-width="3"/>
-                        <text x="100" y="115" font-family="Arial" font-size="60" font-weight="bold" fill="white" text-anchor="middle">⚡</text>
-                    </svg>
-                    <span>Ontario Energy Assistant</span>
-                </a>
-                <ul>
-                    <li><a href="ontario-energy-demo.html">Chat</a></li>
-                    <li><a href="eligibility-checker.html" class="active">Check Eligibility</a></li>
-                    <li><a href="apply-assistant.html">Apply</a></li>
-                    <li><a href="status-tracker.html">Track Status</a></li>
-                </ul>
-                <a href="ontario-energy-demo.html" class="btn btn-primary">Back to Demo</a>
-            </nav>
-        </div>
-    </header>
+<a class="skip-link" href="#main">Skip to content</a>
 
-    <!-- Progress Bar -->
-    <div class="progress-bar">
-        <div class="container">
-            <div class="steps">
-                <div class="step active" id="step1-indicator">
-                    <div class="step-number">1</div>
-                    <span class="step-label">Your Home</span>
-                </div>
-                <div class="step" id="step2-indicator">
-                    <div class="step-number">2</div>
-                    <span class="step-label">Household</span>
-                </div>
-                <div class="step" id="step3-indicator">
-                    <div class="step-number">3</div>
-                    <span class="step-label">Upgrades</span>
-                </div>
-                <div class="step" id="step4-indicator">
-                    <div class="step-number">4</div>
-                    <span class="step-label">Results</span>
-                </div>
-            </div>
-        </div>
+<!-- ══ Header ══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="/">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="hm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#hm)"/>
+        <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+        <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+          <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+        </g>
+        <g fill="#8EC5FF">
+          <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+          <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+        </g>
+        <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+      </svg>
+      <span>ShieldAI</span>
+    </a>
+    <span class="app-header__context">Eligibility checker</span>
+
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="index.html#portfolio">Products</a>
+      <a href="index.html#infrastructure">Infrastructure</a>
+      <a href="index.html#compliance">Compliance</a>
+      <a href="index.html#engage">How we work</a>
+      <a href="products.html">All products</a>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn--secondary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20enquiry">Contact</a>
+      <a class="btn btn--primary" href="ontario-energy-demo.html">Back to demo</a>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container">
-            <div class="form-container" id="formContainer">
-                <div class="form-header">
-                    <h1>Check Your Eligibility</h1>
-                    <p>Answer a few questions to see which programs you qualify for</p>
-                </div>
-                <div class="form-body">
-                    <!-- Step 1: Home Information -->
-                    <div class="form-section active" id="step1">
-                        <h3 style="margin-bottom: 25px; color: #333;">Tell us about your home</h3>
-                        
-                        <div class="form-group">
-                            <label>Do you own your home?</label>
-                            <div class="radio-group">
-                                <div class="radio-option">
-                                    <input type="radio" name="ownership" id="own-yes" value="yes">
-                                    <label for="own-yes">Yes, I own it</label>
-                                </div>
-                                <div class="radio-option">
-                                    <input type="radio" name="ownership" id="own-no" value="no">
-                                    <label for="own-no">No, I rent</label>
-                                </div>
-                            </div>
-                        </div>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+</header>
 
-                        <div class="form-group">
-                            <label>Is this your primary residence?</label>
-                            <div class="radio-group">
-                                <div class="radio-option">
-                                    <input type="radio" name="primary" id="primary-yes" value="yes">
-                                    <label for="primary-yes">Yes</label>
-                                </div>
-                                <div class="radio-option">
-                                    <input type="radio" name="primary" id="primary-no" value="no">
-                                    <label for="primary-no">No</label>
-                                </div>
-                            </div>
-                        </div>
+<script>
+(function () {
+  var btn = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('site-nav');
+  if (!btn || !nav) return;
 
-                        <div class="form-group">
-                            <label>What type of home do you live in?</label>
-                            <select id="homeType">
-                                <option value="">Select home type...</option>
-                                <option value="detached">Detached House</option>
-                                <option value="semi">Semi-Detached</option>
-                                <option value="townhouse">Townhouse / Row House</option>
-                                <option value="condo">Condo / Apartment</option>
-                                <option value="mobile">Mobile Home</option>
-                            </select>
-                        </div>
+  function setOpen(open) {
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) { nav.setAttribute('data-open', ''); }
+    else { nav.removeAttribute('data-open'); }
+  }
 
-                        <div class="form-group">
-                            <label>What is your postal code?</label>
-                            <input type="text" id="postalCode" placeholder="e.g., M5V 1A1" maxlength="7">
-                            <p class="hint">We use this to find local programs and contractors</p>
-                        </div>
+  btn.addEventListener('click', function () {
+    setOpen(btn.getAttribute('aria-expanded') !== 'true');
+  });
 
-                        <div class="form-actions">
-                            <div></div>
-                            <button class="btn btn-primary" onclick="nextStep(2)">Continue →</button>
-                        </div>
-                    </div>
+  // Close after choosing a destination, or on Escape
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false); btn.focus();
+    }
+  });
+  // Reset state if the viewport grows back to the desktop layout
+  window.matchMedia('(min-width: 941px)').addEventListener('change', function (m) {
+    if (m.matches) setOpen(false);
+  });
+})();
+</script>
 
-                    <!-- Step 2: Household Information -->
-                    <div class="form-section" id="step2">
-                        <h3 style="margin-bottom: 25px; color: #333;">Household Information</h3>
-                        
-                        <div class="form-group">
-                            <label>How many people live in your household?</label>
-                            <select id="householdSize">
-                                <option value="">Select...</option>
-                                <option value="1">1 person</option>
-                                <option value="2">2 people</option>
-                                <option value="3">3 people</option>
-                                <option value="4">4 people</option>
-                                <option value="5">5+ people</option>
-                            </select>
-                        </div>
+<main id="main" class="app-main">
+  <div class="wrap">
 
-                        <div class="form-group">
-                            <label>What is your approximate annual household income?</label>
-                            <select id="income">
-                                <option value="">Select income range...</option>
-                                <option value="under30">Under $30,000</option>
-                                <option value="30-50">$30,000 - $50,000</option>
-                                <option value="50-80">$50,000 - $80,000</option>
-                                <option value="80-120">$80,000 - $120,000</option>
-                                <option value="120-200">$120,000 - $200,000</option>
-                                <option value="over200">Over $200,000</option>
-                            </select>
-                            <p class="hint">This helps determine eligibility for income-based programs</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label>What is your current heating source?</label>
-                            <select id="heatingSource">
-                                <option value="">Select...</option>
-                                <option value="gas">Natural Gas</option>
-                                <option value="oil">Oil / Propane</option>
-                                <option value="electric">Electric Baseboard</option>
-                                <option value="heatpump">Heat Pump</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-
-                        <div class="form-actions">
-                            <button class="btn btn-secondary" onclick="prevStep(1)">← Back</button>
-                            <button class="btn btn-primary" onclick="nextStep(3)">Continue →</button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Planned Upgrades -->
-                    <div class="form-section" id="step3">
-                        <h3 style="margin-bottom: 25px; color: #333;">What upgrades are you considering?</h3>
-                        <p style="color: #666; margin-bottom: 20px;">Select all that apply</p>
-                        
-                        <div class="form-group">
-                            <div class="checkbox-group">
-                                <label class="checkbox-option">
-                                    <input type="checkbox" name="upgrades" value="heatpump">
-                                    <span>Heat Pump</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" name="upgrades" value="insulation">
-                                    <span>Insulation</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" name="upgrades" value="windows">
-                                    <span>Windows / Doors</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" name="upgrades" value="solar">
-                                    <span>Solar Panels</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" name="upgrades" value="waterheater">
-                                    <span>Water Heater</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" name="upgrades" value="thermostat">
-                                    <span>Smart Thermostat</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" name="upgrades" value="ev">
-                                    <span>EV Charger</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" name="upgrades" value="other">
-                                    <span>Other / Not Sure</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group" style="margin-top: 30px;">
-                            <label>When are you planning to make these upgrades?</label>
-                            <select id="timeline">
-                                <option value="">Select timeline...</option>
-                                <option value="asap">As soon as possible</option>
-                                <option value="3months">Within 3 months</option>
-                                <option value="6months">Within 6 months</option>
-                                <option value="year">Within a year</option>
-                                <option value="exploring">Just exploring options</option>
-                            </select>
-                        </div>
-
-                        <div class="form-actions">
-                            <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
-                            <button class="btn btn-primary" onclick="showResults()">See My Results →</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Results Container -->
-            <div class="results-container" id="resultsContainer">
-                <div class="results-header">
-                    <div class="icon">🎉</div>
-                    <h2>Great News! You May Qualify for Multiple Programs</h2>
-                    <p>Based on your answers, here are the programs you're likely eligible for:</p>
-                </div>
-
-                <div class="total-savings">
-                    <div class="label">Potential Total Savings</div>
-                    <div class="amount">Up to $21,100</div>
-                </div>
-
-                <div class="program-card eligible">
-                    <div class="program-header">
-                        <div>
-                            <span class="eligibility-badge eligible">✓ Likely Eligible</span>
-                            <div class="program-name">Canada Greener Homes Grant</div>
-                        </div>
-                        <div class="program-amount">Up to $5,600</div>
-                    </div>
-                    <p class="program-description">Federal grant for home energy retrofits including heat pumps, insulation, windows, and more.</p>
-                    <div class="program-requirements">
-                        <h4>Why you qualify:</h4>
-                        <ul>
-                            <li>✓ You own your home</li>
-                            <li>✓ It's your primary residence</li>
-                            <li>✓ Your home type is eligible</li>
-                            <li>✓ You're planning qualifying upgrades</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="program-card eligible">
-                    <div class="program-header">
-                        <div>
-                            <span class="eligibility-badge eligible">✓ Likely Eligible</span>
-                            <div class="program-name">Enbridge Home Efficiency Rebate</div>
-                        </div>
-                        <div class="program-amount">Up to $5,000</div>
-                    </div>
-                    <p class="program-description">Rebates for upgrading to high-efficiency heating equipment if you're an Enbridge Gas customer.</p>
-                    <div class="program-requirements">
-                        <h4>Why you qualify:</h4>
-                        <ul>
-                            <li>✓ You have natural gas heating</li>
-                            <li>✓ You're considering a heat pump upgrade</li>
-                            <li>✓ Your postal code is in the service area</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="program-card eligible">
-                    <div class="program-header">
-                        <div>
-                            <span class="eligibility-badge eligible">✓ Likely Eligible</span>
-                            <div class="program-name">Canada Greener Homes Loan</div>
-                        </div>
-                        <div class="program-amount">Up to $40,000</div>
-                    </div>
-                    <p class="program-description">Interest-free loan to help finance your home energy improvements. 10-year repayment term.</p>
-                    <div class="program-requirements">
-                        <h4>Why you qualify:</h4>
-                        <ul>
-                            <li>✓ You own your home</li>
-                            <li>✓ It's your primary residence</li>
-                            <li>✓ You're planning eligible retrofits</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="program-card maybe">
-                    <div class="program-header">
-                        <div>
-                            <span class="eligibility-badge maybe">? May Qualify</span>
-                            <div class="program-name">Oil to Heat Pump Affordability Program</div>
-                        </div>
-                        <div class="program-amount">Up to $10,000</div>
-                    </div>
-                    <p class="program-description">Additional grant for switching from oil heating to an electric heat pump.</p>
-                    <div class="program-requirements">
-                        <h4>Additional verification needed:</h4>
-                        <ul>
-                            <li>⚠️ Requires oil heating (you selected gas)</li>
-                            <li>✓ Income requirements may apply</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="cra-notice">
-                    <div class="icon">🔐</div>
-                    <div>
-                        <h4>Income Verification Available</h4>
-                        <p>For income-based programs, we can securely verify your income through CRA integration (coming soon). This speeds up your application and ensures you get all the rebates you qualify for.</p>
-                    </div>
-                </div>
-
-                <div class="next-steps">
-                    <h3>Ready to Apply?</h3>
-                    <p style="color: #666; margin-bottom: 20px;">Our AI assistant can guide you through the application process step by step.</p>
-                    <div class="buttons">
-                        <a href="apply-assistant.html" class="btn btn-primary" style="padding: 15px 40px; font-size: 16px;">Start Application →</a>
-                        <a href="ontario-energy-demo.html" class="btn btn-secondary" style="padding: 15px 40px; font-size: 16px;">Ask Questions First</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="page-head">
+      <span class="eyebrow">Ontario Energy Assistant</span>
+      <h1>Check your eligibility</h1>
+      <p>Answer a few questions to see which energy programmes you qualify for.</p>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 ShieldAI. All rights reserved. | <a href="index.html">Back to ShieldAI</a> | <a href="ontario-energy-demo.html">Ontario Energy Assistant</a></p>
+    <div class="checker">
+
+      <!-- Progress -->
+      <div class="panel">
+        <ol class="stepper" aria-label="Progress">
+          <li class="stepper__item active" id="step1-indicator">
+            <span class="stepper__dot" aria-hidden="true">1</span> Your home
+          </li>
+          <li class="stepper__item" id="step2-indicator">
+            <span class="stepper__dot" aria-hidden="true">2</span> Household
+          </li>
+          <li class="stepper__item" id="step3-indicator">
+            <span class="stepper__dot" aria-hidden="true">3</span> Upgrades
+          </li>
+          <li class="stepper__item" id="step4-indicator">
+            <span class="stepper__dot" aria-hidden="true">4</span> Results
+          </li>
+        </ol>
+      </div>
+
+      <!-- Questions -->
+      <div class="panel" id="formContainer">
+
+        <!-- Step 1: home -->
+        <section class="form-section active" id="step1" aria-label="Your home">
+          <div class="panel__header">
+            <h2>Tell us about your home</h2>
+          </div>
+          <div class="panel__body">
+
+            <fieldset class="field">
+              <legend class="label">Do you own your home?</legend>
+              <div class="choice-group choice-group--wide">
+                <label class="choice" for="own-yes">
+                  <input type="radio" name="ownership" id="own-yes" value="yes">
+                  <span class="choice__text">Yes, I own it</span>
+                </label>
+                <label class="choice" for="own-no">
+                  <input type="radio" name="ownership" id="own-no" value="no">
+                  <span class="choice__text">No, I rent</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="field">
+              <legend class="label">Is this your primary residence?</legend>
+              <div class="choice-group choice-group--wide">
+                <label class="choice" for="primary-yes">
+                  <input type="radio" name="primary" id="primary-yes" value="yes">
+                  <span class="choice__text">Yes</span>
+                </label>
+                <label class="choice" for="primary-no">
+                  <input type="radio" name="primary" id="primary-no" value="no">
+                  <span class="choice__text">No</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label class="label" for="homeType">What type of home do you live in?</label>
+              <select class="select" id="homeType">
+                <option value="">Select home type…</option>
+                <option value="detached">Detached house</option>
+                <option value="semi">Semi-detached</option>
+                <option value="townhouse">Townhouse / row house</option>
+                <option value="condo">Condo / apartment</option>
+                <option value="mobile">Mobile home</option>
+              </select>
             </div>
+
+            <div class="field">
+              <label class="label" for="postalCode">What is your postal code?</label>
+              <input class="input" type="text" id="postalCode" placeholder="e.g. M5V 1A1" maxlength="7" autocomplete="postal-code" aria-describedby="postalCode-hint">
+              <p class="hint" id="postalCode-hint">We use this to find local programmes and contractors.</p>
+            </div>
+
+          </div>
+          <div class="panel__footer">
+            <button class="btn btn--primary" onclick="nextStep(2)">
+              Continue
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- Step 2: household -->
+        <section class="form-section" id="step2" aria-label="Household">
+          <div class="panel__header">
+            <h2>Household information</h2>
+          </div>
+          <div class="panel__body">
+
+            <div class="field">
+              <label class="label" for="householdSize">How many people live in your household?</label>
+              <select class="select" id="householdSize">
+                <option value="">Select…</option>
+                <option value="1">1 person</option>
+                <option value="2">2 people</option>
+                <option value="3">3 people</option>
+                <option value="4">4 people</option>
+                <option value="5">5+ people</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="label" for="income">What is your approximate annual household income?</label>
+              <select class="select" id="income" aria-describedby="income-hint">
+                <option value="">Select income range…</option>
+                <option value="under30">Under $30,000</option>
+                <option value="30-50">$30,000 – $50,000</option>
+                <option value="50-80">$50,000 – $80,000</option>
+                <option value="80-120">$80,000 – $120,000</option>
+                <option value="120-200">$120,000 – $200,000</option>
+                <option value="over200">Over $200,000</option>
+              </select>
+              <p class="hint" id="income-hint">This determines eligibility for income-based programmes.</p>
+            </div>
+
+            <div class="field">
+              <label class="label" for="heatingSource">What is your current heating source?</label>
+              <select class="select" id="heatingSource">
+                <option value="">Select…</option>
+                <option value="gas">Natural gas</option>
+                <option value="oil">Oil / propane</option>
+                <option value="electric">Electric baseboard</option>
+                <option value="heatpump">Heat pump</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+          </div>
+          <div class="panel__footer">
+            <button class="btn btn--secondary" onclick="prevStep(1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+            <button class="btn btn--primary" onclick="nextStep(3)">
+              Continue
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+        <!-- Step 3: upgrades -->
+        <section class="form-section" id="step3" aria-label="Upgrades">
+          <div class="panel__header">
+            <h2>What upgrades are you considering?</h2>
+          </div>
+          <div class="panel__body">
+
+            <fieldset class="field">
+              <legend class="label">Select all that apply</legend>
+              <div class="choice-group choice-group--wide">
+                <label class="choice" for="upg-heatpump">
+                  <input type="checkbox" name="upgrades" id="upg-heatpump" value="heatpump">
+                  <span class="choice__text">Heat pump</span>
+                </label>
+                <label class="choice" for="upg-insulation">
+                  <input type="checkbox" name="upgrades" id="upg-insulation" value="insulation">
+                  <span class="choice__text">Insulation</span>
+                </label>
+                <label class="choice" for="upg-windows">
+                  <input type="checkbox" name="upgrades" id="upg-windows" value="windows">
+                  <span class="choice__text">Windows / doors</span>
+                </label>
+                <label class="choice" for="upg-solar">
+                  <input type="checkbox" name="upgrades" id="upg-solar" value="solar">
+                  <span class="choice__text">Solar panels</span>
+                </label>
+                <label class="choice" for="upg-waterheater">
+                  <input type="checkbox" name="upgrades" id="upg-waterheater" value="waterheater">
+                  <span class="choice__text">Water heater</span>
+                </label>
+                <label class="choice" for="upg-thermostat">
+                  <input type="checkbox" name="upgrades" id="upg-thermostat" value="thermostat">
+                  <span class="choice__text">Smart thermostat</span>
+                </label>
+                <label class="choice" for="upg-ev">
+                  <input type="checkbox" name="upgrades" id="upg-ev" value="ev">
+                  <span class="choice__text">EV charger</span>
+                </label>
+                <label class="choice" for="upg-other">
+                  <input type="checkbox" name="upgrades" id="upg-other" value="other">
+                  <span class="choice__text">Other / not sure</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label class="label" for="timeline">When are you planning to make these upgrades?</label>
+              <select class="select" id="timeline">
+                <option value="">Select timeline…</option>
+                <option value="asap">As soon as possible</option>
+                <option value="3months">Within 3 months</option>
+                <option value="6months">Within 6 months</option>
+                <option value="year">Within a year</option>
+                <option value="exploring">Just exploring options</option>
+              </select>
+            </div>
+
+          </div>
+          <div class="panel__footer">
+            <button class="btn btn--secondary" onclick="prevStep(2)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+            <button class="btn btn--primary" onclick="showResults()">
+              See my results
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Results -->
+      <div class="results-container" id="resultsContainer">
+
+        <div class="page-head">
+          <span class="icon-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M9 12l2 2 4-4"/></svg>
+          </span>
+          <h2>You may qualify for several programmes</h2>
+          <p>Based on your answers, these are the programmes you are likely eligible for.</p>
         </div>
-    </footer>
+
+        <div class="panel">
+          <div class="panel__body text-center">
+            <p class="savings__label">Potential total savings</p>
+            <p class="savings__amount">Up to $21,100</p>
+          </div>
+        </div>
+
+        <article class="panel">
+          <div class="panel__header">
+            <div class="prog__id">
+              <h3>Canada Greener Homes Grant</h3>
+              <span class="status status--approved">Likely eligible</span>
+            </div>
+            <span class="prog__amount">Up to $5,600</span>
+          </div>
+          <div class="panel__body">
+            <p>Federal grant for home energy retrofits including heat pumps, insulation, windows and more.</p>
+            <div class="reqs">
+              <h4>Why you qualify</h4>
+              <ul>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> You own your home</li>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> It is your primary residence</li>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Your home type is eligible</li>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> You are planning qualifying upgrades</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel__header">
+            <div class="prog__id">
+              <h3>Enbridge Home Efficiency Rebate</h3>
+              <span class="status status--approved">Likely eligible</span>
+            </div>
+            <span class="prog__amount">Up to $5,000</span>
+          </div>
+          <div class="panel__body">
+            <p>Rebates for upgrading to high-efficiency heating equipment if you are an Enbridge Gas customer.</p>
+            <div class="reqs">
+              <h4>Why you qualify</h4>
+              <ul>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> You have natural gas heating</li>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> You are considering a heat pump upgrade</li>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Your postal code is in the service area</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel__header">
+            <div class="prog__id">
+              <h3>Canada Greener Homes Loan</h3>
+              <span class="status status--approved">Likely eligible</span>
+            </div>
+            <span class="prog__amount">Up to $40,000</span>
+          </div>
+          <div class="panel__body">
+            <p>Interest-free loan to help finance your home energy improvements. Ten-year repayment term.</p>
+            <div class="reqs">
+              <h4>Why you qualify</h4>
+              <ul>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> You own your home</li>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> It is your primary residence</li>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> You are planning eligible retrofits</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel__header">
+            <div class="prog__id">
+              <h3>Oil to Heat Pump Affordability Programme</h3>
+              <span class="status status--review">May qualify</span>
+            </div>
+            <span class="prog__amount">Up to $10,000</span>
+          </div>
+          <div class="panel__body">
+            <p>Additional grant for switching from oil heating to an electric heat pump.</p>
+            <div class="reqs">
+              <h4>Additional verification needed</h4>
+              <ul>
+                <li class="req req--warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 4.3 2.5 18a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></svg> Requires oil heating (you selected gas)</li>
+                <li class="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Income requirements may apply</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <div class="alert alert--info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <p><strong>Income verification available</strong>
+          For income-based programmes, we can securely verify your income through CRA integration (coming soon). This speeds up your application and ensures you get all the rebates you qualify for.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel__body text-center">
+            <h3>Ready to apply?</h3>
+            <p class="hint">Our AI assistant can guide you through the application process step by step.</p>
+            <div class="btn-row btn-row--center mt-6">
+              <a class="btn btn--primary btn--lg" href="apply-assistant.html">
+                Start application
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+              <a class="btn btn--secondary btn--lg" href="ontario-energy-demo.html">Ask questions first</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ══ Footer ══════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <span class="brand">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="fm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#fm)"/>
+            <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+            <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+              <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+            </g>
+            <g fill="#8EC5FF">
+              <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+              <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+            </g>
+            <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+          </svg>
+          <span>ShieldAI</span>
+        </span>
+        <p>Sovereign AI systems and the infrastructure beneath them, built in Canada for organisations that answer to a regulator.</p>
+      </div>
+
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="gateway.html">ShieldAI Gateway</a></li>
+          <li><a href="https://elpista.com" target="_blank" rel="noopener">Elpista</a></li>
+          <li><a href="https://terminova.io" target="_blank" rel="noopener">Terminova</a></li>
+          <li><a href="https://workcohorts.com" target="_blank" rel="noopener">WorkCohorts</a></li>
+          <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="index.html#infrastructure">Sovereign cloud architecture</a></li>
+          <li><a href="index.html#infrastructure">Network &amp; security architecture</a></li>
+          <li><a href="index.html#infrastructure">AI infrastructure &amp; GPU fabric</a></li>
+          <li><a href="index.html#compliance">Compliance posture</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="eligibility-checker.html">Eligibility checker</a></li>
+          <li><a href="apply-assistant.html">Apply assistant</a></li>
+          <li><a href="status-tracker.html">Status tracker</a></li>
+          <li><a href="admin-dashboard.html">Admin dashboard</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
+          <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 ShieldAI. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="index.html#privacy">Privacy policy</a>
+        <a href="index.html#terms">Terms of service</a>
+        <a href="index.html#accessibility">Accessibility</a>
+      </nav>
+    </div>
+  </div>
+</footer>
 
     <script>
         let currentStep = 1;
