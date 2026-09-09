@@ -110,6 +110,10 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* The hidden attribute has to win against component display rules such as
+   .field-row{display:grid}, which would otherwise silently re-show it. */
+[hidden] { display: none !important; }
+
 * { margin: 0; }
 
 html {
@@ -883,7 +887,11 @@ ul, ol { padding: 0; list-style: none; }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: var(--s-5);
+  margin-bottom: var(--s-5);
 }
+/* Gap alone spaces these — margin as well would double it on the wrapped rows */
+.field-row .field { margin-bottom: 0; }
+.field-row:last-child { margin-bottom: 0; }
 
 /* Choice controls — the whole block is the target, not just the box */
 .choice-group { display: grid; gap: var(--s-3); }

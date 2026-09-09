@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI infrastructure sizing calculator — ShieldAI</title>
+<meta name="description" content="Size GPU infrastructure for open-weight model inference on Canadian infrastructure. Memory, latency, topology and cost — with the arithmetic shown for every figure.">
+<link rel="canonical" href="https://shield-ai.ca/sizing.html">
+<meta name="theme-color" content="#0a0f1c">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI infrastructure sizing calculator — ShieldAI">
+<meta property="og:description" content="What it actually takes to serve an open-weight model from Canadian infrastructure. Every figure shows its working.">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shield.css">
+<style>
+  /* Two-column calculator; inputs stay in view while results update. */
+  .calc {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--s-8);
+    align-items: start;
+  }
+  @media (max-width: 1000px) { .calc { grid-template-columns: minmax(0, 1fr); } }
+  @media (min-width: 1001px) {
+    .calc__inputs { position: sticky; top: calc(var(--header-h) + var(--s-6)); max-height: calc(100vh - var(--header-h) - var(--s-12)); overflow-y: auto; }
+  }
+  .calc__results { display: grid; gap: var(--s-6); min-width: 0; }
+
+  .rule { height: 1px; border: 0; background: var(--border); margin-block: var(--s-6); }
+
+  .result-headline { background: var(--surface-dark); border-color: transparent; }
+  .result-headline .panel__body { padding: var(--s-8); }
+  .result-headline__label {
+    font-size: var(--t-xs); font-weight: 620; letter-spacing: .09em;
+    text-transform: uppercase; color: var(--a-400);
+  }
+  .result-headline__value {
+    margin-top: var(--s-3);
+    font-size: var(--t-2xl); font-weight: 700; letter-spacing: -0.03em;
+    line-height: 1.1; color: #fff;
+  }
+  .result-headline__sub { margin-top: var(--s-2); font-size: var(--t-sm); color: var(--text-on-dark-muted); }
+  .result-headline__best {
+    margin-top: var(--s-4); padding-top: var(--s-4);
+    border-top: 1px solid var(--border-dark);
+    font-size: var(--t-sm); color: var(--a-300);
+  }
+  .result-headline__best strong { color: #fff; font-weight: 680; }
+  .result-headline .stat { border-left-color: rgba(61,144,240,.35); }
+  .result-headline .stat__value { color: #fff; font-size: var(--t-xl); }
+  .result-headline .stat__label { color: var(--text-on-dark-muted); }
+
+  /* Result tables read as label/value pairs, not a data grid */
+  .calc-table th[scope="row"] {
+    position: static;
+    padding: var(--s-3) 0;
+    font-size: var(--t-sm); font-weight: 500;
+    letter-spacing: normal; text-transform: none; white-space: normal;
+    color: var(--text-muted); background: transparent;
+  }
+  .calc-table td { padding: var(--s-3) 0; font-variant-numeric: tabular-nums; font-weight: 560; }
+  .calc-table tr.is-total th[scope="row"],
+  .calc-table tr.is-total td { font-weight: 680; color: var(--text); border-bottom: 0; }
+
+  /* The shown working — the point of the tool */
+  .working {
+    margin-top: var(--s-5);
+    padding: var(--s-4) var(--s-5);
+    font-size: var(--t-sm); line-height: 1.65;
+    color: var(--text-muted);
+    background: var(--n-50);
+    border-left: 2px solid var(--b-200);
+    border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  }
+  .working strong { color: var(--text); font-weight: 640; }
+
+  .fabric-verdict {
+    font-size: var(--t-lg); font-weight: 620; line-height: 1.4;
+    letter-spacing: -0.015em;
+  }
+  .fabric-verdict.is-ok { color: var(--ok-700); }
+  .fabric-verdict.is-critical { color: #b45309; }
+
+  .alert.mb-4 { margin-bottom: var(--s-4); }
+  .alert strong { display: block; margin-bottom: 2px; }
+
+  .panel--caveat { border-color: var(--border-strong); background: var(--n-25); }
+  .panel--caveat p { font-size: var(--t-base); color: var(--text-muted); }
+
+  .advanced { margin-top: var(--s-6); }
+  .advanced summary {
+    font-size: var(--t-sm); font-weight: 600; color: var(--b-600);
+    cursor: pointer; padding: var(--s-2) 0;
+  }
+  .advanced summary:hover { text-decoration: underline; }
+  .advanced[open] summary { margin-bottom: var(--s-4); }
+
+  .card code {
+    font-family: var(--font-mono); font-size: .8125em;
+    padding: 1px 5px; border-radius: 4px;
+    background: var(--n-100); color: var(--b-700);
+  }
+</style>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ══ Header ══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="hm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#hm)"/>
+        <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+        <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+          <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+        </g>
+        <g fill="#8EC5FF">
+          <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+          <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+        </g>
+        <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+      </svg>
+      <span>ShieldAI</span>
+    </a>
+    <span class="app-header__context">Sizing calculator</span>
+
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="#portfolio">Products</a>
+      <a href="#infrastructure">Infrastructure</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#engage">How we work</a>
+      <a href="products.html">All products</a>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn--secondary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20enquiry">Contact</a>
+      <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20briefing%20request&amp;body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20book%20a%20technical%20briefing.%0D%0A%0D%0AName%3A%0D%0AOrganisation%3A%0D%0ARole%3A%0D%0AArea%20of%20interest%3A%0D%0ABest%20time%3A%0D%0A">
+        Book a briefing
+      </a>
+    </div>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+</header>
+
+<script>
+(function () {
+  var btn = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('site-nav');
+  if (!btn || !nav) return;
+
+  function setOpen(open) {
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) { nav.setAttribute('data-open', ''); }
+    else { nav.removeAttribute('data-open'); }
+  }
+
+  btn.addEventListener('click', function () {
+    setOpen(btn.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Close after choosing a destination, or on Escape
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false); btn.focus();
+    }
+  });
+  // Reset state if the viewport grows back to the desktop layout
+  window.matchMedia('(min-width: 941px)').addEventListener('change', function (m) {
+    if (m.matches) setOpen(false);
+  });
+})();
+</script>
+
+<main id="main">
+<section class="app-main">
+  <div class="wrap">
+
+    <div class="page-head">
+      <span class="eyebrow">Infrastructure &amp; architecture practice</span>
+      <h1>Sovereign AI infrastructure sizing calculator</h1>
+      <p>
+        Work out what it actually takes to serve an open-weight model from Canadian
+        infrastructure — GPU count, memory headroom, latency, topology and cost.
+        Every figure below shows the arithmetic that produced it, so you can check it
+        rather than trust it.
+      </p>
+    </div>
+
+    <div class="calc">
+
+      <!-- ══ Inputs ══════════════════════════════════════════════════ -->
+      <form class="calc__inputs panel" id="calcForm" novalidate>
+        <div class="panel__header"><h2>Workload</h2></div>
+        <div class="panel__body">
+
+          <div class="field">
+            <label class="label" for="model">Model</label>
+            <select class="select" id="model">
+              <option value="llama31-8b">Llama 3.1 8B</option>
+              <option value="llama31-70b" selected>Llama 3.1 70B</option>
+              <option value="llama31-405b">Llama 3.1 405B</option>
+              <option value="mistral-7b">Mistral 7B</option>
+              <option value="mixtral-8x7b">Mixtral 8×7B (MoE)</option>
+              <option value="qwen25-72b">Qwen2.5 72B</option>
+              <option value="custom">Custom — enter architecture</option>
+            </select>
+            <p class="hint">
+              Presets fill the fields below and are approximate. Verify against the model
+              card; every value stays editable.
+            </p>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="params">Total parameters (B)</label>
+              <input class="input" id="params" type="number" min="0.1" step="0.1" value="70.6">
+            </div>
+            <div class="field">
+              <label class="label" for="activeParams">Active parameters (B)</label>
+              <input class="input" id="activeParams" type="number" min="0.1" step="0.1" value="70.6">
+              <p class="hint">Differs only for MoE. Memory holds all; compute reads active.</p>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="layers">Layers</label>
+              <input class="input" id="layers" type="number" min="1" step="1" value="80">
+            </div>
+            <div class="field">
+              <label class="label" for="kvHeads">KV heads</label>
+              <input class="input" id="kvHeads" type="number" min="1" step="1" value="8">
+              <p class="hint">GQA models have far fewer than attention heads. This drives KV cache size.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="headDim">Head dim</label>
+              <input class="input" id="headDim" type="number" min="1" step="1" value="128">
+            </div>
+          </div>
+
+          <hr class="rule">
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="precision">Weight precision</label>
+              <select class="select" id="precision">
+                <option value="2">BF16 / FP16 — 2 bytes</option>
+                <option value="1">FP8 — 1 byte</option>
+                <option value="0.5">INT4 / AWQ / GPTQ — 0.5 bytes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="kvPrecision">KV cache precision</label>
+              <select class="select" id="kvPrecision">
+                <option value="2">FP16 — 2 bytes</option>
+                <option value="1">FP8 — 1 byte</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="inputTokens">Input tokens / request</label>
+              <input class="input" id="inputTokens" type="number" min="1" step="1" value="2000">
+            </div>
+            <div class="field">
+              <label class="label" for="outputTokens">Output tokens / request</label>
+              <input class="input" id="outputTokens" type="number" min="1" step="1" value="500">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="rps">Target throughput (requests/sec)</label>
+              <input class="input" id="rps" type="number" min="0.01" step="0.1" value="10">
+            </div>
+            <div class="field">
+              <label class="label" for="batch">Concurrent requests per replica</label>
+              <input class="input" id="batch" type="number" min="1" step="1" value="32">
+              <p class="hint">Batch size. Raising it lifts throughput and worsens per-stream latency.</p>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="label" for="ttftTarget">Target TTFT (ms)</label>
+              <input class="input" id="ttftTarget" type="number" min="1" step="10" value="1000">
+              <p class="hint">Time to first token — prefill, compute-bound.</p>
+            </div>
+            <div class="field">
+              <label class="label" for="itlTarget">Target inter-token latency (ms)</label>
+              <input class="input" id="itlTarget" type="number" min="1" step="1" value="50">
+              <p class="hint">Decode step time — memory-bandwidth-bound.</p>
+            </div>
+          </div>
+
+          <hr class="rule">
+
+          <div class="field">
+            <label class="label" for="gpu">GPU</label>
+            <select class="select" id="gpu">
+              <option value="h100_sxm" selected>H100 SXM 80GB</option>
+              <option value="h200_sxm">H200 SXM 141GB</option>
+              <option value="a100_80">A100 SXM 80GB</option>
+              <option value="l40s">L40S 48GB (PCIe)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label" for="deployment">Deployment</label>
+            <select class="select" id="deployment">
+              <option value="cloud" selected>Canadian cloud region</option>
+              <option value="onprem">On-premises / Canadian colocation</option>
+            </select>
+          </div>
+
+          <div class="field-row" id="cloudCostRow">
+            <div class="field">
+              <label class="label" for="gpuHourly">Cost per GPU-hour (CAD)</label>
+              <input class="input" id="gpuHourly" type="number" min="0" step="0.05" value="6.50">
+              <p class="hint">Verify against a current quote — list prices move and vary by commitment.</p>
+            </div>
+          </div>
+
+          <div class="field-row" id="onpremCostRow" hidden>
+            <div class="field">
+              <label class="label" for="gpuCapex">Capex per GPU (CAD)</label>
+              <input class="input" id="gpuCapex" type="number" min="0" step="1000" value="45000">
+            </div>
+            <div class="field">
+              <label class="label" for="kwhRate">Electricity (CAD/kWh)</label>
+              <input class="input" id="kwhRate" type="number" min="0" step="0.01" value="0.13">
+            </div>
+          </div>
+
+          <details class="advanced">
+            <summary>Efficiency assumptions</summary>
+            <div class="field-row">
+              <div class="field">
+                <label class="label" for="mbu">Memory bandwidth utilisation</label>
+                <input class="input" id="mbu" type="number" min="0.05" max="1" step="0.05" value="0.7">
+                <p class="hint">0.6–0.8 is realistic for a tuned vLLM / TensorRT-LLM deployment.</p>
+              </div>
+              <div class="field">
+                <label class="label" for="mfu">Model FLOPs utilisation (prefill)</label>
+                <input class="input" id="mfu" type="number" min="0.05" max="1" step="0.05" value="0.45">
+              </div>
+            </div>
+          </details>
+
+        </div>
+      </form>
+
+      <!-- ══ Results ═════════════════════════════════════════════════ -->
+      <div class="calc__results">
+
+        <div class="panel result-headline">
+          <div class="panel__body">
+            <p class="result-headline__label">Recommended configuration</p>
+            <p class="result-headline__value" id="rHeadline">—</p>
+            <p class="result-headline__sub" id="rHeadlineSub">—</p>
+            <p class="result-headline__best" id="rBest" hidden></p>
+            <div class="stats mt-6">
+              <div class="stat">
+                <div class="stat__value" id="rTP">—</div>
+                <div class="stat__label">Tensor parallel degree</div>
+              </div>
+              <div class="stat">
+                <div class="stat__value" id="rReplicas">—</div>
+                <div class="stat__label">Replicas</div>
+              </div>
+              <div class="stat">
+                <div class="stat__value" id="rNodes">—</div>
+                <div class="stat__label">8-GPU nodes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="rAlerts"></div>
+
+        <div class="panel">
+          <div class="panel__header"><h2>Memory</h2></div>
+          <div class="panel__body">
+            <table class="table calc-table">
+              <tbody>
+                <tr><th scope="row">Weights</th><td class="num" id="rWeights">—</td></tr>
+                <tr><th scope="row">KV cache at full concurrency</th><td class="num" id="rKV">—</td></tr>
+                <tr><th scope="row">Activations &amp; runtime overhead</th><td class="num" id="rOverhead">—</td></tr>
+                <tr class="is-total"><th scope="row">Total per replica</th><td class="num" id="rTotalMem">—</td></tr>
+                <tr><th scope="row">GPUs required to fit</th><td class="num" id="rMemGPUs">—</td></tr>
+                <tr><th scope="row">Concurrent sequences this memory allows</th><td class="num" id="rMaxBatch">—</td></tr>
+              </tbody>
+            </table>
+            <p class="working" id="wMemory">—</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__header"><h2>Latency &amp; throughput</h2></div>
+          <div class="panel__body">
+            <table class="table calc-table">
+              <tbody>
+                <tr><th scope="row">Time to first token</th><td class="num" id="rTTFT">—</td></tr>
+                <tr><th scope="row">Inter-token latency</th><td class="num" id="rITL">—</td></tr>
+                <tr><th scope="row">Per-stream output rate</th><td class="num" id="rPerStream">—</td></tr>
+                <tr><th scope="row">Decode throughput per replica</th><td class="num" id="rReplicaTps">—</td></tr>
+                <tr><th scope="row">Concurrency implied by arrival rate</th><td class="num" id="rConcurrency">—</td></tr>
+                <tr class="is-total"><th scope="row">Aggregate output tokens/sec</th><td class="num" id="rAggTps">—</td></tr>
+              </tbody>
+            </table>
+            <p class="working" id="wThroughput">—</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__header"><h2>Network topology</h2></div>
+          <div class="panel__body">
+            <p id="rFabric" class="fabric-verdict">—</p>
+            <p class="working" id="wFabric">—</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel__header"><h2>Cost &amp; Canadian availability</h2></div>
+          <div class="panel__body">
+            <table class="table calc-table">
+              <tbody id="rCostBody"></tbody>
+            </table>
+            <p class="working" id="wCost">—</p>
+            <div class="alert alert--info mt-6" id="rRegion">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+              <span id="rRegionText">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel--caveat">
+          <div class="panel__header"><h2>What this cannot know</h2></div>
+          <div class="panel__body">
+            <p>
+              These figures are a defensible starting point, not a bill of materials. The
+              variables that move a real deployment by ±40% are all things a form cannot ask:
+              your actual token-length distribution rather than an average, prefix-cache hit
+              rate, how bursty arrivals are against your tail-latency target, scheduler and
+              chunked-prefill configuration, speculative decoding, tolerance for quality loss
+              under quantisation, and the failure domain you need to survive.
+            </p>
+            <p class="mt-4">
+              We size clusters against real traces rather than averages, and design the
+              fabric, segmentation and residency controls underneath them.
+            </p>
+            <div class="btn-row mt-6">
+              <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=Sizing%20review%20request&amp;body=Hi%2C%0D%0A%0D%0AI%20used%20the%20sizing%20calculator%20and%20would%20like%20a%20review%20against%20our%20real%20workload.%0D%0A%0D%0AOrganisation%3A%0D%0AModel%20and%20workload%3A%0D%0ADeployment%20(cloud%20%2F%20on-prem%20%2F%20hybrid)%3A%0D%0AResidency%20or%20compliance%20constraints%3A%0D%0A">
+                Request a sizing review
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+              <a class="btn btn--secondary" href="index.html#infrastructure">About the practice</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ Method ════════════════════════════════════════════════════ -->
+    <section class="section section--tight" id="method">
+      <div class="sec-head">
+        <span class="eyebrow">Method</span>
+        <h2>How these numbers are derived</h2>
+      </div>
+      <div class="grid grid--2">
+        <article class="card">
+          <h3>Memory</h3>
+          <p>Weights are <code>parameters × bytes per parameter</code>. KV cache per token is
+          <code>2 × layers × KV heads × head dim × bytes</code> — the factor of two being K and V.
+          Total cache scales with concurrency and sequence length, which is why it, not the
+          weights, is usually what actually runs you out of memory at long context.</p>
+        </article>
+        <article class="card">
+          <h3>Decode</h3>
+          <p>Token generation is bound by memory bandwidth, not arithmetic. Each forward pass
+          streams the weights once plus the KV cache for every sequence in the batch, so step
+          time is <code>bytes read ÷ (bandwidth × utilisation)</code>. Batching amortises the
+          weight read across concurrent requests, which is why throughput climbs steeply with
+          batch size until the point where it goes compute-bound.</p>
+        </article>
+        <article class="card">
+          <h3>Prefill</h3>
+          <p>Time to first token is compute-bound: roughly <code>2 × active parameters ×
+          input tokens</code> FLOPs against the GPU's dense throughput, divided across the
+          tensor-parallel group. Long prompts hurt TTFT; they do not affect inter-token latency.</p>
+        </article>
+        <article class="card">
+          <h3>Topology</h3>
+          <p>Tensor parallelism inside a node runs over NVLink. Replicas are independent and
+          exchange nothing. So for most inference the inter-node fabric carries no traffic on
+          the critical path and its choice is irrelevant — a claim worth making precisely
+          because so much marketing implies otherwise. It changes only when the model is too
+          large to shard within one node.</p>
+        </article>
+      </div>
+
+      <div class="panel mt-8">
+        <div class="panel__header"><h2>GPU reference figures</h2></div>
+        <div class="panel__body panel__body--flush">
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">GPU</th>
+                  <th scope="col" class="num">Memory</th>
+                  <th scope="col" class="num">Bandwidth</th>
+                  <th scope="col" class="num">BF16 dense</th>
+                  <th scope="col" class="num">Board power</th>
+                  <th scope="col">Intra-node link</th>
+                </tr>
+              </thead>
+              <tbody id="gpuTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <p class="hint mt-4">
+        Vendor-published figures, shown so the arithmetic above can be audited. Dense BF16
+        throughput is quoted — not the doubled sparsity number that marketing material
+        usually leads with.
+      </p>
+    </section>
+
+  </div>
+</section>
+</main>
+
+<!-- ══ Footer ══════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <span class="brand">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="fm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#fm)"/>
+            <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+            <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+              <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+            </g>
+            <g fill="#8EC5FF">
+              <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+              <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+            </g>
+            <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+          </svg>
+          <span>ShieldAI</span>
+        </span>
+        <p>Sovereign AI systems and the infrastructure beneath them, built in Canada for organisations that answer to a regulator.</p>
+      </div>
+
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="gateway.html">ShieldAI Gateway</a></li>
+          <li><a href="https://elpista.com" target="_blank" rel="noopener">Elpista</a></li>
+          <li><a href="https://terminova.io" target="_blank" rel="noopener">Terminova</a></li>
+          <li><a href="https://workcohorts.com" target="_blank" rel="noopener">WorkCohorts</a></li>
+          <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#infrastructure">Sovereign cloud architecture</a></li>
+          <li><a href="#infrastructure">Network &amp; security architecture</a></li>
+          <li><a href="#infrastructure">AI infrastructure &amp; GPU fabric</a></li>
+          <li><a href="#compliance">Compliance posture</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="sizing.html">AI sizing calculator</a></li>
+          <li><a href="eligibility-checker.html">Eligibility checker</a></li>
+          <li><a href="apply-assistant.html">Apply assistant</a></li>
+          <li><a href="status-tracker.html">Status tracker</a></li>
+          <li><a href="admin-dashboard.html">Admin dashboard</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
+          <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 ShieldAI. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="#privacy">Privacy policy</a>
+        <a href="#terms">Terms of service</a>
+        <a href="#accessibility">Accessibility</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Reference data ───────────────────────────────────────────────────
+  // mem  GB (decimal, 1e9 B)   bw  GB/s   bf16  TFLOPS dense (not sparsity)
+  var GPUS = {
+    h100_sxm: { label:'H100 SXM 80GB',  mem:80,  bw:3350, bf16:989, watts:700, link:'NVLink 900 GB/s',
+      ca:'Available in Azure Canada Central, AWS ca-central-1 and GCP northamerica-northeast. Quota is the usual constraint, not catalogue availability — plan lead time.' },
+    h200_sxm: { label:'H200 SXM 141GB', mem:141, bw:4800, bf16:989, watts:700, link:'NVLink 900 GB/s',
+      ca:'Thinner availability in Canadian regions than in US regions. Confirm your region and commitment terms before designing around it.' },
+    a100_80:  { label:'A100 SXM 80GB',  mem:80,  bw:2039, bf16:312, watts:400, link:'NVLink 600 GB/s',
+      ca:'Best-established Canadian-region availability of the four. Often the pragmatic choice when residency is non-negotiable and lead time matters.' },
+    l40s:     { label:'L40S 48GB',      mem:48,  bw:864,  bf16:181, watts:350, link:'PCIe only — no NVLink',
+      ca:'Broadly available and cheaper per card. No NVLink means tensor parallelism crosses PCIe, which materially hurts multi-GPU decode.' }
+  };
+
+  var MODELS = {
+    'llama31-8b':   { params:8.03,  active:8.03,  layers:32,  kvHeads:8, headDim:128 },
+    'llama31-70b':  { params:70.6,  active:70.6,  layers:80,  kvHeads:8, headDim:128 },
+    'llama31-405b': { params:405,   active:405,   layers:126, kvHeads:8, headDim:128 },
+    'mistral-7b':   { params:7.24,  active:7.24,  layers:32,  kvHeads:8, headDim:128 },
+    'mixtral-8x7b': { params:46.7,  active:12.9,  layers:32,  kvHeads:8, headDim:128 },
+    'qwen25-72b':   { params:72.7,  active:72.7,  layers:80,  kvHeads:8, headDim:128 }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var num = function (id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+
+  function fmt(n, dp) {
+    if (!isFinite(n)) return '—';
+    dp = dp === undefined ? 1 : dp;
+    return n.toLocaleString('en-CA', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  }
+  function money(n) {
+    return '$' + Math.round(n).toLocaleString('en-CA');
+  }
+  function pow2AtLeast(n) {
+    var p = 1; while (p < n) { p *= 2; } return p;
+  }
+
+  // ── Core model ───────────────────────────────────────────────────────
+  function compute() {
+    var g = GPUS[$('gpu').value];
+    var params      = num('params');
+    var active      = num('activeParams');
+    var layers      = num('layers');
+    var kvHeads     = num('kvHeads');
+    var headDim     = num('headDim');
+    var wBytes      = parseFloat($('precision').value);
+    var kvBytes     = parseFloat($('kvPrecision').value);
+    var inTok       = num('inputTokens');
+    var outTok      = num('outputTokens');
+    var rps         = num('rps');
+    var batch       = Math.max(1, num('batch'));
+    var mbu         = Math.min(1, Math.max(0.05, num('mbu')));
+    var mfu         = Math.min(1, Math.max(0.05, num('mfu')));
+    var ttftTarget  = num('ttftTarget');
+    var itlTarget   = num('itlTarget');
+
+    var seqLen = inTok + outTok;
+
+    // Memory ---------------------------------------------------------
+    var weightsGB   = params * wBytes;                                  // B params x bytes
+    var kvPerTokenB = 2 * layers * kvHeads * headDim * kvBytes;         // bytes / token / seq
+    var kvGB        = kvPerTokenB * seqLen * batch / 1e9;
+    var overheadGB  = 2 + 0.10 * weightsGB;
+    var totalGB     = weightsGB + kvGB + overheadGB;
+
+    var memGPUsRaw  = Math.ceil(totalGB / g.mem);
+    var tp          = pow2AtLeast(Math.max(1, memGPUsRaw));
+
+    // Decode: bandwidth-bound. Each GPU streams its shard once per pass.
+    var activeWeightsB = active * wBytes * 1e9;
+    var kvActiveB      = kvPerTokenB * seqLen * batch;
+    var bytesPerGPU    = (activeWeightsB + kvActiveB) / tp;
+    var stepSec        = bytesPerGPU / (g.bw * 1e9 * mbu);
+    var itlMs          = stepSec * 1000;
+    var replicaTps     = batch / stepSec;                                // output tokens/sec
+    var perStreamTps   = 1 / stepSec;
+
+    // Prefill: compute-bound.
+    var prefillFlops = 2 * active * 1e9 * inTok;
+    var ttftSec      = prefillFlops / (g.bf16 * 1e12 * mfu * tp);
+    var ttftMs       = ttftSec * 1000;
+
+    var requiredTps = rps * outTok;
+    var replicas    = Math.max(1, Math.ceil(requiredTps / replicaTps));
+
+    // How many sequences will actually fit in this TP group's spare memory?
+    var kvPerSeqB    = kvPerTokenB * seqLen;
+    var spareBytes   = tp * g.mem * 1e9 - params * wBytes * 1e9 - overheadGB * 1e9;
+    var maxBatchMem  = Math.max(1, Math.floor(spareBytes / kvPerSeqB));
+    // Throughput if the batch were raised to that memory ceiling
+    var bytesAtMax   = (activeWeightsB + kvPerSeqB * maxBatchMem) / tp;
+    var stepAtMax    = bytesAtMax / (g.bw * 1e9 * mbu);
+    var tpsAtMax     = maxBatchMem / stepAtMax;
+    var replicasAtMax= Math.max(1, Math.ceil(requiredTps / tpsAtMax));
+    var itlAtMaxMs   = stepAtMax * 1000;
+    // Little's Law: concurrency the arrival rate actually implies
+    var concurrencyNeeded = rps * (ttftSec + outTok * stepSec);
+
+    // Cheapest configuration meeting the same throughput. TP buys memory headroom,
+    // which buys batch, which buys throughput — so the minimum is not always the
+    // smallest TP that merely fits the weights.
+    var best = null;
+    [1, 2, 4, 8, 16, 32, 64].forEach(function (cand) {
+      var spare = cand * g.mem * 1e9 - params * wBytes * 1e9 - overheadGB * 1e9;
+      if (spare <= kvPerSeqB) return;                      // no room for even one sequence
+      var mb    = Math.floor(spare / kvPerSeqB);
+      var st    = ((activeWeightsB + kvPerSeqB * mb) / cand) / (g.bw * 1e9 * mbu);
+      var reps  = Math.max(1, Math.ceil(requiredTps / (mb / st)));
+      var total = cand * reps;
+      var cfg = { tp: cand, batch: mb, replicas: reps, total: total,
+                  itl: st * 1000,
+                  ttft: prefillFlops / (g.bf16 * 1e12 * mfu * cand) * 1000 };
+      if (!best || total < best.total) { best = cfg; }
+    });
+    var totalGPUs   = tp * replicas;
+    var nodes       = Math.ceil(totalGPUs / 8);
+    var aggTps      = replicaTps * replicas;
+
+    return {
+      g:g, tp:tp, replicas:replicas, totalGPUs:totalGPUs, nodes:nodes,
+      weightsGB:weightsGB, kvGB:kvGB, overheadGB:overheadGB, totalGB:totalGB,
+      kvPerTokenB:kvPerTokenB, memGPUsRaw:memGPUsRaw,
+      itlMs:itlMs, ttftMs:ttftMs, replicaTps:replicaTps, perStreamTps:perStreamTps,
+      aggTps:aggTps, requiredTps:requiredTps,
+      bytesPerGPU:bytesPerGPU, seqLen:seqLen, batch:batch, params:params, active:active,
+      wBytes:wBytes, kvBytes:kvBytes, layers:layers, kvHeads:kvHeads, headDim:headDim,
+      inTok:inTok, outTok:outTok, rps:rps, mbu:mbu, mfu:mfu,
+      ttftTarget:ttftTarget, itlTarget:itlTarget,
+      maxBatchMem:maxBatchMem, tpsAtMax:tpsAtMax, replicasAtMax:replicasAtMax,
+      itlAtMaxMs:itlAtMaxMs, concurrencyNeeded:concurrencyNeeded, best:best
+    };
+  }
+
+  // ── Render ───────────────────────────────────────────────────────────
+  function render() {
+    var r = compute();
+
+    $('rHeadline').textContent = r.totalGPUs + ' × ' + r.g.label;
+    $('rHeadlineSub').textContent =
+      'Tensor parallel ' + r.tp + ' × ' + r.replicas + ' replica' + (r.replicas === 1 ? '' : 's') +
+      ' · ' + r.nodes + ' node' + (r.nodes === 1 ? '' : 's') + ' of 8 GPUs';
+    var bestLine = document.getElementById('rBest');
+    if (r.best && r.best.total < r.totalGPUs) {
+      bestLine.hidden = false;
+      bestLine.innerHTML = 'Throughput-optimal: <strong>' + r.best.total + ' GPUs</strong> at TP ' + r.best.tp +
+        ' × ' + r.best.replicas + ', batch ' + r.best.batch.toLocaleString('en-CA') +
+        ' — ' + fmt(r.best.itl, 0) + ' ms inter-token latency';
+    } else {
+      bestLine.hidden = true;
+    }
+    $('rTP').textContent = r.tp;
+    $('rReplicas').textContent = r.replicas;
+    $('rNodes').textContent = r.nodes;
+
+    // Memory
+    $('rWeights').textContent   = fmt(r.weightsGB) + ' GB';
+    $('rKV').textContent        = fmt(r.kvGB) + ' GB';
+    $('rOverhead').textContent  = fmt(r.overheadGB) + ' GB';
+    $('rTotalMem').textContent  = fmt(r.totalGB) + ' GB';
+    $('rMemGPUs').textContent   = r.memGPUsRaw + ' → ' + r.tp + ' (rounded to a power of two)';
+    $('rMaxBatch').textContent  = r.maxBatchMem.toLocaleString('en-CA') + ' sequences';
+
+    $('wMemory').innerHTML =
+      'Weights = ' + fmt(r.params) + 'B × ' + r.wBytes + ' bytes = <strong>' + fmt(r.weightsGB) + ' GB</strong>. ' +
+      'KV per token = 2 × ' + r.layers + ' layers × ' + r.kvHeads + ' KV heads × ' + r.headDim +
+      ' × ' + r.kvBytes + ' bytes = <strong>' + fmt(r.kvPerTokenB / 1024, 0) + ' KiB</strong>. ' +
+      'Across ' + r.batch + ' concurrent sequences of ' + r.seqLen.toLocaleString('en-CA') +
+      ' tokens that is <strong>' + fmt(r.kvGB) + ' GB</strong>. ' +
+      'Overhead assumed at 2 GB + 10% of weights. ' +
+      'Total ' + fmt(r.totalGB) + ' GB ÷ ' + r.g.mem + ' GB per GPU = ' + r.memGPUsRaw + ' GPUs.';
+
+    // Latency
+    $('rTTFT').textContent      = fmt(r.ttftMs, 0) + ' ms';
+    $('rITL').textContent       = fmt(r.itlMs, 1) + ' ms';
+    $('rPerStream').textContent = fmt(r.perStreamTps, 1) + ' tok/s';
+    $('rReplicaTps').textContent= fmt(r.replicaTps, 0) + ' tok/s';
+    $('rAggTps').textContent    = fmt(r.aggTps, 0) + ' tok/s (need ' + fmt(r.requiredTps, 0) + ')';
+    $('rConcurrency').textContent = fmt(r.concurrencyNeeded, 0) + ' in flight';
+
+    $('wThroughput').innerHTML =
+      'Each decode step streams ' + fmt(r.bytesPerGPU / 1e9) + ' GB per GPU ' +
+      '(active weights ' + fmt(r.active * r.wBytes) + ' GB + KV ' + fmt(r.kvGB) + ' GB, sharded ' + r.tp + '-way) ' +
+      'against ' + fmt(r.g.bw, 0) + ' GB/s × ' + r.mbu + ' utilisation → <strong>' + fmt(r.itlMs, 1) + ' ms</strong> per step. ' +
+      'With ' + r.batch + ' sequences in flight that is ' + fmt(r.replicaTps, 0) + ' tokens/sec per replica. ' +
+      'Prefill = 2 × ' + fmt(r.active) + 'B × ' + r.inTok.toLocaleString('en-CA') + ' tokens = ' +
+      fmt(2 * r.active * r.inTok / 1000) + ' PFLOP ÷ (' + fmt(r.g.bf16, 0) + ' TFLOPS × ' + r.mfu + ' × ' + r.tp + ') → <strong>' +
+      fmt(r.ttftMs, 0) + ' ms</strong>. ' +
+      'Serving ' + fmt(r.rps, 1) + ' req/s × ' + r.outTok + ' output tokens needs ' + fmt(r.requiredTps, 0) +
+      ' tok/s, hence ' + r.replicas + ' replica' + (r.replicas === 1 ? '' : 's') + '. ' +
+      'By Little\'s Law the arrival rate implies ' + fmt(r.concurrencyNeeded, 0) + ' requests in flight ' +
+      '(' + fmt(r.rps, 1) + ' req/s × ' + fmt((r.ttftMs + r.outTok * r.itlMs) / 1000, 1) + ' s residence time) — ' +
+      'that concurrency has to live somewhere, either as batch within a replica or as more replicas.';
+
+    // Alerts
+    var alerts = [];
+    if (r.ttftMs > r.ttftTarget) {
+      alerts.push(['warn', 'TTFT target missed',
+        'Estimated ' + fmt(r.ttftMs, 0) + ' ms against a ' + fmt(r.ttftTarget, 0) + ' ms target. Prefill is compute-bound — shorten the prompt, raise tensor parallelism, enable chunked prefill, or accept a longer first token.']);
+    }
+    if (r.itlMs > r.itlTarget) {
+      alerts.push(['warn', 'Inter-token latency target missed',
+        'Estimated ' + fmt(r.itlMs, 1) + ' ms against a ' + fmt(r.itlTarget, 0) + ' ms target. Decode is bandwidth-bound — reduce batch size, quantise weights, or move to a higher-bandwidth GPU. Adding replicas will not help per-stream latency.']);
+    }
+    if (r.kvGB > r.weightsGB) {
+      alerts.push(['info', 'KV cache exceeds the weights',
+        'At this concurrency and context the cache is ' + fmt(r.kvGB) + ' GB against ' + fmt(r.weightsGB) + ' GB of weights. Cache is what sizes this deployment. FP8 KV, or fewer concurrent sequences, moves the number more than a smaller model would.']);
+    }
+    if (r.best && r.best.total < r.totalGPUs) {
+      alerts.push(['info', 'A smaller configuration serves the same load',
+        'Your batch of ' + r.batch + ' needs ' + r.totalGPUs + ' GPUs. Tensor parallel ' + r.best.tp +
+        ' with ' + r.best.batch.toLocaleString('en-CA') + ' concurrent sequences per replica meets the same ' +
+        fmt(r.requiredTps, 0) + ' tok/s on ' + r.best.total + ' GPUs (' + r.best.replicas + ' replica' +
+        (r.best.replicas === 1 ? '' : 's') + ') — because raising tensor parallelism buys KV headroom, ' +
+        'headroom buys batch, and batch amortises the weight read. The cost is inter-token latency: ' +
+        fmt(r.best.itl, 0) + ' ms rather than ' + fmt(r.itlMs, 1) + ' ms. That trade is worth more than the ' +
+        'choice of GPU, and it is the decision this tool exists to surface.']);
+    }
+    if (r.tp > 8) {
+      alerts.push(['danger', 'Tensor parallelism exceeds one node',
+        'TP of ' + r.tp + ' spans ' + Math.ceil(r.tp / 8) + ' nodes, putting an all-reduce on the critical path of every decode step. This is the regime where fabric design decides whether the cluster performs.']);
+    }
+    if (GPUS[$('gpu').value].link.indexOf('PCIe') === 0 && r.tp > 1) {
+      alerts.push(['warn', 'Tensor parallelism over PCIe',
+        'The L40S has no NVLink, so each decode step\'s all-reduce crosses PCIe. Expect materially worse scaling than this estimate implies — it assumes the interconnect is not the bottleneck.']);
+    }
+    $('rAlerts').innerHTML = alerts.map(function (a) {
+      return '<div class="alert alert--' + a[0] + ' mb-4">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>' +
+        '<span><strong>' + a[1] + '</strong>' + a[2] + '</span></div>';
+    }).join('');
+
+    // Fabric
+    var fabricEl = $('rFabric');
+    if (r.tp <= 8) {
+      fabricEl.className = 'fabric-verdict is-ok';
+      fabricEl.textContent = 'Standard ethernet is sufficient. The fabric is not on the critical path.';
+      $('wFabric').innerHTML =
+        'Tensor parallelism of ' + r.tp + ' fits inside a single node over ' + r.g.link + '. ' +
+        'Replicas share nothing and exchange no traffic during inference, so inter-node bandwidth carries only ' +
+        'model loading and telemetry. <strong>25–100 GbE is ample.</strong> Specifying InfiniBand or a tuned lossless ' +
+        'RoCEv2 fabric for this deployment would add cost and operational complexity for no measurable gain.';
+    } else {
+      fabricEl.className = 'fabric-verdict is-critical';
+      fabricEl.textContent = 'Lossless fabric required — InfiniBand NDR, or RoCEv2 with PFC and ECN properly tuned.';
+      $('wFabric').innerHTML =
+        'Tensor parallelism of ' + r.tp + ' spans ' + Math.ceil(r.tp / 8) + ' nodes, so every decode step ends in a ' +
+        'cross-node all-reduce that sits directly on the latency path. At ' + fmt(r.itlMs, 1) + ' ms per step there is no ' +
+        'headroom to absorb congestion. This needs a lossless fabric: PFC priority queues with correctly computed ' +
+        'headroom, ECN marking thresholds set below the PFC trigger so DCQCN throttles senders before pause frames ' +
+        'propagate, and a rail-optimised topology. <strong>Getting the ECN and PFC thresholds wrong here costs more ' +
+        'throughput than the difference between GPU generations.</strong>';
+    }
+
+    // Cost
+    var rows = '', working = '';
+    if ($('deployment').value === 'cloud') {
+      var hourly = num('gpuHourly');
+      var monthly = r.totalGPUs * hourly * 730;
+      rows =
+        '<tr><th scope="row">GPUs</th><td class="num">' + r.totalGPUs + '</td></tr>' +
+        '<tr><th scope="row">Rate per GPU-hour</th><td class="num">$' + hourly.toFixed(2) + '</td></tr>' +
+        '<tr><th scope="row">Monthly (730 h)</th><td class="num">' + money(monthly) + '</td></tr>' +
+        '<tr class="is-total"><th scope="row">Annual</th><td class="num">' + money(monthly * 12) + '</td></tr>';
+      working = r.totalGPUs + ' GPUs × $' + hourly.toFixed(2) + '/hr × 730 hours = ' + money(monthly) +
+        ' per month, assuming continuous operation at full capacity. Reserved or committed-use pricing typically ' +
+        'reduces this substantially; spot or pre-emptible capacity reduces it further at the cost of availability.';
+    } else {
+      var capexPer = num('gpuCapex');
+      var kwh = num('kwhRate');
+      var capex = r.totalGPUs * capexPer;
+      var kw = r.totalGPUs * r.g.watts / 1000 * 1.3;          // PUE 1.3
+      var powerYr = kw * 24 * 365 * kwh;
+      rows =
+        '<tr><th scope="row">GPU capital cost</th><td class="num">' + money(capex) + '</td></tr>' +
+        '<tr><th scope="row">Draw at PUE 1.3</th><td class="num">' + fmt(kw) + ' kW</td></tr>' +
+        '<tr><th scope="row">Power per year</th><td class="num">' + money(powerYr) + '</td></tr>' +
+        '<tr class="is-total"><th scope="row">Year one</th><td class="num">' + money(capex + powerYr) + '</td></tr>';
+      working = r.totalGPUs + ' GPUs × ' + r.g.watts + ' W × 1.3 PUE = ' + fmt(kw) + ' kW, ' +
+        'at $' + kwh.toFixed(2) + '/kWh over 8,760 hours = ' + money(powerYr) + ' per year. ' +
+        'GPU capital cost only — this excludes hosts, storage, networking, racks, cooling and staff, which together ' +
+        'commonly match or exceed the GPU line.';
+    }
+    $('rCostBody').innerHTML = rows;
+    $('wCost').textContent = working;
+    $('rRegionText').textContent = r.g.ca;
+  }
+
+  // ── Wiring ───────────────────────────────────────────────────────────
+  $('model').addEventListener('change', function () {
+    var m = MODELS[this.value];
+    if (!m) return;
+    $('params').value = m.params;
+    $('activeParams').value = m.active;
+    $('layers').value = m.layers;
+    $('kvHeads').value = m.kvHeads;
+    $('headDim').value = m.headDim;
+    render();
+  });
+
+  $('deployment').addEventListener('change', function () {
+    var cloud = this.value === 'cloud';
+    $('cloudCostRow').hidden = !cloud;
+    $('onpremCostRow').hidden = cloud;
+    render();
+  });
+
+  $('calcForm').addEventListener('input', render);
+  $('calcForm').addEventListener('change', render);
+  $('calcForm').addEventListener('submit', function (e) { e.preventDefault(); });
+
+  // GPU reference table
+  $('gpuTableBody').innerHTML = Object.keys(GPUS).map(function (k) {
+    var g = GPUS[k];
+    return '<tr><th scope="row">' + g.label + '</th>' +
+      '<td class="num">' + g.mem + ' GB</td>' +
+      '<td class="num">' + g.bw.toLocaleString('en-CA') + ' GB/s</td>' +
+      '<td class="num">' + g.bf16 + ' TFLOPS</td>' +
+      '<td class="num">' + g.watts + ' W</td>' +
+      '<td>' + g.link + '</td></tr>';
+  }).join('');
+
+  render();
+})();
+</script>
+
+</body>
+</html>
