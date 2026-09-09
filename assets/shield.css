@@ -1,4 +1,43 @@
 /* ==========================================================================
+   0. Fonts — self-hosted
+   Served from our own origin rather than fonts.googleapis.com. A visitor's IP
+   address is not disclosed to a third party in order to read this site, which
+   is the minimum standard for a company that sells data sovereignty.
+   Inter and JetBrains Mono are both SIL Open Font License 1.1.
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('fonts/inter-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('fonts/inter-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('fonts/inter-latin-600-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('fonts/inter-latin-700-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('fonts/jetbrains-mono-latin-400-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('fonts/jetbrains-mono-latin-500-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ==========================================================================
    ShieldAI Design System
    One stylesheet shared by every page. Change a token here, it changes
    everywhere. Do not re-declare these values in page-level <style> blocks.
@@ -1160,3 +1199,82 @@ ul, ol { padding: 0; list-style: none; }
 .empty svg { width: 40px; height: 40px; margin: 0 auto var(--s-4); color: var(--n-400); }
 .empty h3 { font-size: var(--t-lg); margin-bottom: var(--s-2); }
 .empty p { color: var(--text-muted); font-size: var(--t-sm); max-width: 44ch; margin-inline: auto; }
+
+/* ==========================================================================
+   18. Legal documents
+   Long-form policy pages: privacy, terms, accessibility.
+   ========================================================================== */
+
+.legal { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-10); }
+@media (min-width: 940px) {
+  .legal { grid-template-columns: 230px minmax(0, 1fr); gap: var(--s-16); align-items: start; }
+  .legal__toc { position: sticky; top: calc(var(--header-h) + var(--s-6)); }
+}
+
+.legal__toc h2 {
+  font-size: var(--t-xs); font-weight: 620; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-bottom: var(--s-4);
+}
+.legal__toc ol { counter-reset: toc; display: grid; gap: var(--s-1); }
+.legal__toc a {
+  display: block; padding: var(--s-1) 0;
+  font-size: var(--t-sm); line-height: 1.45;
+  color: var(--text-muted); text-decoration: none;
+}
+.legal__toc a:hover { color: var(--b-600); text-decoration: underline; }
+
+.legal__body { max-width: 74ch; min-width: 0; }
+.legal__body section { margin-bottom: var(--s-12); scroll-margin-top: calc(var(--header-h) + var(--s-6)); }
+.legal__body h2 {
+  font-size: var(--t-xl); letter-spacing: -0.02em;
+  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--border);
+}
+.legal__body h3 { font-size: var(--t-base); font-weight: 640; margin: var(--s-6) 0 var(--s-2); }
+.legal__body p { margin-bottom: var(--s-4); color: var(--text-muted); }
+.legal__body p:last-child { margin-bottom: 0; }
+.legal__body strong { color: var(--text); font-weight: 620; }
+
+.legal__body ul { margin: 0 0 var(--s-4); display: grid; gap: var(--s-2); }
+.legal__body ul li {
+  position: relative; padding-left: var(--s-6);
+  color: var(--text-muted); line-height: 1.6;
+}
+.legal__body ul li::before {
+  content: ""; position: absolute; left: var(--s-2); top: .68em;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--n-400);
+}
+.legal__body ol { margin: 0 0 var(--s-4); counter-reset: n; display: grid; gap: var(--s-2); }
+.legal__body ol li {
+  position: relative; padding-left: var(--s-8);
+  color: var(--text-muted); line-height: 1.6;
+  counter-increment: n;
+}
+.legal__body ol li::before {
+  content: counter(n) "."; position: absolute; left: 0; top: 0;
+  font-variant-numeric: tabular-nums; font-weight: 620; color: var(--text-subtle);
+}
+
+.legal__meta {
+  display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-6);
+  padding: var(--s-4) var(--s-5);
+  margin-bottom: var(--s-8);
+  font-size: var(--t-sm);
+  background: var(--n-50);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+.legal__meta div { color: var(--text-muted); }
+.legal__meta strong { display: block; font-size: var(--t-xs); text-transform: uppercase;
+  letter-spacing: .07em; color: var(--text-subtle); font-weight: 620; margin-bottom: 2px; }
+
+/* Unverified facts. Deliberately loud — a legal page must not go live with
+   an invented retention period or entity name sitting quietly inside it. */
+mark.todo {
+  padding: 1px 6px;
+  font-size: .9em; font-weight: 600;
+  color: #7c2d12; background: #fef3c7;
+  border: 1px dashed #d97706; border-radius: var(--r-sm);
+}

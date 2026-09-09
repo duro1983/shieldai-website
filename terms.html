@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of service — ShieldAI</title>
+<meta name="description" content="The terms on which you may use shield-ai.ca and the interactive tools published on it.">
+<link rel="canonical" href="https://shield-ai.ca/terms.html">
+<meta name="theme-color" content="#0a0f1c">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/shield.css">
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ══ Header ══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="hm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#hm)"/>
+        <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+        <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+          <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+        </g>
+        <g fill="#8EC5FF">
+          <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+          <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+        </g>
+        <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+      </svg>
+      <span>ShieldAI</span>
+    </a>
+    <span class="app-header__context">Terms of service</span>
+
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="#portfolio">Products</a>
+      <a href="#infrastructure">Infrastructure</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#engage">How we work</a>
+      <a href="products.html">All products</a>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn--secondary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20enquiry">Contact</a>
+      <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20briefing%20request&amp;body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20book%20a%20technical%20briefing.%0D%0A%0D%0AName%3A%0D%0AOrganisation%3A%0D%0ARole%3A%0D%0AArea%20of%20interest%3A%0D%0ABest%20time%3A%0D%0A">
+        Book a briefing
+      </a>
+    </div>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+</header>
+
+<script>
+(function () {
+  var btn = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('site-nav');
+  if (!btn || !nav) return;
+
+  function setOpen(open) {
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) { nav.setAttribute('data-open', ''); }
+    else { nav.removeAttribute('data-open'); }
+  }
+
+  btn.addEventListener('click', function () {
+    setOpen(btn.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Close after choosing a destination, or on Escape
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false); btn.focus();
+    }
+  });
+  // Reset state if the viewport grows back to the desktop layout
+  window.matchMedia('(min-width: 941px)').addEventListener('change', function (m) {
+    if (m.matches) setOpen(false);
+  });
+})();
+</script>
+<main id="main">
+<section class="app-main app-main--plain">
+  <div class="wrap">
+
+    <div class="page-head">
+      <span class="eyebrow">Legal</span>
+      <h1>Terms of service</h1>
+      <p>
+        The terms on which you may use shield-ai.ca and the interactive tools published on it.
+      </p>
+    </div>
+
+    <div class="alert alert--warn" style="margin-bottom:var(--s-8);max-width:74ch">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <span>
+        <strong>Draft — not yet in force.</strong>
+        Complete every highlighted field and have this reviewed by a Canadian lawyer before
+        relying on it. Limitation of liability and governing law in particular are
+        jurisdiction-specific and are the clauses most likely to fail when tested. Search for
+        <em>CONFIRM</em> to find each field. This is not legal advice.
+      </span>
+    </div>
+
+    <div class="legal">
+
+      <nav class="legal__toc" aria-label="Contents">
+        <h2>Contents</h2>
+        <ol>
+          <li><a href="#acceptance">1. Acceptance</a></li>
+          <li><a href="#scope">2. What these terms cover</a></li>
+          <li><a href="#tools">3. The calculators and demonstrations</a></li>
+          <li><a href="#noadvice">4. No professional advice</a></li>
+          <li><a href="#acceptable">5. Acceptable use</a></li>
+          <li><a href="#ip">6. Intellectual property</a></li>
+          <li><a href="#thirdparty">7. Third-party links and brands</a></li>
+          <li><a href="#availability">8. Availability</a></li>
+          <li><a href="#warranties">9. Disclaimer of warranties</a></li>
+          <li><a href="#liability">10. Limitation of liability</a></li>
+          <li><a href="#indemnity">11. Indemnity</a></li>
+          <li><a href="#privacy">12. Privacy</a></li>
+          <li><a href="#law">13. Governing law</a></li>
+          <li><a href="#changes">14. Changes</a></li>
+          <li><a href="#contact">15. Contact</a></li>
+        </ol>
+      </nav>
+
+      <div class="legal__body">
+
+        <div class="legal__meta">
+          <div><strong>Effective</strong><mark class="todo">CONFIRM: date</mark></div>
+          <div><strong>Last updated</strong><mark class="todo">CONFIRM: date</mark></div>
+          <div><strong>Applies to</strong>shield-ai.ca</div>
+        </div>
+
+        <section id="acceptance">
+          <h2>1. Acceptance</h2>
+          <p>
+            These terms form an agreement between you and
+            <mark class="todo">CONFIRM: registered legal entity name</mark> ("ShieldAI", "we", "us").
+            By accessing shield-ai.ca you accept them. If you do not accept them, do not use the site.
+          </p>
+        </section>
+
+        <section id="scope">
+          <h2>2. What these terms cover</h2>
+          <p>
+            These terms govern <strong>this website only</strong>, including the calculators and
+            demonstrations published on it.
+          </p>
+          <p>
+            They do <strong>not</strong> govern our commercial services. Use of ShieldAI Gateway,
+            Terminova, Elpista, WorkCohorts or the Ontario Energy Assistant is governed by a separate
+            written agreement between us and the customer organisation. Where these terms conflict
+            with such an agreement, that agreement prevails.
+          </p>
+        </section>
+
+        <section id="tools">
+          <h2>3. The calculators and demonstrations</h2>
+          <p>
+            This site publishes interactive tools. They are provided free, for information, and each
+            carries a specific limitation.
+          </p>
+
+          <h3>AI infrastructure sizing calculator</h3>
+          <p>
+            The calculator produces <strong>engineering estimates from simplified models</strong>. It
+            derives figures from published hardware specifications and standard first-order
+            approximations of memory footprint, bandwidth-bound decode and compute-bound prefill. It
+            cannot account for your actual token-length distribution, cache hit rates, arrival
+            burstiness, scheduler configuration, quantisation quality or failure-domain requirements,
+            and it applies efficiency assumptions that will not match every deployment.
+          </p>
+          <p>
+            <strong>Do not use its output as the sole basis for a procurement, capital or
+            architectural decision.</strong> Real requirements are established by testing against
+            your own workload. We accept no liability for decisions taken in reliance on it.
+          </p>
+
+          <h3>Eligibility checker, apply assistant and status tracker</h3>
+          <p>
+            These are <strong>product demonstrations using illustrative data</strong>. They are not
+            an official government service, are not operated by or on behalf of any ministry or
+            public body, and are not connected to any live government system. Any figure, programme
+            name, status or amount they display is for illustration only.
+          </p>
+          <p>
+            <strong>They do not determine your eligibility for anything, and nothing entered into
+            them constitutes an application.</strong> To apply for a government programme, or to
+            confirm whether you qualify, go to the responsible government body directly.
+          </p>
+
+          <h3>Ontario Energy Assistant demonstration</h3>
+          <p>
+            The demonstration chatbot returns scripted illustrative responses. It is not a source of
+            authoritative information about any energy programme, rebate, eligibility rule or amount.
+          </p>
+        </section>
+
+        <section id="noadvice">
+          <h2>4. No professional advice</h2>
+          <p>
+            Nothing on this site is legal, regulatory, privacy, financial, engineering or
+            professional advice, and no solicitor-client or other professional relationship is
+            created by using it.
+          </p>
+          <p>
+            Our descriptions of PIPEDA, PHIPA, FIPPA, AODA, ISO 27001, SOC 2, NIST, IEC 62443, the
+            Official Languages Act or any other framework are general summaries written for a
+            business audience. They are not a statement of your obligations. Obtain advice from a
+            qualified professional before acting.
+          </p>
+          <p>
+            Where we describe our services as <strong>aligned with</strong> a framework, that
+            describes how they are designed and assessed. It is not a claim of certification.
+            Certification status for any given platform is confirmed in writing during procurement.
+          </p>
+        </section>
+
+        <section id="acceptable">
+          <h2>5. Acceptable use</h2>
+          <p>You agree not to:</p>
+          <ul>
+            <li>use the site unlawfully, or to infringe the rights of others;</li>
+            <li>attempt to gain unauthorised access to the site or any connected system, or probe,
+            scan or test its security without our prior written consent;</li>
+            <li>interfere with the site's operation or availability, including by automated means
+            that place unreasonable load on it;</li>
+            <li>scrape or harvest content at scale, or use it to train a machine-learning model
+            without our written permission;</li>
+            <li>copy, reproduce or republish material from the site except as §6 permits;</li>
+            <li>misrepresent the demonstrations in §3 as official, live or authoritative.</li>
+          </ul>
+          <p>
+            If you believe you have found a security vulnerability in this site, please report it to
+            <a href="mailto:info@shield-ai.ca?subject=Security%20disclosure">info@shield-ai.ca</a>
+            before disclosing it publicly. We will not pursue action against good-faith research
+            conducted without degrading service or accessing others' data.
+          </p>
+        </section>
+
+        <section id="ip">
+          <h2>6. Intellectual property</h2>
+          <p>
+            The content, design, code, logo and trade marks on this site are owned by ShieldAI or
+            our licensors and are protected by Canadian and international law. "ShieldAI",
+            "Terminova", "Elpista" and "WorkCohorts" are our marks.
+            <mark class="todo">CONFIRM: which marks are registered vs. unregistered, and whether the
+            ™ or ® symbol is correct for each. "Black Enterprise Success Track™" and similar
+            third-party marks are not ours to designate.</mark>
+          </p>
+          <p>
+            You may view, download and print pages for your own internal, non-commercial reference,
+            provided you keep all proprietary notices intact. All other rights are reserved.
+          </p>
+        </section>
+
+        <section id="thirdparty">
+          <h2>7. Third-party links and brands</h2>
+          <p>
+            This site links to third-party sites we do not control, and we are not responsible for
+            their content, availability or privacy practices. A link is not an endorsement.
+          </p>
+          <p>
+            Third-party names and marks — including cloud providers, GPU vendors, model providers and
+            framework bodies — are the property of their owners. Their use here is descriptive and
+            does not imply affiliation, sponsorship or endorsement in either direction.
+          </p>
+        </section>
+
+        <section id="availability">
+          <h2>8. Availability</h2>
+          <p>
+            We may change, suspend or withdraw any part of this site at any time without notice. We
+            do not warrant that the site will be available uninterrupted or error-free. Any service
+            level applying to a commercial service is set out in the agreement for that service, not
+            here.
+          </p>
+        </section>
+
+        <section id="warranties">
+          <h2>9. Disclaimer of warranties</h2>
+          <p>
+            To the fullest extent permitted by law, this site and its tools are provided
+            <strong>"as is" and "as available"</strong>, without warranty of any kind, whether
+            express, implied or statutory, including any implied warranty of merchantability,
+            fitness for a particular purpose, accuracy or non-infringement.
+          </p>
+          <p>
+            Some jurisdictions do not allow the exclusion of certain warranties, and consumer
+            protection legislation may give you rights that cannot be excluded. Nothing here limits
+            those rights.
+          </p>
+        </section>
+
+        <section id="liability">
+          <h2>10. Limitation of liability</h2>
+          <p>
+            To the fullest extent permitted by law, ShieldAI and its directors, officers, employees
+            and contractors are not liable for any indirect, incidental, special, consequential,
+            exemplary or punitive damages, or for lost profits, revenue, data, goodwill or
+            anticipated savings, arising out of or connected with your use of this site — whether in
+            contract, tort (including negligence), statute or otherwise, and whether or not we were
+            advised of the possibility.
+          </p>
+          <p>
+            Our total aggregate liability arising out of or connected with this site is limited to
+            <mark class="todo">CONFIRM: cap — commonly CAD $100 for a free informational site. Take
+            advice: an unreasonable cap can be read down entirely, leaving you worse off than a
+            modest one.</mark>
+          </p>
+          <p>
+            Nothing in these terms excludes liability that cannot lawfully be excluded, including
+            for fraud, fraudulent misrepresentation, or death or personal injury caused by
+            negligence.
+          </p>
+        </section>
+
+        <section id="indemnity">
+          <h2>11. Indemnity</h2>
+          <p>
+            You agree to indemnify ShieldAI against any claim, loss, liability or reasonable expense
+            arising from your breach of these terms or your unlawful use of the site.
+          </p>
+        </section>
+
+        <section id="privacy">
+          <h2>12. Privacy</h2>
+          <p>
+            Our handling of personal information is governed by our
+            <a href="privacy.html">privacy policy</a>, which forms part of these terms. The tools on
+            this site run entirely in your browser and transmit nothing to us.
+          </p>
+        </section>
+
+        <section id="law">
+          <h2>13. Governing law</h2>
+          <p>
+            These terms are governed by the laws of
+            <mark class="todo">CONFIRM: province — Ontario if that is where you are established</mark>
+            and the federal laws of Canada applicable in that province. You agree to the exclusive
+            jurisdiction of the courts of that province, without prejudice to any right a consumer
+            has to bring proceedings in their own province of residence.
+          </p>
+        </section>
+
+        <section id="changes">
+          <h2>14. Changes</h2>
+          <p>
+            We may amend these terms at any time by posting a revised version. The effective date
+            above reflects the current version, and continued use after a change constitutes
+            acceptance. Check this page before relying on it.
+          </p>
+        </section>
+
+        <section id="contact">
+          <h2>15. Contact</h2>
+          <ul>
+            <li><strong>Email:</strong> <a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
+            <li><strong>Entity:</strong> <mark class="todo">CONFIRM: registered legal name and number</mark></li>
+            <li><strong>Post:</strong> <mark class="todo">CONFIRM: registered address</mark></li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ══ Footer ══════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <span class="brand">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="fm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#fm)"/>
+            <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+            <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+              <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+            </g>
+            <g fill="#8EC5FF">
+              <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+              <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+            </g>
+            <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+          </svg>
+          <span>ShieldAI</span>
+        </span>
+        <p>Sovereign AI systems and the infrastructure beneath them, built in Canada for organisations that answer to a regulator.</p>
+      </div>
+
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="gateway.html">ShieldAI Gateway</a></li>
+          <li><a href="https://elpista.com" target="_blank" rel="noopener">Elpista</a></li>
+          <li><a href="https://terminova.io" target="_blank" rel="noopener">Terminova</a></li>
+          <li><a href="https://workcohorts.com" target="_blank" rel="noopener">WorkCohorts</a></li>
+          <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="index.html#infrastructure">Sovereign cloud architecture</a></li>
+          <li><a href="index.html#infrastructure">Network &amp; security architecture</a></li>
+          <li><a href="index.html#infrastructure">AI infrastructure &amp; GPU fabric</a></li>
+          <li><a href="index.html#compliance">Compliance posture</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="sizing.html">AI sizing calculator</a></li>
+          <li><a href="eligibility-checker.html">Eligibility checker</a></li>
+          <li><a href="apply-assistant.html">Apply assistant</a></li>
+          <li><a href="status-tracker.html">Status tracker</a></li>
+          <li><a href="admin-dashboard.html">Admin dashboard</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
+          <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 ShieldAI. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of service</a>
+        <a href="accessibility.html">Accessibility</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

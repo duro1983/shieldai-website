@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy — ShieldAI</title>
+<meta name="description" content="How ShieldAI collects, uses, discloses and protects personal information under PIPEDA and Quebec Law 25, and the rights you have over it.">
+<link rel="canonical" href="https://shield-ai.ca/privacy.html">
+<meta name="theme-color" content="#0a0f1c">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/shield.css">
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ══ Header ══════════════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+        <defs>
+          <linearGradient id="hm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+          </linearGradient>
+        </defs>
+        <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#hm)"/>
+        <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+        <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+          <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+        </g>
+        <g fill="#8EC5FF">
+          <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+          <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+        </g>
+        <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+      </svg>
+      <span>ShieldAI</span>
+    </a>
+    <span class="app-header__context">Privacy policy</span>
+
+    <nav class="nav" id="site-nav" aria-label="Primary">
+      <a href="#portfolio">Products</a>
+      <a href="#infrastructure">Infrastructure</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#engage">How we work</a>
+      <a href="products.html">All products</a>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn--secondary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20enquiry">Contact</a>
+      <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=ShieldAI%20briefing%20request&amp;body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20book%20a%20technical%20briefing.%0D%0A%0D%0AName%3A%0D%0AOrganisation%3A%0D%0ARole%3A%0D%0AArea%20of%20interest%3A%0D%0ABest%20time%3A%0D%0A">
+        Book a briefing
+      </a>
+    </div>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span>
+      <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+</header>
+
+<script>
+(function () {
+  var btn = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('site-nav');
+  if (!btn || !nav) return;
+
+  function setOpen(open) {
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) { nav.setAttribute('data-open', ''); }
+    else { nav.removeAttribute('data-open'); }
+  }
+
+  btn.addEventListener('click', function () {
+    setOpen(btn.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Close after choosing a destination, or on Escape
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+      setOpen(false); btn.focus();
+    }
+  });
+  // Reset state if the viewport grows back to the desktop layout
+  window.matchMedia('(min-width: 941px)').addEventListener('change', function (m) {
+    if (m.matches) setOpen(false);
+  });
+})();
+</script>
+<main id="main">
+<section class="app-main app-main--plain">
+  <div class="wrap">
+
+    <div class="page-head">
+      <span class="eyebrow">Legal</span>
+      <h1>Privacy policy</h1>
+      <p>
+        How ShieldAI collects, uses, discloses and protects personal information, and
+        the rights you have over it under Canadian privacy law.
+      </p>
+    </div>
+
+    <div class="alert alert--warn" style="margin-bottom:var(--s-8);max-width:74ch">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <span>
+        <strong>Draft — not yet in force.</strong>
+        Every highlighted field below must be completed and the whole document reviewed by a
+        Canadian privacy lawyer before this is relied on. Search this page for
+        <em>CONFIRM</em> to find each one. This was prepared as a structural starting point,
+        not as legal advice.
+      </span>
+    </div>
+
+    <div class="legal">
+
+      <nav class="legal__toc" aria-label="Contents">
+        <h2>Contents</h2>
+        <ol>
+          <li><a href="#scope">1. Who we are and what this covers</a></li>
+          <li><a href="#website">2. Information collected through this website</a></li>
+          <li><a href="#services">3. Information processed in our services</a></li>
+          <li><a href="#purposes">4. Why we collect it</a></li>
+          <li><a href="#consent">5. Consent</a></li>
+          <li><a href="#disclosure">6. Disclosure and service providers</a></li>
+          <li><a href="#residency">7. Where information is stored</a></li>
+          <li><a href="#retention">8. Retention</a></li>
+          <li><a href="#safeguards">9. Safeguards</a></li>
+          <li><a href="#automated">10. Automated processing</a></li>
+          <li><a href="#rights">11. Your rights</a></li>
+          <li><a href="#breach">12. Breach response</a></li>
+          <li><a href="#complaints">13. Complaints</a></li>
+          <li><a href="#changes">14. Changes</a></li>
+          <li><a href="#contact">15. Contact</a></li>
+        </ol>
+      </nav>
+
+      <div class="legal__body">
+
+        <div class="legal__meta">
+          <div><strong>Effective</strong><mark class="todo">CONFIRM: date</mark></div>
+          <div><strong>Last updated</strong><mark class="todo">CONFIRM: date</mark></div>
+          <div><strong>Applies to</strong>shield-ai.ca and the services listed in §1</div>
+        </div>
+
+        <section id="scope">
+          <h2>1. Who we are and what this covers</h2>
+          <p>
+            This policy is issued by <mark class="todo">CONFIRM: exact registered legal entity name,
+            e.g. "ShieldAI Inc."</mark>, a company incorporated in
+            <mark class="todo">CONFIRM: jurisdiction of incorporation</mark> with its registered
+            office at <mark class="todo">CONFIRM: registered address</mark> ("ShieldAI", "we", "us").
+          </p>
+          <p>
+            We are subject to the federal <strong>Personal Information Protection and Electronic
+            Documents Act (PIPEDA)</strong>, and, where we handle personal information about
+            residents of Quebec, to the <strong>Act respecting the protection of personal information
+            in the private sector</strong> as amended by Law 25. Where we act as a service provider
+            to a public body, additional obligations under provincial access and privacy legislation
+            such as FIPPA or PHIPA may apply through our contract with that body.
+          </p>
+          <p>This policy covers two distinct things, and the distinction matters:</p>
+          <ul>
+            <li><strong>This website</strong> — shield-ai.ca, including the interactive tools published on it. Covered in §2.</li>
+            <li><strong>Our services</strong> — ShieldAI Gateway, Terminova, Elpista, WorkCohorts and the Ontario Energy Assistant. Covered in §3.</li>
+          </ul>
+          <p>
+            For our services, our customer is usually the organisation that engages us, and that
+            organisation determines what personal information is processed and why. In those
+            engagements we generally act as a <strong>service provider</strong> processing
+            information on the customer's instructions, and the customer's own privacy policy
+            governs the relationship with the individuals concerned. Where you are an individual
+            using one of our services through such an organisation, contact that organisation
+            first; we will support them in responding to you.
+          </p>
+        </section>
+
+        <section id="website">
+          <h2>2. Information collected through this website</h2>
+          <p>
+            This site is deliberately built to collect as little as possible. As published, it:
+          </p>
+          <ul>
+            <li><strong>sets no cookies</strong>, and uses no browser local or session storage;</li>
+            <li>contains <strong>no analytics, advertising or tracking scripts</strong> of any kind;</li>
+            <li>contains <strong>no forms that transmit anything to us</strong> — the sizing calculator and
+            eligibility tools run entirely in your browser, and the values you enter are never sent
+            anywhere or seen by us;</li>
+            <li>offers contact only through <code>mailto:</code> links, which open your own email
+            client. We receive that message only if you choose to send it.</li>
+          </ul>
+          <p>
+            Two things are nonetheless collected as a technical consequence of the site being on
+            the internet, and we would rather state them plainly than imply the site is invisible:
+          </p>
+          <ul>
+            <li><strong>Server logs.</strong> This site is hosted on GitHub Pages. GitHub records
+            request data including IP address, user agent and requested URL, and retains it under
+            its own policies. We do not receive, query or store these logs.</li>
+            <li><strong>Web fonts.</strong> <mark class="todo">CONFIRM: remove this bullet once fonts are
+            self-hosted</mark> Typefaces are currently requested from Google Fonts, so your browser
+            discloses your IP address to Google when loading a page. We are moving these to
+            self-hosted files to eliminate this.</li>
+          </ul>
+          <p>
+            If you email us, we hold your message and contact details for as long as needed to deal
+            with your enquiry and to keep a record of our correspondence.
+          </p>
+        </section>
+
+        <section id="services">
+          <h2>3. Information processed in our services</h2>
+          <p>
+            What we process depends entirely on which service and which customer engagement is
+            involved. Categories may include:
+          </p>
+          <ul>
+            <li><strong>Account and contact data</strong> for the individuals authorised to use a service.</li>
+            <li><strong>Content submitted for processing</strong> — prompts and documents sent through
+            ShieldAI Gateway, source text in Terminova, application material in WorkCohorts, enquiries
+            to the Ontario Energy Assistant. This content may itself contain personal information, and
+            in some deployments sensitive information such as health or financial details.</li>
+            <li><strong>Audit and log data</strong> recording who did what and when, which is a core
+            function of our products rather than an incidental by-product.</li>
+          </ul>
+          <p>
+            <mark class="todo">CONFIRM: for each product, whether personal information is used to train,
+            fine-tune or improve any model. If it is not — which we believe to be the case — state
+            that explicitly here, because customers will ask and it is a material commitment.</mark>
+          </p>
+        </section>
+
+        <section id="purposes">
+          <h2>4. Why we collect it</h2>
+          <p>We identify our purposes before or at the time of collection. Those purposes are:</p>
+          <ul>
+            <li>to provide, operate, secure and support the services;</li>
+            <li>to authenticate users and administer access;</li>
+            <li>to maintain the audit records our customers rely on to demonstrate compliance;</li>
+            <li>to respond to enquiries and provide customer support;</li>
+            <li>to meet legal, regulatory and contractual obligations.</li>
+          </ul>
+          <p>
+            We do not sell personal information, and we do not use it for advertising or for
+            profiling unrelated to delivering the service.
+          </p>
+        </section>
+
+        <section id="consent">
+          <h2>5. Consent</h2>
+          <p>
+            We collect, use and disclose personal information with your knowledge and consent,
+            except where PIPEDA permits or requires otherwise. Consent may be express or implied
+            depending on the sensitivity of the information and the reasonable expectations of the
+            individual; sensitive information calls for express consent.
+          </p>
+          <p>
+            You may withdraw consent at any time, subject to legal and contractual restrictions and
+            on reasonable notice. Withdrawing consent may mean we can no longer provide a service.
+            Where we process information on behalf of a customer organisation, consent is managed by
+            that organisation.
+          </p>
+        </section>
+
+        <section id="disclosure">
+          <h2>6. Disclosure and service providers</h2>
+          <p>We disclose personal information only:</p>
+          <ul>
+            <li>to service providers who process it on our behalf under contract, bound to
+            protections comparable to those in this policy and permitted to use it only for the
+            purposes we specify;</li>
+            <li>where required or permitted by law, including in response to a valid legal demand;</li>
+            <li>with your consent.</li>
+          </ul>
+          <p>
+            <mark class="todo">CONFIRM: list the actual sub-processors — cloud providers and regions,
+            any model or inference providers, email, support and payment systems. Public-sector
+            procurement will require this list, and an inaccurate one is worse than none.</mark>
+          </p>
+          <p>
+            A demand from a law-enforcement or government body does not automatically compel
+            disclosure. Where we are lawfully able to, we notify the affected customer before
+            responding so they can seek to contest it.
+          </p>
+        </section>
+
+        <section id="residency">
+          <h2>7. Where information is stored</h2>
+          <p>
+            Our services are designed to keep customer data in Canadian regions, and residency is a
+            deployment constraint we architect for rather than a contractual promise about
+            infrastructure we do not control.
+          </p>
+          <p>
+            <mark class="todo">CONFIRM: state the actual regions per product — e.g. Terminova on
+            Azure Canada East — and identify any processing, support access or backup that occurs
+            outside Canada. If any does, say so: while information is outside Canada it is subject
+            to the laws of that jurisdiction and may be accessible to its courts and authorities.
+            PIPEDA requires transparency about this, not its absence.</mark>
+          </p>
+        </section>
+
+        <section id="retention">
+          <h2>8. Retention</h2>
+          <p>
+            We keep personal information only as long as necessary to fulfil the purposes for which
+            it was collected, or as required by law or contract. Information that has served its
+            purpose is destroyed, erased or anonymised.
+          </p>
+          <p>
+            <mark class="todo">CONFIRM: actual retention periods — customer content, audit logs,
+            backups, and correspondence. A stated schedule is required to answer a PIA and is one of
+            the first things a public-sector reviewer will ask for.</mark>
+          </p>
+          <p>
+            Audit records exist precisely so they cannot be quietly altered or removed, and are
+            retained for the period agreed with the customer even where other data has been deleted.
+          </p>
+        </section>
+
+        <section id="safeguards">
+          <h2>9. Safeguards</h2>
+          <p>
+            We protect personal information with safeguards appropriate to its sensitivity,
+            including encryption in transit and at rest, role-based access control on a
+            need-to-know basis, network segmentation, logging and monitoring, and
+            tamper-evident audit trails.
+          </p>
+          <p>
+            <mark class="todo">CONFIRM: certification status. Say "aligned with ISO 27001 and SOC 2"
+            unless you hold current certificates, in which case name the certificate, scope and
+            auditor. Claiming certification you do not hold is the single most damaging error
+            available on this page.</mark>
+          </p>
+          <p>No safeguard is absolute, and we do not claim our systems cannot be breached.</p>
+        </section>
+
+        <section id="automated">
+          <h2>10. Automated processing</h2>
+          <p>
+            Our services use artificial intelligence, so we state our position on automated
+            decisions directly.
+          </p>
+          <p>
+            Our products are built so that a person makes any decision carrying consequences for an
+            individual. Models triage, rank, extract and draft; they do not approve, reject or
+            determine eligibility on their own. Each routing decision is logged with the reasoning
+            that produced it, so a decision can be reviewed and explained after the fact.
+          </p>
+          <p>
+            Where a decision is nonetheless based exclusively on automated processing, Quebec's Law
+            25 requires that the individual be informed of that fact and be able to submit
+            observations to a person able to review the decision. Where that applies to a deployment,
+            we support the customer in meeting it.
+          </p>
+          <p>
+            <mark class="todo">CONFIRM: whether any deployment makes fully automated decisions
+            without human review. If any does, it must be described specifically here.</mark>
+          </p>
+        </section>
+
+        <section id="rights">
+          <h2>11. Your rights</h2>
+          <p>Subject to the exceptions in applicable law, you may:</p>
+          <ul>
+            <li><strong>Access</strong> the personal information we hold about you, and be told how it
+            has been used and to whom it has been disclosed.</li>
+            <li><strong>Correct</strong> information that is inaccurate or incomplete.</li>
+            <li><strong>Withdraw consent</strong>, subject to §5.</li>
+            <li><strong>Request deletion</strong> where we no longer have a lawful basis to keep it.
+            Quebec residents have a right to de-indexing and erasure in defined circumstances.</li>
+            <li><strong>Receive a portable copy</strong> of computerised personal information you
+            provided to us, in a structured, commonly used technological format — a right available
+            to Quebec residents since 22 September 2024.</li>
+          </ul>
+          <p>
+            Write to the contact in §15. We will respond within <strong>30 days</strong> as PIPEDA
+            requires, or tell you within that period why we need an extension. We may need to verify
+            your identity first, and we will not charge for a routine request without telling you in
+            advance.
+          </p>
+        </section>
+
+        <section id="breach">
+          <h2>12. Breach response</h2>
+          <p>
+            If a breach of security safeguards creates a <strong>real risk of significant
+            harm</strong> to an individual, PIPEDA requires us to report it to the Privacy
+            Commissioner of Canada and to notify the affected individuals as soon as feasible. We
+            maintain records of every breach of security safeguards for at least
+            <strong>24 months</strong>, whether or not it met the reporting threshold, and will
+            make those records available to the Commissioner on request.
+          </p>
+          <p>
+            Where we act as a service provider, we notify the affected customer without undue delay
+            so that they can meet their own obligations.
+          </p>
+        </section>
+
+        <section id="complaints">
+          <h2>13. Complaints</h2>
+          <p>
+            Raise any concern with our Privacy Officer first — see §15. We will investigate and
+            respond in writing. If a complaint is justified we will take appropriate steps,
+            including amending our practices.
+          </p>
+          <p>
+            If you are not satisfied with our response, you may complain to the
+            <strong>Office of the Privacy Commissioner of Canada</strong> at
+            <a href="https://www.priv.gc.ca" target="_blank" rel="noopener">priv.gc.ca</a>, or
+            1-800-282-1376. Quebec residents may instead contact the
+            <strong>Commission d'accès à l'information du Québec</strong> at
+            <a href="https://www.cai.gouv.qc.ca" target="_blank" rel="noopener">cai.gouv.qc.ca</a>.
+            You do not need our permission to do so.
+          </p>
+        </section>
+
+        <section id="changes">
+          <h2>14. Changes</h2>
+          <p>
+            We may update this policy. The effective date above always reflects the current version.
+            Where a change materially affects how we handle personal information we already hold, we
+            will take reasonable steps to notify affected individuals or our customers directly
+            rather than relying on this page alone.
+          </p>
+          <p>
+            Canadian federal privacy law is under active reform. Bill C-27, which would have replaced
+            PIPEDA with the Consumer Privacy Protection Act, died on the order paper when Parliament
+            was prorogued in January 2025. PIPEDA remains in force. We will revise this policy if
+            successor legislation is enacted.
+          </p>
+        </section>
+
+        <section id="contact">
+          <h2>15. Contact</h2>
+          <p>
+            PIPEDA requires us to designate an individual accountable for our compliance. Direct
+            any question, access request or complaint to:
+          </p>
+          <ul>
+            <li><strong>Privacy Officer:</strong> <mark class="todo">CONFIRM: named individual — PIPEDA
+            Principle 1 and Law 25 both require a designated person, by name</mark></li>
+            <li><strong>Email:</strong> <a href="mailto:privacy@shield-ai.ca">privacy@shield-ai.ca</a>
+            <mark class="todo">CONFIRM: create this mailbox, or change to info@shield-ai.ca</mark></li>
+            <li><strong>Post:</strong> <mark class="todo">CONFIRM: mailing address</mark></li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ══ Footer ══════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <span class="brand">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="fm" x1="32" y1="4" x2="32" y2="60" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#35499C"/><stop offset="1" stop-color="#1B2653"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 4 5.5 14.2v20.3c0 12.4 8.3 21.6 26.5 25.5 18.2-3.9 26.5-13.1 26.5-25.5V14.2L32 4Z" fill="url(#fm)"/>
+            <path d="M32 9.4 10.6 17.6v16.9c0 9.9 6.6 17.4 21.4 20.8 14.8-3.4 21.4-10.9 21.4-20.8V17.6L32 9.4Z" fill="none" stroke="#5AA9FF" stroke-opacity=".28" stroke-width="1.4"/>
+            <g stroke="#8EC5FF" stroke-width="1.9" stroke-linecap="round" fill="none">
+              <path d="M32 20.5 21.5 29M32 20.5 42.5 29M21.5 29 32 39.5M42.5 29 32 39.5"/>
+            </g>
+            <g fill="#8EC5FF">
+              <circle cx="32" cy="20.5" r="4"/><circle cx="21.5" cy="29" r="3.1"/>
+              <circle cx="42.5" cy="29" r="3.1"/><circle cx="32" cy="39.5" r="3.1"/>
+            </g>
+            <circle cx="32" cy="20.5" r="1.7" fill="#131B3B"/>
+          </svg>
+          <span>ShieldAI</span>
+        </span>
+        <p>Sovereign AI systems and the infrastructure beneath them, built in Canada for organisations that answer to a regulator.</p>
+      </div>
+
+      <div>
+        <h4>Products</h4>
+        <ul>
+          <li><a href="products.html">All products</a></li>
+          <li><a href="gateway.html">ShieldAI Gateway</a></li>
+          <li><a href="https://elpista.com" target="_blank" rel="noopener">Elpista</a></li>
+          <li><a href="https://terminova.io" target="_blank" rel="noopener">Terminova</a></li>
+          <li><a href="https://workcohorts.com" target="_blank" rel="noopener">WorkCohorts</a></li>
+          <li><a href="ontario-energy-demo.html">Ontario Energy Assistant</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="index.html#infrastructure">Sovereign cloud architecture</a></li>
+          <li><a href="index.html#infrastructure">Network &amp; security architecture</a></li>
+          <li><a href="index.html#infrastructure">AI infrastructure &amp; GPU fabric</a></li>
+          <li><a href="index.html#compliance">Compliance posture</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Tools</h4>
+        <ul>
+          <li><a href="sizing.html">AI sizing calculator</a></li>
+          <li><a href="eligibility-checker.html">Eligibility checker</a></li>
+          <li><a href="apply-assistant.html">Apply assistant</a></li>
+          <li><a href="status-tracker.html">Status tracker</a></li>
+          <li><a href="admin-dashboard.html">Admin dashboard</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@shield-ai.ca">info@shield-ai.ca</a></li>
+          <li><a href="mailto:ofatokun@shield-ai.ca">ofatokun@shield-ai.ca</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 ShieldAI. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms of service</a>
+        <a href="accessibility.html">Accessibility</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
