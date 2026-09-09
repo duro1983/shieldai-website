@@ -74,6 +74,21 @@
   }
   .working strong { color: var(--text); font-weight: 640; }
 
+  .topo { overflow-x: auto; }
+  .topo svg { width: 100%; min-width: 520px; height: auto; display: block; }
+  .topo-legend {
+    display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-5);
+    margin-top: var(--s-4);
+    font-size: var(--t-xs); color: var(--text-muted);
+  }
+  .topo-key { display: inline-flex; align-items: center; gap: var(--s-2); }
+  .topo-swatch { width: 14px; height: 12px; border-radius: 3px; flex: none; }
+  .topo-swatch.is-used   { background: var(--b-100); border: 1.5px solid var(--b-600); }
+  .topo-swatch.is-free   { background: var(--n-50);  border: 1.5px dashed var(--n-400); }
+  .topo-swatch.is-nvlink { height: 3px; border-radius: 2px; background: var(--b-500); }
+  .topo-swatch.is-fabric { height: 3px; border-radius: 2px; background: var(--n-400); }
+  .topo-swatch.is-crit   { height: 3px; border-radius: 2px; background: #b45309; }
+
   .fabric-verdict {
     font-size: var(--t-lg); font-weight: 620; line-height: 1.4;
     letter-spacing: -0.015em;
@@ -429,6 +444,21 @@
         </div>
 
         <div class="panel">
+          <div class="panel__header"><h2>Topology</h2></div>
+          <div class="panel__body">
+            <div class="topo" id="topoWrap"></div>
+            <p class="visually-hidden" id="topoSummary"></p>
+            <div class="topo-legend" aria-hidden="true">
+              <span class="topo-key"><span class="topo-swatch is-used"></span>GPU in use</span>
+              <span class="topo-key"><span class="topo-swatch is-free"></span>Empty slot</span>
+              <span class="topo-key"><span class="topo-swatch is-nvlink"></span>NVLink (in-node)</span>
+              <span class="topo-key"><span class="topo-swatch is-fabric"></span>Inter-node fabric</span>
+            </div>
+            <p class="working" id="wTopo">—</p>
+          </div>
+        </div>
+
+        <div class="panel">
           <div class="panel__header"><h2>Network topology</h2></div>
           <div class="panel__body">
             <p id="rFabric" class="fabric-verdict">—</p>
@@ -767,6 +797,149 @@
     };
   }
 
+
+  // ── Topology diagram ─────────────────────────────────────────────────
+  // Colour encodes STATE (in use / empty / critical), never replica identity —
+  // a 20-replica config would exhaust any categorical palette, and identity is
+  // carried by the in-square label instead.
+  var PER_NODE = 8, MAX_NODES = 4;
+
+  function esc(t) { return String(t).replace(/[&<>]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+
+  function renderTopology(r) {
+    var shown  = Math.min(r.nodes, MAX_NODES);
+    var spans  = r.tp > PER_NODE;                 // one replica crosses nodes
+    var GW = 46, GH = 32, GAP = 6, PAD = 14;
+    var innerW = 4 * GW + 3 * GAP;                // 202
+    var nodeW  = innerW + PAD * 2;                // 230
+    var nodeH  = PAD + 20 + (2 * GH + GAP) + PAD; // header + 2 rows
+    var pitch  = nodeW + 44;
+    var barY   = 0, barH = 24, nodeY = 74;
+    var W = shown * nodeW + (shown - 1) * 44;
+    var H = nodeY + nodeH + (r.tp > PER_NODE ? 38 : 14);
+
+    var svg = [];
+    svg.push('<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" ' +
+             'aria-labelledby="topoT topoD" preserveAspectRatio="xMidYMid meet">');
+    svg.push('<title id="topoT">Recommended GPU topology</title>');
+    svg.push('<desc id="topoD">' + esc(r.totalGPUs + ' GPUs across ' + r.nodes +
+      ' nodes of 8, tensor parallel ' + r.tp + ' by ' + r.replicas + ' replicas.') + '</desc>');
+
+    // Fabric bar across the top
+    var fabColour = spans ? '#b45309' : 'var(--n-400)';
+    var fabLabel  = spans
+      ? 'Lossless fabric — all-reduce on the critical path'
+      : 'Standard ethernet — no traffic on the critical path';
+    svg.push('<rect x="0" y="' + barY + '" width="' + W + '" height="' + barH +
+             '" rx="6" fill="' + (spans ? '#fffbeb' : 'var(--n-50)') +
+             '" stroke="' + fabColour + '" stroke-width="' + (spans ? 2 : 1) + '"/>');
+    svg.push('<text x="' + (W / 2) + '" y="' + (barY + 16) + '" text-anchor="middle" ' +
+             'font-size="12" font-weight="620" fill="' + (spans ? '#7c2d12' : 'var(--text-muted)') +
+             '">' + esc(fabLabel) + '</text>');
+
+    for (var n = 0; n < shown; n++) {
+      var x0 = n * pitch;
+
+      // drop line from the fabric bar into each node
+      svg.push('<line x1="' + (x0 + nodeW / 2) + '" y1="' + (barY + barH) +
+               '" x2="' + (x0 + nodeW / 2) + '" y2="' + nodeY + '" stroke="' + fabColour +
+               '" stroke-width="' + (spans ? 2 : 1.5) + '"' +
+               (spans ? '' : ' stroke-dasharray="4 4"') + '/>');
+
+      // node chassis
+      svg.push('<rect x="' + x0 + '" y="' + nodeY + '" width="' + nodeW + '" height="' + nodeH +
+               '" rx="10" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1.5"/>');
+      svg.push('<text x="' + (x0 + PAD) + '" y="' + (nodeY + PAD + 10) +
+               '" font-size="11" font-weight="620" letter-spacing="0.07em" ' +
+               'fill="var(--text-subtle)">NODE ' + (n + 1) + ' · 8 GPU</text>');
+
+      for (var slot = 0; slot < PER_NODE; slot++) {
+        var gi   = n * PER_NODE + slot;             // global GPU index
+        var used = gi < r.totalGPUs;
+        var rep  = Math.floor(gi / r.tp) + 1;
+        var col  = slot % 4, row = (slot / 4) | 0;
+        var gx   = x0 + PAD + col * (GW + GAP);
+        var gy   = nodeY + PAD + 20 + row * (GH + GAP);
+        // alternate a faint band per replica so groups read as groups
+        var band = used ? (rep % 2 ? 'var(--b-100)' : 'var(--b-50)') : 'var(--n-50)';
+
+        svg.push('<rect x="' + gx + '" y="' + gy + '" width="' + GW + '" height="' + GH +
+                 '" rx="5" fill="' + band + '" stroke="' +
+                 (used ? 'var(--b-600)' : 'var(--n-300)') + '" stroke-width="1.5"' +
+                 (used ? '' : ' stroke-dasharray="3 3"') + '/>');
+        svg.push('<text x="' + (gx + GW / 2) + '" y="' + (gy + GH / 2 + 4) +
+                 '" text-anchor="middle" font-size="11" font-weight="' + (used ? 660 : 500) +
+                 '" fill="' + (used ? 'var(--b-700)' : 'var(--n-400)') + '">' +
+                 (used ? 'R' + rep : '—') + '</text>');
+      }
+
+      // NVLink rail under each row, only where a TP group actually shares the node
+      if (!spans && r.tp > 1) {
+        for (var rw = 0; rw < 2; rw++) {
+          var first = n * PER_NODE + rw * 4;
+          if (first >= r.totalGPUs) continue;
+          var last = Math.min(first + 3, r.totalGPUs - 1);
+          if (Math.floor(first / r.tp) !== Math.floor(last / r.tp)) continue; // group splits
+          var ry = nodeY + PAD + 20 + rw * (GH + GAP) + GH + 3;
+          svg.push('<line x1="' + (x0 + PAD + 6) + '" y1="' + ry + '" x2="' +
+                   (x0 + PAD + innerW - 6) + '" y2="' + ry +
+                   '" stroke="var(--b-500)" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>');
+        }
+      }
+    }
+
+    // One connector per replica that actually spans nodes. Drawing a single
+    // line across every node would imply replicas share traffic; they do not.
+    if (spans) {
+      var yy = nodeY + nodeH + 14;
+      var nodesPerReplica = Math.ceil(r.tp / PER_NODE);
+      for (var rp = 0; rp * nodesPerReplica < shown; rp++) {
+        var a = rp * nodesPerReplica;
+        var z = Math.min(a + nodesPerReplica - 1, shown - 1);
+        if (z <= a) continue;
+        svg.push('<line x1="' + (a * pitch + nodeW / 2) + '" y1="' + yy + '" x2="' +
+                 (z * pitch + nodeW / 2) + '" y2="' + yy +
+                 '" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>');
+        svg.push('<text x="' + ((a * pitch + z * pitch) / 2 + nodeW / 2) + '" y="' + (yy + 15) +
+                 '" text-anchor="middle" font-size="10.5" font-weight="620" fill="#7c2d12">' +
+                 'R' + (rp + 1) + ' all-reduce</text>');
+      }
+    }
+
+    svg.push('</svg>');
+    document.getElementById('topoWrap').innerHTML = svg.join('');
+
+    var legend = document.querySelector('.topo-legend');
+    if (legend) {
+      legend.innerHTML =
+        '<span class="topo-key"><span class="topo-swatch is-used"></span>GPU in use</span>' +
+        '<span class="topo-key"><span class="topo-swatch is-free"></span>Empty slot</span>' +
+        (spans
+          ? '<span class="topo-key"><span class="topo-swatch is-crit"></span>Cross-node all-reduce</span>'
+          : '<span class="topo-key"><span class="topo-swatch is-nvlink"></span>NVLink (in-node)</span>') +
+        '<span class="topo-key"><span class="topo-swatch is-fabric"></span>Inter-node fabric' +
+        (spans ? '' : ' (idle during inference)') + '</span>';
+    }
+
+    var more = r.nodes > shown ? ' Showing ' + shown + ' of ' + r.nodes +
+      ' identical nodes.' : '';
+    document.getElementById('topoSummary').textContent =
+      r.totalGPUs + ' GPUs across ' + r.nodes + ' nodes of eight. Tensor parallel ' + r.tp +
+      ', ' + r.replicas + ' replicas. ' + (spans
+        ? 'A replica spans multiple nodes, so the inter-node fabric is on the critical path.'
+        : 'Each replica fits within one node, so no traffic crosses the fabric during inference.') + more;
+
+    document.getElementById('wTopo').innerHTML = spans
+      ? 'Each square is a GPU; <strong>R<em>n</em></strong> marks which replica it serves. ' +
+        'Tensor parallelism of ' + r.tp + ' does not fit in one 8-GPU node, so a single replica is ' +
+        'split across ' + Math.ceil(r.tp / PER_NODE) + ' — every decode step ends in a cross-node all-reduce.' + esc(more)
+      : 'Each square is a GPU; <strong>R<em>n</em></strong> marks which replica it serves. ' +
+        'All ' + r.tp + ' GPUs of a replica sit in one node and talk over ' + esc(r.g.link) + '. ' +
+        'Replicas share nothing, so the links between nodes carry no inference traffic — ' +
+        'they are drawn dashed for that reason.' + esc(more);
+  }
+
   // ── Render ───────────────────────────────────────────────────────────
   function render() {
     var r = compute();
@@ -864,6 +1037,8 @@
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>' +
         '<span><strong>' + a[1] + '</strong>' + a[2] + '</span></div>';
     }).join('');
+
+    renderTopology(r);
 
     // Fabric
     var fabricEl = $('rFabric');
