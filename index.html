@@ -441,20 +441,88 @@
           <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> <code>ECN</code> / <code>DCQCN</code> marking thresholds tuned against real congestion</p>
           <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Rail-optimised leaf/spine topology, <code>NCCL</code> collective profiling</p>
           <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Capacity, thermal and power planning for sustained training loads</p>
+          <p class="spec"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> <a href="#fabriccheck" style="color:var(--a-300)">FabricCheck</a> — independent assessment of a cluster already running</p>
         </div>
       </article>
 
     </div>
 
-    <div class="card mt-12" style="background:rgba(61,144,240,.07);border-color:rgba(61,144,240,.22)">
-      <h3>Try the sizing calculator</h3>
+    <p class="pair-intro">
+      Two ways in. <span>Size it before you buy, and verify it once it is running.</span>
+    </p>
+
+    <!-- FabricCheck — the paid, fixed-scope engagement -->
+    <div class="offer" id="fabriccheck">
+      <div class="offer__head">
+        <span class="icon-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3l2.5-7 4 14 2.5-7h6"/></svg>
+        </span>
+        <div>
+          <h3 class="offer__name">FabricCheck</h3>
+          <p class="offer__kicker">An independent performance check for NVIDIA GPU clusters</p>
+        </div>
+      </div>
+
+      <p class="offer__lede">
+        You bought the GPUs. Are you getting what you paid for? FabricCheck is an
+        assessment of a cluster that is already running, carried out by engineers who did
+        not sell you the hardware and have no reason to tell you it is fine. The faults that
+        cost the most throughput rarely announce themselves — nothing errors, nothing alerts,
+        the jobs simply complete slower than the invoice implies.
+      </p>
+
+      <div class="offer__finds">
+        <div class="offer__find">
+          <h4>Links not running at rate</h4>
+          <p>
+            Ports negotiated below their rating, flapping links, error counters quietly
+            climbing, MTU mismatches, and <code>PFC</code> or <code>ECN</code> settings
+            that disagree between the switch and the NIC.
+          </p>
+        </div>
+        <div class="offer__find">
+          <h4>GPUDirect RDMA that is not actually on</h4>
+          <p>
+            The most common silent fault. Traffic falls back through host memory and
+            everything still works, just slower. Usually a peer-memory module that never
+            loaded, PCIe <code>ACS</code> left enabled and blocking peer-to-peer, or a NIC
+            sitting on a different root complex from the GPU it serves.
+          </p>
+        </div>
+        <div class="offer__find">
+          <h4>Servers dragging the rest down</h4>
+          <p>
+            Collectives are synchronous, so the slowest GPU sets the pace for every other
+            one. A single node with a downgraded PCIe link or poor thermal behaviour costs
+            you across the entire cluster, and averages hide it.
+          </p>
+        </div>
+      </div>
+
+      <div class="offer__foot">
+        <p class="offer__deliver">
+          <strong>What you get:</strong> a plain-English report your procurement team can
+          read and your engineers can act on — what is wrong, what it is costing you in
+          throughput, and a fix list in priority order.
+        </p>
+        <a class="btn btn--primary" href="mailto:info@shield-ai.ca?subject=FabricCheck%20enquiry&amp;body=Hi%2C%0D%0A%0D%0AI%27d%20like%20to%20talk%20about%20a%20FabricCheck%20on%20our%20cluster.%0D%0A%0D%0AOrganisation%3A%0D%0AGPUs%20and%20interconnect%3A%0D%0ACluster%20size%20(nodes)%3A%0D%0AWorkload%20(training%20%2F%20inference%20%2F%20both)%3A%0D%0AWhat%20made%20you%20suspect%20a%20problem%3A%0D%0A">
+          Request a FabricCheck
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sizing calculator — the free tool -->
+    <div class="card mt-6" style="background:rgba(255,255,255,.035);border-color:var(--border-dark)">
+      <h3>Or start with the sizing calculator</h3>
       <p class="mt-0">
-        Work out what serving an open-weight model from Canadian infrastructure actually
-        costs — GPU count, memory, latency, topology. Every figure shows its arithmetic,
-        including the cases where the honest answer is that you need less than you thought.
+        Free, and nothing to install. Work out what serving an open-weight model from
+        Canadian infrastructure actually costs — GPU count, memory, latency, topology.
+        Every figure shows its arithmetic, including the cases where the honest answer is
+        that you need less than you thought.
       </p>
       <div class="btn-row mt-6">
-        <a class="btn btn--primary" href="sizing.html">
+        <a class="btn btn--secondary" href="sizing.html">
           Open the calculator
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
@@ -607,6 +675,7 @@
           <li><a href="#infrastructure">Sovereign cloud architecture</a></li>
           <li><a href="#infrastructure">Network &amp; security architecture</a></li>
           <li><a href="#infrastructure">AI infrastructure &amp; GPU fabric</a></li>
+          <li><a href="#fabriccheck">FabricCheck</a></li>
           <li><a href="#compliance">Compliance posture</a></li>
         </ul>
       </div>

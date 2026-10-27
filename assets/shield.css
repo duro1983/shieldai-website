@@ -1278,3 +1278,52 @@ mark.todo {
   color: #7c2d12; background: #fef3c7;
   border: 1px dashed #d97706; border-radius: var(--r-sm);
 }
+
+/* ==========================================================================
+   19. Featured offering
+   A named, fixed-scope engagement given more weight than a capability card.
+   ========================================================================== */
+
+.offer {
+  padding: clamp(var(--s-6), 4vw, var(--s-10));
+  background: rgba(61, 144, 240, .07);
+  border: 1px solid rgba(61, 144, 240, .26);
+  border-radius: var(--r-lg);
+}
+.offer__head { display: flex; align-items: flex-start; gap: var(--s-5); margin-bottom: var(--s-5); }
+.offer__head .icon-chip { margin-bottom: 0; }
+.offer__name { font-size: var(--t-2xl); letter-spacing: -0.03em; margin: 0; }
+.offer__kicker {
+  margin-top: var(--s-2);
+  font-size: var(--t-lg); line-height: 1.5;
+  color: var(--text-on-dark-muted);
+}
+.offer__lede { max-width: 72ch; margin-bottom: var(--s-8); }
+.section--dark .offer__lede { color: var(--text-on-dark-muted); }
+
+.offer__finds { display: grid; gap: var(--s-6); margin-bottom: var(--s-8); }
+@media (min-width: 760px) { .offer__finds { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.offer__find h4 { font-size: var(--t-base); margin-bottom: var(--s-2); }
+.offer__find p { font-size: var(--t-sm); line-height: 1.6; color: var(--text-on-dark-muted); }
+.offer__find code {
+  font-family: var(--font-mono); font-size: .8125em;
+  padding: 1px 5px; border-radius: 4px;
+  background: rgba(255,255,255,.08); color: var(--a-300);
+}
+
+.offer__foot {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-5);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--border-dark);
+}
+.offer__deliver { flex: 1 1 340px; font-size: var(--t-sm); color: var(--text-on-dark-muted); }
+.offer__deliver strong { color: #fff; font-weight: 620; }
+
+/* The free tool and the paid check, framed as one before/after pair */
+.pair-intro {
+  margin-top: clamp(var(--s-12), 6vw, var(--s-16));
+  margin-bottom: var(--s-6);
+  font-size: var(--t-lg); font-weight: 560;
+  color: #fff;
+}
+.pair-intro span { color: var(--text-on-dark-muted); font-weight: 400; }
